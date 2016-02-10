@@ -319,6 +319,7 @@ public class ThemeFragment extends Fragment {
     private class task extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
+            client = null;
             try {
                 SharedPreferences settings = getContext().getSharedPreferences("MyPrefs", 0);
                 SharedPreferences.Editor editor = settings.edit();

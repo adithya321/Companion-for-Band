@@ -73,7 +73,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 }
 
                 Toast.makeText(getApplicationContext(), getString(R.string.picture_saved) + " CompanionForBand/Camera",
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_SHORT).show();
                 refreshCamera();
             }
         };
@@ -152,15 +152,26 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
 
 
     private void processIntent(Intent intent) {
+        ImageButton cameraSwitch = (ImageButton) findViewById(R.id.camera_switch);
+        ImageButton flashSwitch = (ImageButton) findViewById(R.id.flash_switch);
+
         String extraString = intent.getStringExtra("new intent");
 
-        if (extraString != null && extraString.equals("TileEventReceiver")) {
-            if (intent.getAction() == TileEvent.ACTION_TILE_BUTTON_PRESSED) {
-                try {
-                    captureImage();
-                } catch (Exception e) {
-                    //
-                }
+        if (intent.getAction().equals(TileEvent.ACTION_TILE_BUTTON_PRESSED)) {
+            switch (extraString) {
+                case "SwitchCamera":
+                    CameraSwitch(cameraSwitch);
+                    break;
+                case "FlashMode":
+                    FlashMode(flashSwitch);
+                    break;
+                case "TileEventReceiver":
+                    try {
+                        captureImage();
+                    } catch (Exception e) {
+                        //
+                    }
+                    break;
             }
         }
     }
@@ -181,76 +192,85 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     }
 
     public void CameraClick(View view) {
-        Camera.Parameters params;
-        params = camera.getParameters();
-
         ImageButton cameraSwitch = (ImageButton) view.findViewById(R.id.camera_switch);
         ImageButton flashSwitch = (ImageButton) view.findViewById(R.id.flash_switch);
         switch (view.getId()) {
             case R.id.camera_switch:
-                int cameraId = -1;
-                switch (cameraSwitch.getContentDescription().toString()) {
-                    case "to Rear":
-                        cameraId = findFrontFacingCamera(true);
-                        cameraSwitch.setImageResource(R.drawable.ic_camera_rear_white_48dp);
-                        cameraSwitch.setContentDescription("to Front");
-                        break;
-                    case "to Front":
-                        cameraId = findFrontFacingCamera(false);
-                        cameraSwitch.setImageResource(R.drawable.ic_camera_front_white_48dp);
-                        cameraSwitch.setContentDescription("to Rear");
-                        break;
-                }
-                if (cameraId < 0) {
-                    Toast.makeText(this, "Camera not found.",
-                            Toast.LENGTH_LONG).show();
-                    return;
-                } else {
-                    surfaceDestroyed(surfaceHolder);
-                    camera = Camera.open(cameraId);
-                }
-
-                params = camera.getParameters();
-
-                List<Camera.Size> sizes = params.getSupportedPictureSizes();
-                Camera.Size size = sizes.get(0);
-                for (int i = 0; i < sizes.size(); i++) {
-                    if (sizes.get(i).width > size.width)
-                        size = sizes.get(i);
-                }
-                params.setPictureSize(size.width, size.height);
-                camera.setParameters(params);
-
-                try {
-                    camera.setPreviewDisplay(surfaceHolder);
-                    camera.startPreview();
-                    cameraSwitch.setImageResource(R.drawable.ic_camera_rear_white_48dp);
-                } catch (Exception e) {
-                    System.err.println(e);
-                }
+                CameraSwitch(cameraSwitch);
                 break;
             case R.id.flash_switch:
-                String string = flashSwitch.getContentDescription().toString();
-                switch (string) {
-                    case "Flash Auto":
-                        params.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
-                        flashSwitch.setContentDescription("Flash On");
-                        flashSwitch.setImageResource(R.drawable.ic_flash_on_white_48dp);
-                        break;
-                    case "Flash On":
-                        params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
-                        flashSwitch.setContentDescription("Flash Off");
-                        flashSwitch.setImageResource(R.drawable.ic_flash_off_white_48dp);
-                        break;
-                    case "Flash Off":
-                        params.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
-                        flashSwitch.setContentDescription("Flash Auto");
-                        flashSwitch.setImageResource(R.drawable.ic_flash_auto_white_48dp);
-                        break;
-                }
-                camera.setParameters(params);
+                FlashMode(flashSwitch);
                 break;
         }
+    }
+
+    void CameraSwitch(ImageButton cameraSwitch) {
+        Camera.Parameters params;
+
+        int cameraId = -1;
+        switch (cameraSwitch.getContentDescription().toString()) {
+            case "to Rear":
+                cameraId = findFrontFacingCamera(true);
+                cameraSwitch.setImageResource(R.drawable.ic_camera_rear_white_48dp);
+                cameraSwitch.setContentDescription("to Front");
+                break;
+            case "to Front":
+                cameraId = findFrontFacingCamera(false);
+                cameraSwitch.setImageResource(R.drawable.ic_camera_front_white_48dp);
+                cameraSwitch.setContentDescription("to Rear");
+                break;
+        }
+        if (cameraId < 0) {
+            Toast.makeText(this, "Camera not found.",
+                    Toast.LENGTH_LONG).show();
+            return;
+        } else {
+            surfaceDestroyed(surfaceHolder);
+            camera = Camera.open(cameraId);
+        }
+
+        params = camera.getParameters();
+
+        List<Camera.Size> sizes = params.getSupportedPictureSizes();
+        Camera.Size size = sizes.get(0);
+        for (int i = 0; i < sizes.size(); i++) {
+            if (sizes.get(i).width > size.width)
+                size = sizes.get(i);
+        }
+        params.setPictureSize(size.width, size.height);
+        camera.setParameters(params);
+
+        try {
+            camera.setPreviewDisplay(surfaceHolder);
+            camera.startPreview();
+            cameraSwitch.setImageResource(R.drawable.ic_camera_rear_white_48dp);
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+    }
+
+    void FlashMode(ImageButton flashSwitch) {
+        Camera.Parameters params;
+        params = camera.getParameters();
+        String string = flashSwitch.getContentDescription().toString();
+        switch (string) {
+            case "Flash Auto":
+                params.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
+                flashSwitch.setContentDescription("Flash On");
+                flashSwitch.setImageResource(R.drawable.ic_flash_on_white_48dp);
+                break;
+            case "Flash On":
+                params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                flashSwitch.setContentDescription("Flash Off");
+                flashSwitch.setImageResource(R.drawable.ic_flash_off_white_48dp);
+                break;
+            case "Flash Off":
+                params.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
+                flashSwitch.setContentDescription("Flash Auto");
+                flashSwitch.setImageResource(R.drawable.ic_flash_auto_white_48dp);
+                break;
+        }
+        camera.setParameters(params);
     }
 
     private int findFrontFacingCamera(boolean b) {

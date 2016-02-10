@@ -60,12 +60,25 @@ public class TileEventReceiver extends BroadcastReceiver {
                     break;
 
                 case 91:
+                case 92:
+                case 93:
                     Intent i = new Intent(context, CameraActivity.class);
                     i.setAction(intent.getAction());
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    i.putExtra("new intent", "TileEventReceiver");
                     i.putExtra(TileEvent.TILE_EVENT_DATA, intent.getParcelableExtra(TileEvent.TILE_EVENT_DATA));
+                    switch (buttonData.getElementID()) {
+                        case 91:
+                            i.putExtra("new intent", "TileEventReceiver");
+                            break;
+                        case 92:
+                            i.putExtra("new intent", "SwitchCamera");
+                            break;
+                        case 93:
+                            i.putExtra("new intent", "FlashMode");
+                            break;
+
+                    }
                     context.startActivity(i);
                     break;
             }

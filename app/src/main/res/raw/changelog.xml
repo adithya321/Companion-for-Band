@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
+    <changelogversion changeDate="FEB 10, 2016" versionName="2.4.2">
+        <changelogimprovement>Switch camera and Flash mode from Camera Tile</changelogimprovement>
+    </changelogversion>
+
     <changelogversion changeDate="FEB 9, 2016" versionName="2.4.1">
         <changelogimprovement>Translated to French. Thanks to Myrmex
             (onesky@myrmex.org)

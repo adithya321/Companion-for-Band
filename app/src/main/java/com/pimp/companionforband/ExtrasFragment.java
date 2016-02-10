@@ -57,6 +57,8 @@ public class ExtrasFragment extends Fragment {
     private static final UUID pageId2 = UUID.fromString("3f34d8b4-e697-4b4b-89df-823cef78b744");
     private static final UUID pageId3 = UUID.fromString("134055f9-e786-47e9-a0ff-c12cce0b4f96");
     private static final UUID cameraPageId1 = UUID.fromString("7efc3ce8-0785-4860-88cd-54a11115298f");
+    private static final UUID cameraPageId2 = UUID.fromString("7efc3ce8-0785-4860-88cd-54a11115298e");
+    private static final UUID cameraPageId3 = UUID.fromString("7efc3ce8-0785-4860-88cd-54a11115298d");
     private static final UUID flashlightPageId1 = UUID.fromString("6ef43666-4117-432f-ba6a-663d45ba2d71");
     private static final UUID flashlightPageId2 = UUID.fromString("6ef43666-4117-432f-ba6a-663d45ba2d72");
 
@@ -470,14 +472,28 @@ public class ExtrasFragment extends Fragment {
     }
 
     private PageLayout createCamera1Layout() {
-        return new PageLayout(new FilledPanel(5, 0, 260, 105,
+        return new PageLayout(new FilledPanel(0, 0, 260, 105,
                 new PageElement[0]).addElements(new TextButton(0, 0, 210, 105)
                 .setMargins(0, 0, 0, 0).setId(91).setPressedColor(-1)));
     }
 
+    private PageLayout createCamera2Layout() {
+        return new PageLayout(new FilledPanel(0, 0, 260, 105,
+                new PageElement[0]).addElements(new TextButton(0, 0, 210, 105)
+                .setMargins(0, 0, 0, 0).setId(92).setPressedColor(-1)));
+    }
+
+    private PageLayout createCamera3Layout() {
+        return new PageLayout(new FilledPanel(0, 0, 260, 105,
+                new PageElement[0]).addElements(new TextButton(0, 0, 210, 105)
+                .setMargins(0, 0, 0, 0).setId(93).setPressedColor(-1)));
+    }
+
     private void updateCameraPages() throws BandIOException {
         this.client.getTileManager().setPages(this.cameraTileId,
-                new PageData(cameraPageId1, 0).update(new TextButtonData(91, "Capture")));
+                new PageData(cameraPageId1, 0).update(new TextButtonData(93, "Flash Mode")),
+                new PageData(cameraPageId2, 1).update(new TextButtonData(92, "Switch Camera")),
+                new PageData(cameraPageId3, 2).update(new TextButtonData(91, "Capture")));
     }
 
     private boolean addCameraTile() throws Exception {
@@ -489,7 +505,8 @@ public class ExtrasFragment extends Fragment {
                 options);
 
         BandTile tile = new BandTile.Builder(cameraTileId, getString(R.string.camera_tile), tileIcon)
-                .setTileSmallIcon(badgeIcon).addPageLayout(createCamera1Layout()).build();
+                .setTileSmallIcon(badgeIcon).addPageLayout(createCamera3Layout())
+                .addPageLayout(createCamera2Layout()).addPageLayout(createCamera1Layout()).build();
         appendToUI(getString(R.string.camera_tile_adding), Style.INFO);
         if (client.getTileManager().addTile(getActivity(), tile).await()) {
             appendToUI(getString(R.string.camera_tile_added), Style.CONFIRM);
