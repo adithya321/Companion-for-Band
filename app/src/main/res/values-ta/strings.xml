@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">"பேண்ட் தோழமை"</string>
+    <string name="about">"Adithya ஜே உருவாக்கப்பட்டது"</string>
+
+    <string name="accelerometer">"முடுக்க"</string>
+    <string name="altimeter">"அல்டிமீட்டர்"</string>
+    <string name="barometer">"காற்றழுத்த"</string>
+    <string name="calories">"கலோரிகள்"</string>
+    <string name="contact">"தொடர்பு"</string>
+    <string name="distance">"தூரம்"</string>
+    <string name="gsr">"GSR (கால்வனிக் தோல் எதிர்வினை)"</string>
+    <string name="gyroscope">"சுழல் காட்டி"</string>
+    <string name="heart_rate">"இதய துடிப்பு"</string>
+    <string name="light">"வெளிச்சம்"</string>
+    <string name="log">"புகுபதிகை"</string>
+    <string name="log_text">"பதிவுகள் CompanionForBand கோப்புறை காணப்படும்."</string>
+    <string name="backlog">"பின்னணி உள்நுழைய"</string>
+    <string name="permit_log">"அமைப்புகளை திரையில் பயன்பாடுகள் செல்வதன் மூலம் சேமிப்பு அனுமதி."</string>
+    <string name="pedometer">"பிடோமீட்டர்"</string>
+    <string name="rr">"ஆர்ஆர் இடைவேளை"</string>
+    <string name="temperature">"தோல் வெப்பநிலை"</string>
+    <string name="uv">"புற ஊதா"</string>
+
+    <string name="base">"அடித்தளம்"</string>
+    <string name="base_desc">"தொடக்க அன்ட்ரெஸ் ஓடு"</string>
+    <string name="highlight">"சிறப்பம்சமாக"</string>
+    <string name="highlight_desc">"தலைப்பு"</string>
+    <string name="lowlight">"Lowlight"</string>
+    <string name="lowlight_desc">"தொடக்க அன்ட்ரெஸ் ஓடுகள் கீழே கருத்துக்களை தொடவும்"</string>
+    <string name="secondaryText">"இரண்டாம் நிலை உரை"</string>
+    <string name="secondaryText_desc">"மாற்று-ம் தேதி மாநில"</string>
+    <string name="highContrast">"ஹை கான்ட்ராஸ்ட்"</string>
+    <string name="highContrast_desc">"அடையாளக் குறியிடப்படும் தொடக்க அன்ட்ரெஸ் ஓடு"</string>
+    <string name="muted">"முடக்கியது"</string>
+    <string name="muted_desc">"உடற்பயிற்சி சாதனை மார்க்கர் பின்னணியில்"</string>
+
+    <string name="music_tile">"இசை டைல்"</string>
+    <string name="music_tile_adding">"இசை ஓடு கூறினார்"</string>
+    <string name="music_tile_added">"இசை டைல் சேர்க்கப்பட்டது"</string>
+    <string name="music_tile_not_added">"இசைக்குழு இசை ஓடு சேர்க்க முடியவில்லை"</string>
+
+    <string name="camera_tile">"கேமரா டைல்"</string>
+    <string name="camera_tile_adding">"கேமரா ஓடு கூறினார்"</string>
+    <string name="camera_tile_added">"கேமரா டைல் சேர்க்கப்பட்டது"</string>
+    <string name="camera_tile_not_added">"இசைக்குழு கேமரா ஓடு சேர்க்க முடியவில்லை"</string>
+
+    <string name="message_tile">"செய்தி டைல்"</string>
+    <string name="message_tile_adding">"செய்தி ஓடு கூறினார்"</string>
+    <string name="message_tile_added">"செய்தி டைல் சேர்க்கப்பட்டது"</string>
+    <string name="message_tile_not_added">"இசைக்குழு செய்தியை ஓடு சேர்க்க முடியவில்லை"</string>
+
+    <string name="barcode_tile">"பார்கோடு டைல்"</string>
+    <string name="barcode_tile_adding">"பார்கோடு ஓடு கூறினார்"</string>
+    <string name="barcode_tile_added">"பார்கோடு டைல் சேர்க்கப்பட்டது"</string>
+    <string name="barcode_tile_not_added">"இசைக்குழு பார்கோடு ஓடு சேர்க்க முடியவில்லை"</string>
+
+    <string name="title">"தலைப்பு"</string>
+    <string name="hint">"உடல்"</string>
+    <string name="message_send_error">"இசைக்குழு செய்தியை அனுப்ப தலைப்பு அல்லது உடல் சேர்க்கவும்"</string>
+
+    <string name="name">"பெயர்"</string>
+    <string name="number">"எண்"</string>
+    <string name="barcode_send_error_1">"பேண்ட் பார்கோடு அனுப்ப பெயர் மற்றும் எண்ணை சேர்க்கவும்"</string>
+    <string name="barcode_send_error_2">"பார்கோடு ஒரு பார்கோடு வகை மற்றும் பக்கம் எண்ணை தேர்வு"</string>
+
+    <string name="send">"அனுப்பு"</string>
+
+    <string name="home">"முகப்பு"</string>
+    <string name="aboutLib">"பற்றி"</string>
+    <string name="other">"பிற பயன்பாடுகள்"</string>
+    <string name="feedback">"கருத்து"</string>
+    <string name="rate">"மதிப்பிட்டு மதிப்புரை"</string>
+    <string name="share">"பகிர்"</string>
+    <string name="support">"ஆதரவு அபிவிருத்தி"</string>
+    <string name="report">"அறிக்கை பிழைகள் அல்லது கோரிக்கை அம்சங்கள்"</string>
+    <string name="translate">"மொழிபெயர்"</string>
+
+    <string name="pick_me_tile">"என்னை அடுக்கு எடுக்க"</string>
+    <string name="crop_me_tile">"பயிர் என்னை அடுக்கு"</string>
+    <string name="get_me_tile">"என்னை அடுக்கு GET"</string>
+    <string name="update_me_tile">"என்னை டைல் அமைப்பை"</string>
+    <string name="get_theme">"தீம் இங்கு"</string>
+    <string name="update_theme">"கருப்பொருளை"</string>
+
+    <string name="invitation_title">"அழைக்கவும் ஆப் அனுப்பவும்"</string>
+    <string name="invitation_message">"இந்த பயன்பாட்டை மிகச்சிறப்பானது, அது ஒரு முயற்சி கொடுக்க"</string>
+    <string name="invitation_cta">"நிறுவ!"</string>
+    <string name="invitation_subject">"இந்த பெரிய பயன்பாட்டை முயற்சி!"</string>
+    <string name="send_failed">"அழைப்பிதழ்களை இவர்களுக்கு அனுப்புகிறது தோல்வி"</string>
+
+    <string name="support_dev">"கூட டெவலப்பர்கள் சில நேரங்களில் தங்கள் வயிறுகளை நிரப்புவதும் வேண்டும் cuz"</string>
+
+    <string name="camera_permission">"கேமரா அனுமதி கேமரா ஓடு தேவை. கூடுதல் செயல்பாடுகளை ஆப் அமைப்புகள் அனுமதிக்க கொள்ளவும்."</string>
+    <string name="camera_granted">"அனுமதி அளித்தார். இப்போது நீங்கள் கேமரா ஓடு பயன்படுத்த முடியும்."</string>
+    <string name="camera_denied">"அனுமதி மறுக்கப்பட்டது. நீங்கள் கேமரா ஓடு பயன்படுத்த முடியாது."</string>
+
+    <string name="storage_permission">"சேமிப்பு அனுமதி சென்சார் தரவு பதிவு தேவை. கூடுதல் செயல்பாடுகளை ஆப் அமைப்புகள் அனுமதிக்க கொள்ளவும்."</string>
+    <string name="storage_granted">"அனுமதி அளித்தார். இப்போது நீங்கள் தரவு நுழைய முடியும்."</string>
+    <string name="storage_denied">"அனுமதி மறுக்கப்பட்டது. நீங்கள் தரவு நுழைய முடியாது."</string>
+
+    <string name="rate_dialog_title">"பிடிக்கிறதா? அதை மதிப்பிட!"</string>
+    <string name="rate_dialog_text">"நீங்கள் இந்த பயன்பாட்டை பயன்படுத்தி அனுபவிக்க என்றால், மதிப்பிடவும் சிறிதுநேரம். உங்கள் ஆதரவுக்கு நன்றி!"</string>
+
+    <string name="theme">"தீம்"</string>
+    <string name="sensors">"சென்சார்கள்"</string>
+    <string name="extras">"உபரி"</string>
+
+    <string name="picture_saved">"படம் சேமிக்கப்படும்"</string>
+
+    <string name="band_done">"முடிந்தது"</string>
+    <string name="band_connecting">"பேண்ட் இணைக்கும்"</string>
+    <string name="band_connected">"பேண்ட் இணைக்கப்பட்டுள்ளது"</string>
+    <string name="band_not_paired">"பேண்ட் உங்கள் தொலைபேசி ஜோடியாக"</string>
+    <string name="band_not_found">"\"பேண்ட் இணைக்கப்பட்டுள்ளது. நிச்சயமாக ப்ளூடூத் உள்ளது செய்ய மற்றும் இசைக்குழு வரம்பில் உள்ளது கொள்ளவும்"</string>
+    <string name="band_unsupported_sdk">"மைக்ரோசாப்ட் சுகாதார BandService உங்கள் SDK பதிப்பு ஆதரிக்கவில்லை. சமீபத்திய SDK, புதுப்பிக்கவும்."</string>
+    <string name="band_service_unavailable">"மைக்ரோசாப்ட் சுகாதார BandService கிடைக்கவில்லை. நிச்சயமாக மைக்ரோசாப்ட் சுகாதார நிறுவப்பட்ட என்பதை தயவுசெய்து நீங்கள் சரியான உள்ளதா என்பதை."</string>
+    <string name="band_full">"பேண்ட் முழு உள்ளது. ஒரு ஓடு நீக்க மைக்ரோசாப்ட் சுகாதார பயன்படுத்த தயவு செய்து."</string>
+    <string name="band_unknown_error">"அறியாத பிழை ஏற்பட்டது"</string>
+    <string name="band_grabbing_info">"உங்கள் இசைக்குழு இருந்து தகவல் வாட்டி"</string>
+    <string name="band_tile_added">"டைல் சேர்க்கப்பட்டது"</string>
+
+    <string name="notification_one">"அறிவித்தல் ஒரு தொனி"</string>
+    <string name="notification_two">"அறிவித்தல் இரண்டு தொனியில்"</string>
+    <string name="notification_alarm">"அறிவித்தல் அலாரம்"</string>
+    <string name="notification_timer">"அறிவித்தல் டைமர்"</string>
+    <string name="one_high">"உயர் ஒரு தொனி"</string>
+    <string name="two_high">"உயர் இரண்டு தொனியில்"</string>
+    <string name="three_high">"உயர் மூன்று தொனி"</string>
+    <string name="ramp_up">"வலிமையாக்கும்"</string>
+    <string name="ramp_down">"கீழே வலிமையாக்கும்"</string>
+
+    <string name="barcode_type">"வகை"</string>
+    <string name="barcode_page">"பக்கம்"</string>
+
+    <string name="me_tile_updating">"MeTile மேம்படுத்தும்"</string>
+    <string name="me_tile_updated">"MeTile புதுப்பிக்கப்படுகிறது!"</string>
+    <string name="theme_updating">"தீம் மேம்படுத்தும்"</string>
+    <string name="theme_updated">"தீம் புதுப்பிக்கப்படுகிறது!"</string>
+
+    <!-- Log -->
+    <string name="timestamp">"நேர முத்திரை"</string>
+    <string name="date_time">"தேதி நேரம்"</string>
+
+    <!-- Altimeter -->
+    <string name="total_gain">"மொத்த கெயின்"</string>
+    <string name="total_loss">"மொத்த இழப்பு"</string>
+    <string name="stepping_gain">"கெயின் நுழைவதை"</string>
+    <string name="stepping_loss">"படிக்கல் இழப்பு"</string>
+    <string name="steps_ascended">"படிகள் ஏறினார்"</string>
+    <string name="steps_descended">"படிகள் தோன்றியதா"</string>
+    <string name="alt_rate">"மதிப்பீடு"</string>
+    <string name="stairs_ascended">"படிக்கட்டு ஏறினார் இன் விமானங்கள்"</string>
+    <string name="stairs_descended">"படிக்கட்டு இறங்கி இன் விமானங்கள்"</string>
+
+    <string name="brightness">"ஒளிர்வு"</string>
+
+    <string name="air_pressure">"மேகமூட்டம்"</string>
+    <string name="air_temperature">"ஏர் வெப்பநிலை"</string>
+
+    <string name="contact_status">"நிலைமை"</string>
+
+    <string name="motion_type">"மோஷன் வகை"</string>
+    <string name="pace">"பேஸ்"</string>
+    <string name="speed">"வேகம்"</string>
+    <string name="total_distance">"மொத்த தூரம்"</string>
+
+    <string name="resistance">"எதிர்ப்பு"</string>
+
+    <string name="beats_per_minute">"நிமிடத்திற்கு துடிக்கிறது"</string>
+    <string name="quality">"தர"</string>
+
+    <string name="total_steps">"மொத்த படிகள்"</string>
+
+    <string name="uv_index">"UV குறிகாட்டி"</string>
+
+    <string name="heart_rate_consent">"நீங்கள் இன்னும் இதய துடிப்பு தரவு அணுக இந்த பயன்பாடு சம்மதம். ஹார்ட் விகிதம் ஒப்புதல் பட்டனை அழுத்தவும்."</string>
+    <string name="band_2_required">"அல்டிமீட்டர், வெளிச்சம், காற்றழுத்த, GSR, ஆர்ஆர் இடைவேளை உணரிகள் உங்கள் பேண்ட் பதிப்பு ஆதரவு இல்லை. மைக்ரோசாப்ட் பேண்ட் 2 தேவைப்படுகிறது."</string>
+    <string name="flashlight_tile">மின்னும் டைல்</string>
+    <string name="flashlight_tile_added">மின்னும் டைல் சேர்க்கும்</string>
+    <string name="flashlight_tile_adding">மின்னும் டைல் சேர்க்கப்படும்</string>
+    <string name="flashlight_tile_not_added">இசைக்குழு பிரகாச ஒளி ஓடு சேர்க்க முடியவில்லை</string>
+</resources>

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/SensorTxtStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="8dp" />
+
+        <TextView
+            android:id="@+id/band2TxtStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+
+        <Switch
+            android:id="@+id/log_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="SwitchClick"
+            android:padding="8dp"
+            android:text="@string/log" />
+
+        <TextView
+            android:id="@+id/logStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/log_text" />
+
+        <Switch
+            android:id="@+id/backlog_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="SwitchClick"
+            android:padding="8dp"
+            android:text="@string/backlog"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/backlogStatus"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:padding="8dp"
+            android:visibility="gone" />
+
+        <Switch
+            android:id="@+id/accelerometer_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="SwitchClick"
+            android:padding="8dp"
+            android:text="@string/accelerometer" />
+
+        <TextView
+            android:id="@+id/accelerometerStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+
+        <Switch
+            android:id="@+id/altimeter_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="SwitchClick"
+            android:padding="8dp"
+            android:text="@string/altimeter" />
+
+        <TextView
+            android:id="@+id/altimeterStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+
+        <Switch
+            android:id="@+id/light_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="SwitchClick"
+            android:padding="8dp"
+            android:text="@string/light" />
+
+        <TextView
+            android:id="@+id/lightStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+
+        <Switch
+            android:id="@+id/barometer_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="SwitchClick"
+            android:padding="8dp"
+            android:text="@string/barometer" />
+
+        <TextView
+            android:id="@+id/barometerStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+
+        <Switch
+            android:id="@+id/calories_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="SwitchClick"
+            android:padding="8dp"
+            android:text="@string/calories" />
+
+        <TextView
+            android:id="@+id/caloriesStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+
+        <Switch
+            android:id="@+id/contact_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="SwitchClick"
+            android:padding="8dp"
+            android:text="@string/contact" />
+
+        <TextView
+            android:id="@+id/contactStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+
+        <Switch
+            android:id="@+id/distance_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="SwitchClick"
+            android:padding="8dp"
+            android:text="@string/distance" />
+
+        <TextView
+            android:id="@+id/distanceStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+
+        <Switch
+            android:id="@+id/gsr_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="SwitchClick"
+            android:padding="8dp"
+            android:text="@string/gsr" />
+
+        <TextView
+            android:id="@+id/gsrStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+
+        <Switch
+            android:id="@+id/gyroscope_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="SwitchClick"
+            android:padding="8dp"
+            android:text="@string/gyroscope" />
+
+        <TextView
+            android:id="@+id/gyroscopeStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+
+        <Switch
+            android:id="@+id/heart_rate_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="SwitchClick"
+            android:padding="8dp"
+            android:text="@string/heart_rate" />
+
+        <TextView
+            android:id="@+id/heartStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+
+        <Switch
+            android:id="@+id/pedometer_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="SwitchClick"
+            android:padding="8dp"
+            android:text="@string/pedometer" />
+
+        <TextView
+            android:id="@+id/pedometerStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+
+        <Switch
+            android:id="@+id/rr_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="SwitchClick"
+            android:padding="8dp"
+            android:text="@string/rr" />
+
+        <TextView
+            android:id="@+id/rrStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+
+        <Switch
+            android:id="@+id/temperature_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="SwitchClick"
+            android:padding="8dp"
+            android:text="@string/temperature" />
+
+        <TextView
+            android:id="@+id/temperatureStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+
+        <Switch
+            android:id="@+id/UV_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="SwitchClick"
+            android:padding="8dp"
+            android:text="@string/uv" />
+
+        <TextView
+            android:id="@+id/UVStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+    </LinearLayout>
+</ScrollView>

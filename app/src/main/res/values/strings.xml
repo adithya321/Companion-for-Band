@@ -1,0 +1,197 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="app_name">Companion for Band</string>
+    <string name="about">Developed by Adithya J</string>
+
+    <string name="accelerometer">Accelerometer</string>
+    <string name="altimeter">Altimeter</string>
+    <string name="barometer">Barometer</string>
+    <string name="calories">Calories</string>
+    <string name="contact">Contact</string>
+    <string name="distance">Distance</string>
+    <string name="gsr">GSR (Galvanic Skin Response)</string>
+    <string name="gyroscope">Gyroscope</string>
+    <string name="heart_rate">Heart Rate</string>
+    <string name="light">Ambient light</string>
+    <string name="log">Log</string>
+    <string name="log_text">Logs can be found in the CompanionForBand folder.</string>
+    <string name="backlog">Log in Background</string>
+    <string name="permit_log">Grant permission for storage by going to apps settings screen.</string>
+    <string name="pedometer">Pedometer</string>
+    <string name="rr">RR Interval</string>
+    <string name="temperature">Skin Temperature</string>
+    <string name="uv">UV</string>
+
+    <string name="base">Base</string>
+    <string name="base_desc">Start Strip tile</string>
+    <string name="highlight">Highlight</string>
+    <string name="highlight_desc">Header</string>
+    <string name="lowlight">Lowlight</string>
+    <string name="lowlight_desc">Touch down-feedback on Start Strip tiles</string>
+    <string name="secondaryText">Secondary Text</string>
+    <string name="secondaryText_desc">Toggle-on state</string>
+    <string name="highContrast">High Contrast</string>
+    <string name="highContrast_desc">Badged Start Strip tile</string>
+    <string name="muted">Muted</string>
+    <string name="muted_desc">Fitness achievement marker backgrounds</string>
+
+    <string name="music_tile">Music Tile</string>
+    <string name="music_tile_adding">Music Tile is adding</string>
+    <string name="music_tile_added">Music Tile is added</string>
+    <string name="music_tile_not_added">Unable to add music tile to the band</string>
+
+    <string name="camera_tile">Camera Tile</string>
+    <string name="camera_tile_adding">Camera Tile is adding</string>
+    <string name="camera_tile_added">Camera Tile is added</string>
+    <string name="camera_tile_not_added">Unable to add camera tile to the band</string>
+
+    <string name="flashlight_tile">Flashlight Tile</string>
+    <string name="flashlight_tile_adding">Flashlight Tile is adding</string>
+    <string name="flashlight_tile_added">Flashlight Tile is added</string>
+    <string name="flashlight_tile_not_added">Unable to add flashlight tile to the band</string>
+
+    <string name="message_tile">Message Tile</string>
+    <string name="message_tile_adding">Message Tile is adding</string>
+    <string name="message_tile_added">Message Tile is added</string>
+    <string name="message_tile_not_added">Unable to add message tile to the band</string>
+
+    <string name="barcode_tile">Barcode Tile</string>
+    <string name="barcode_tile_adding">Barcode Tile is adding</string>
+    <string name="barcode_tile_added">Barcode Tile is added</string>
+    <string name="barcode_tile_not_added">Unable to add barcode tile to the band</string>
+
+    <string name="title">Title</string>
+    <string name="hint">Body</string>
+    <string name="message_send_error">Enter title or body to send message to band</string>
+
+    <string name="name">Name</string>
+    <string name="number">Number</string>
+    <string name="barcode_send_error_1">Enter name and number to send barcode to band</string>
+    <string name="barcode_send_error_2">Select a barcode type and page number for the barcode</string>
+
+    <string name="send">SEND</string>
+
+    <string name="home">Home</string>
+    <string name="aboutLib">About</string>
+    <string name="other">Other apps</string>
+    <string name="feedback">Feedback</string>
+    <string name="rate">Rate and Review</string>
+    <string name="share">Share</string>
+    <string name="support">Support Development</string>
+    <string name="report">Report Bugs or Request Features</string>
+    <string name="translate">Translate</string>
+
+    <string name="pick_me_tile">PICK ME TILE</string>
+    <string name="crop_me_tile">CROP ME TILE</string>
+    <string name="get_me_tile">GET ME TILE</string>
+    <string name="update_me_tile">SET ME TILE</string>
+    <string name="get_theme">GET THEME</string>
+    <string name="update_theme">SET THEME</string>
+
+    <string name="invitation_title">Send App Invite</string>
+    <string name="invitation_message">This app is terrific, give it a try</string>
+    <string name="invitation_cta">Install!</string>
+    <string name="invitation_subject">Try this great app!</string>
+    <string name="send_failed">Sending invitations failed</string>
+
+    <string name="support_dev">Cuz even developers have to fill their stomachs sometimes</string>
+
+    <string name="camera_permission">Camera permission needed for camera tile. Please allow in App Settings for additional functionality.</string>
+    <string name="camera_granted">Permission Granted. Now you can use camera tile.</string>
+    <string name="camera_denied">Permission Denied. You cannot use camera tile.</string>
+
+    <string name="storage_permission">Storage permission needed to log sensor data. Please allow in App Settings for additional functionality.</string>
+    <string name="storage_granted">Permission Granted. Now you can log data.</string>
+    <string name="storage_denied">Permission Denied. You cannot log data.</string>
+
+    <string name="rate_dialog_title">Like it? Rate it!</string>
+    <string name="rate_dialog_text">If you enjoy using this app, please take a moment to rate it. Thanks for your support!</string>
+
+    <string name="theme">THEME</string>
+    <string name="sensors">SENSORS</string>
+    <string name="extras">EXTRAS</string>
+
+    <string name="picture_saved">Picture saved to</string>
+
+    <string name="band_done">Done</string>
+    <string name="band_connecting">Band is connecting</string>
+    <string name="band_connected">Band is connected</string>
+    <string name="band_not_paired">Band is not paired with your phone</string>
+    <string name="band_not_found">"Band is not connected. Please make sure bluetooth is on and the band is in range</string>
+    <string name="band_unsupported_sdk">Microsoft Health BandService does not support your SDK Version. Please update to latest SDK.</string>
+    <string name="band_service_unavailable">Microsoft Health BandService is not available. Please make sure Microsoft Health is installed and that you have the correct permissions.</string>
+    <string name="band_full">Band is full. Please use Microsoft Health to remove a tile.</string>
+    <string name="band_unknown_error">Unknown error occurred</string>
+    <string name="band_grabbing_info">Grabbing info from your band</string>
+    <string name="band_tile_added">Tile added</string>
+
+    <string name="notification_one">Notification one tone</string>
+    <string name="notification_two">Notification two tone</string>
+    <string name="notification_alarm">Notification alarm</string>
+    <string name="notification_timer">Notification timer</string>
+    <string name="one_high">One tone high</string>
+    <string name="two_high">Two tone high</string>
+    <string name="three_high">Three tone high</string>
+    <string name="ramp_up">Ramp up</string>
+    <string name="ramp_down">Ramp down</string>
+
+    <string name="barcode_type">Type</string>
+    <string name="barcode_page">Page</string>
+
+    <string name="me_tile_updating">MeTile is updating</string>
+    <string name="me_tile_updated">MeTile is updated!</string>
+    <string name="theme_updating">Theme is updating</string>
+    <string name="theme_updated">Theme is updated!</string>
+
+    <!-- Log -->
+    <string name="timestamp">Timestamp</string>
+    <string name="date_time">DateTime</string>
+
+    <!-- Altimeter -->
+    <string name="total_gain">Total Gain</string>
+    <string name="total_loss">Total Loss</string>
+    <string name="stepping_gain">Stepping Gain</string>
+    <string name="stepping_loss">Stepping Loss</string>
+    <string name="steps_ascended">Steps Ascended</string>
+    <string name="steps_descended">Steps Descended</string>
+    <string name="alt_rate">Rate</string>
+    <string name="stairs_ascended">Flights of Stairs Ascended</string>
+    <string name="stairs_descended">Flights of Stairs Descended</string>
+
+    <string name="brightness">Brightness</string>
+
+    <string name="air_pressure">Air Pressure</string>
+    <string name="air_temperature">Air Temperature</string>
+
+    <string name="contact_status">Status</string>
+
+    <string name="motion_type">Motion Type</string>
+    <string name="pace">Pace</string>
+    <string name="speed">Speed</string>
+    <string name="total_distance">Total Distance</string>
+
+    <string name="resistance">Resistance</string>
+
+    <string name="beats_per_minute">beats per minute</string>
+    <string name="quality">Quality</string>
+
+    <string name="total_steps">Total Steps</string>
+
+    <string name="uv_index">UV Index</string>
+
+    <string name="heart_rate_consent">You have not given this application consent to access heart rate data yet. Please press the Heart Rate Consent button.</string>
+    <string name="band_2_required">The Altimeter, Ambient Light, Barometer, GSR, RR Interval sensors are not supported with your Band version. Microsoft Band 2 is required.</string>
+
+    <string name="permission_title_rationale">Permission needed</string>
+    <string name="permission_read_storage_rationale">Storage read permission is needed to pick files.</string>
+    <string name="permission_write_storage_rationale">Storage write permission is needed to save the image.</string>
+
+    <string name="label_cancel">Cancel</string>
+    <string name="label_ok">OK</string>
+    <string name="label_select_picture">Select Picture</string>
+
+    <string name="toast_cannot_retrieve_selected_image">Cannot retrieve selected image</string>
+    <string name="toast_cannot_retrieve_cropped_image">Cannot retrieve cropped image</string>
+    <string name="toast_unexpected_error">Unexpected error</string>
+
+    <string name="changelog">Changelog</string>
+</resources>

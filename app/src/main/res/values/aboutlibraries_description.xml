@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="aboutLibraries_description_name">Companion for Band</string>
+    <string name="aboutLibraries_description_showIcon">true</string>
+    <string name="aboutLibraries_description_showVersion">true</string>
+    <string name="aboutLibraries_description_text">
+        <![CDATA[The only app you will need for your Microsoft Band<br /><b>Made with {gmd-favorite} in India.</b>]]>
+    </string>
+
+    <string name="aboutLibraries_description_special1_name">CHANGELOG</string>
+    <string name="aboutLibraries_description_special1_text">
+        <![CDATA[This is a small sample which can be set in the about my app description file.<br /><br /><b>You can style this with html markup :D</b>]]>
+    </string>
+
+
+    <string name="define_license_none">none</string>
+    <string name="license_none_licenseName">No License</string>
+    <string name="license_none_licenseWebsite">Do what you want with this library.</string>
+    <string name="license_none_licenseShortDescription">
+        <![CDATA[
+        No License
+        <br /><br />
+        Copyright &#169; <<<YEAR>>>, <<<OWNER>>>
+        <br />
+        All rights reserved.
+        <br /><br />
+        Do what you want with this library.
+        ]]>
+    </string>
+    <string name="license_none_licenseDescription">
+        <![CDATA[
+        No License
+        <br /><br />
+        Copyright &#169; <<<YEAR>>>, <<<OWNER>>>
+        <br />
+        All rights reserved.
+        <br /><br />
+        Do what you want with this library.
+        ]]>
+    </string>
+
+
+    <string name="define_MaterialColorPicker">year;owner</string>
+    <string name="library_MaterialColorPicker_author">Simone Pessotto</string>
+    <string name="library_MaterialColorPicker_authorWebsite">http://www.simonepessotto.it</string>
+    <string name="library_MaterialColorPicker_libraryName">Android Material Color Picker Dialog</string>
+    <string name="library_MaterialColorPicker_libraryVersion">1.0.1</string>
+    <string name="library_MaterialColorPicker_libraryWebsite">https://github.com/Pes8/android-material-color-picker-dialog</string>
+    <string name="library_MaterialColorPicker_licenseId">mit</string>
+    <string name="library_MaterialColorPicker_libraryDescription">
+        <![CDATA[
+            A simple, minimalistic and beautiful dialog color picker for Android 4.1+ devices. This color picker is easy-to-use and easy-to-integrate in your application to let users of your app choose color in a simple way.
+            Design inspired from Dribbble by Lucas Bonomi.
+        ]]>
+    </string>
+    <string name="library_MaterialColorPicker_isOpenSource">true</string>
+    <string name="library_MaterialColorPicker_repositoryLink">https://github.com/Pes8/android-material-color-picker-dialog</string>
+    <string name="library_MaterialColorPicker_owner">Simone Pessotto</string>
+    <string name="library_MaterialColorPicker_year">2015</string>
+
+
+    <string name="define_FiveStars">year;owner</string>
+    <string name="library_FiveStars_author">Angelo Gallarello</string>
+    <string name="library_FiveStars_authorWebsite">http://www.angtrim.com</string>
+    <string name="library_FiveStars_libraryName">Android Five Stars</string>
+    <string name="library_FiveStars_libraryVersion">3.1</string>
+    <string name="library_FiveStars_libraryWebsite">https://github.com/Angtrim/Android-Five-Stars-Library</string>
+    <string name="library_FiveStars_licenseId">none</string>
+    <string name="library_FiveStars_libraryDescription">
+        <![CDATA[
+            Android Five Stars Library is a small library that helps developers add a "Rate My App" dialog to their applications.
+            It\'s called "Five Stars" because the dialog has a different behaviour based on the rating given by the user.
+        ]]>
+    </string>
+    <string name="library_FiveStars_isOpenSource">true</string>
+    <string name="library_FiveStars_repositoryLink">https://github.com/Angtrim/Android-Five-Stars-Library</string>
+    <string name="library_FiveStars_owner">Angelo Gallarello</string>
+    <string name="library_FiveStars_year">2015</string>
+
+
+    <string name="define_CustomCrash">year;owner</string>
+    <string name="library_CustomCrash_author">Eduard Ereza Martínez</string>
+    <string name="library_CustomCrash_authorWebsite">http://www.eduardereza.com/</string>
+    <string name="library_CustomCrash_libraryName">Custom Activity On Crash</string>
+    <string name="library_CustomCrash_libraryVersion">1.4.0</string>
+    <string name="library_CustomCrash_libraryWebsite">https://github.com/Ereza/CustomActivityOnCrash</string>
+    <string name="library_CustomCrash_licenseId">apache_2_0</string>
+    <string name="library_CustomCrash_libraryDescription">
+        <![CDATA[
+            This library allows launching a custom activity when the app crashes, instead of showing the hated "Unfortunately, X has stopped" dialog.<br /><br />
+            The bug image used in the default error activity is licensed under CC-BY by Riff: <a>https://www.sketchport.com/drawing/6119265933459456/lady-bug</a>
+        ]]>
+    </string>
+    <string name="library_CustomCrash_isOpenSource">true</string>
+    <string name="library_CustomCrash_repositoryLink">https://github.com/Ereza/CustomActivityOnCrash</string>
+    <string name="library_CustomCrash_owner">Eduard Ereza Martínez</string>
+    <string name="library_CustomCrash_year">2015</string>
+
+
+    <string name="define_uCrop">year;owner</string>
+    <string name="library_uCrop_author">Yalantis</string>
+    <string name="library_uCrop_authorWebsite">https://yalantis.com/</string>
+    <string name="library_uCrop_libraryName">uCrop</string>
+    <string name="library_uCrop_libraryVersion">1.2.3</string>
+    <string name="library_uCrop_libraryWebsite">https://github.com/Yalantis/uCrop</string>
+    <string name="library_uCrop_licenseId">apache_2_0</string>
+    <string name="library_uCrop_libraryDescription">
+        <![CDATA[
+            This project aims to provide an ultimate and flexible image cropping experience. Made in Yalantis.
+        ]]>
+    </string>
+    <string name="library_uCrop_isOpenSource">true</string>
+    <string name="library_uCrop_repositoryLink">https://github.com/Yalantis/uCrop</string>
+    <string name="library_uCrop_owner">Yalantis</string>
+    <string name="library_uCrop_year">2016</string>
+
+
+    <string name="define_ChangeLog">year;owner</string>
+    <string name="library_ChangeLog_author">Gabriele Mariotti</string>
+    <string name="library_ChangeLog_authorWebsite">https://plus.google.com/u/0/+GabrieleMariotti</string>
+    <string name="library_ChangeLog_libraryName">ChangeLog</string>
+    <string name="library_ChangeLog_libraryVersion">2.0.0</string>
+    <string name="library_ChangeLog_libraryWebsite">https://github.com/gabrielemariotti/changeloglib</string>
+    <string name="library_ChangeLog_licenseId">apache_2_0</string>
+    <string name="library_ChangeLog_libraryDescription">
+        <![CDATA[
+            ChangeLog Library provides an easy way to display a change log in your Android app.
+        ]]>
+    </string>
+    <string name="library_ChangeLog_isOpenSource">true</string>
+    <string name="library_ChangeLog_repositoryLink">https://github.com/gabrielemariotti/changeloglib</string>
+    <string name="library_ChangeLog_owner">Gabriele Mariotti</string>
+    <string name="library_ChangeLog_year">2013&#8211;2015</string>
+</resources>

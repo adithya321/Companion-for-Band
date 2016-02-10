@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<changelog bulletedList="true">
+    <changelogversion changeDate="FEB 9, 2016" versionName="2.4.1">
+        <changelogimprovement>Translated to French. Thanks to Myrmex
+            (onesky@myrmex.org)
+        </changelogimprovement>
+    </changelogversion>
+
+    <changelogversion changeDate="FEB 7, 2016" versionName="2.4">
+        <changelogimprovement>Changelog and Licenses</changelogimprovement>
+    </changelogversion>
+
+    <changelogversion changeDate="FEB 3, 2016" versionName="2.3">
+        <changelogimprovement>Better Image Cropping with uCrop</changelogimprovement>
+        <changelogimprovement>Flashlight Tile</changelogimprovement>
+    </changelogversion>
+
+    <changelogversion changeDate="JAN 29, 2016" versionName="2.2">
+        <changelogimprovement>Translations for Spanish and Tamil</changelogimprovement>
+    </changelogversion>
+
+    <changelogversion changeDate="JAN 28, 2016" versionName="2.1">
+        <changelogtext>Temperature in Fahrenheit and Celsius</changelogtext>
+        <changelogtext>Get theme from band</changelogtext>
+    </changelogversion>
+
+    <changelogversion changeDate="JAN 27, 2016" versionName="2.0">
+        <changelogimprovement>Barcode Tile</changelogimprovement>
+        <changelogimprovement>Background logging of sensors</changelogimprovement>
+    </changelogversion>
+
+    <changelogversion changeDate="JAN 26, 2016" versionName="1.9">
+        <changelogtext>More Camera Controls</changelogtext>
+        <changelogbug>Request permissions for Marshmallow devices</changelogbug>
+    </changelogversion>
+
+    <changelogversion changeDate="JAN 16, 2016" versionName="1.8">
+        <changelogimprovement>Camera Tile</changelogimprovement>
+        <changelogimprovement>Crop Image to your band resolution</changelogimprovement>
+    </changelogversion>
+</changelog>
