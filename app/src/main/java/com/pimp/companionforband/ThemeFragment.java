@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.graphics.Palette;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,11 +36,12 @@ public class ThemeFragment extends Fragment {
     private static int REQUEST_PICTURE = 1;
     private static int REQUEST_CROP_PICTURE = 2;
     int base, highlight, lowlight, secondaryText, highContrast, muted;
+    Button btnBase, btnHighlight, btnLowlight, btnSecondaryText, btnHighContrast, btnMuted;
     BitmapDrawable bitmapDrawable;
     boolean band2 = true;
     private BandClient client = null;
     private ImageView imageView;
-    private Button btnUpdateMe, btnPickMe, btnUpdateTheme, btnGetMeTile, btnGetTheme;
+    private Button btnUpdateMe, btnPickMe, btnUpdateTheme, btnGetMeTile, btnGetTheme, btnGetColors;
 
     public static ThemeFragment newInstance() {
         return new ThemeFragment();
@@ -110,21 +112,56 @@ public class ThemeFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.base)
-                .setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & base))));
-        view.findViewById(R.id.highlight)
-                .setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & highlight))));
-        view.findViewById(R.id.lowlight)
-                .setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & lowlight))));
-        view.findViewById(R.id.secondaryText)
-                .setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & secondaryText))));
-        view.findViewById(R.id.highContrast)
-                .setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & highContrast))));
-        view.findViewById(R.id.muted)
-                .setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & muted))));
+        btnBase = (Button) view.findViewById(R.id.base);
+        btnHighlight = (Button) view.findViewById(R.id.highlight);
+        btnLowlight = (Button) view.findViewById(R.id.lowlight);
+        btnSecondaryText = (Button) view.findViewById(R.id.secondaryText);
+        btnHighContrast = (Button) view.findViewById(R.id.highContrast);
+        btnMuted = (Button) view.findViewById(R.id.muted);
+
+        btnBase.setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & base))));
+        btnHighlight.setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & highlight))));
+        btnLowlight.setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & lowlight))));
+        btnSecondaryText.setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & secondaryText))));
+        btnHighContrast.setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & highContrast))));
+        btnMuted.setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & muted))));
 
         new task().execute();
+
+        btnGetColors = (Button) view.findViewById(R.id.get_colors_button);
+        btnGetColors.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
+                if (bitmapDrawable.getBitmap() != null && !bitmapDrawable.getBitmap().isRecycled()) {
+                    Palette.from(bitmapDrawable.getBitmap()).generate(paletteListener);
+                }
+            }
+        });
     }
+
+    Palette.PaletteAsyncListener paletteListener = new Palette.PaletteAsyncListener() {
+        public void onGenerated(Palette palette) {
+            int def = Color.WHITE;
+
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyPrefs", 0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("base", palette.getVibrantColor(def));
+            editor.putInt("highLight", palette.getLightVibrantColor(def));
+            editor.putInt("lowLight", palette.getDarkVibrantColor(def));
+            editor.putInt("secondaryText", palette.getMutedColor(def));
+            editor.putInt("highContrast", palette.getLightMutedColor(def));
+            editor.putInt("muted", palette.getDarkMutedColor(def));
+            editor.apply();
+
+            btnBase.setBackgroundColor(palette.getVibrantColor(def));
+            btnHighlight.setBackgroundColor(palette.getLightVibrantColor(def));
+            btnLowlight.setBackgroundColor(palette.getDarkVibrantColor(def));
+            btnSecondaryText.setBackgroundColor(palette.getMutedColor(def));
+            btnHighContrast.setBackgroundColor(palette.getLightMutedColor(def));
+            btnMuted.setBackgroundColor(palette.getDarkMutedColor(def));
+        }
+    };
 
     @Override
     public void onDestroy() {

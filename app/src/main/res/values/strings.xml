@@ -86,6 +86,7 @@
     <string name="update_me_tile">SET ME TILE</string>
     <string name="get_theme">GET THEME</string>
     <string name="update_theme">SET THEME</string>
+    <string name="get_colors">GET COLORS FROM IMAGE</string>
 
     <string name="invitation_title">Send App Invite</string>
     <string name="invitation_message">This app is terrific, give it a try</string>

@@ -8,8 +8,8 @@ android {
         applicationId "com.pimp.companionforband"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 19
-        versionName "2.4.2"
+        versionCode 20
+        versionName "2.4.3"
     }
     buildTypes {
         release {
@@ -22,7 +22,6 @@ android {
 repositories {
     jcenter()
     mavenCentral()
-    maven { url "http://jzaccone.github.io/SlidingMenu-aar" }
 }
 
 dependencies {
@@ -48,6 +47,7 @@ dependencies {
     compile 'com.ragnarok.rxcamera:lib:0.0.1'
     compile 'com.yalantis:ucrop:1.2.3'
 
+    compile 'com.android.support:palette-v7:23.1.1'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile 'com.android.support:recyclerview-v7:23.1.1'
