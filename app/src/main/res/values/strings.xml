@@ -5,6 +5,7 @@
     <string name="accelerometer">Accelerometer</string>
     <string name="altimeter">Altimeter</string>
     <string name="barometer">Barometer</string>
+    <string name="calories_today">Calories Today</string>
     <string name="calories">Calories</string>
     <string name="contact">Contact</string>
     <string name="distance">Distance</string>
@@ -149,13 +150,15 @@
 
     <!-- Altimeter -->
     <string name="total_gain">Total Gain</string>
+    <string name="total_gain_today">Total Gain Today</string>
     <string name="total_loss">Total Loss</string>
     <string name="stepping_gain">Stepping Gain</string>
     <string name="stepping_loss">Stepping Loss</string>
     <string name="steps_ascended">Steps Ascended</string>
     <string name="steps_descended">Steps Descended</string>
     <string name="alt_rate">Rate</string>
-    <string name="stairs_ascended">Flights of Stairs Ascended</string>
+    <string name="stairs_ascended_today">Flights of Stairs Ascended Today</string>
+    <string name="stairs_ascended">Total Flights of Stairs Ascended</string>
     <string name="stairs_descended">Flights of Stairs Descended</string>
 
     <string name="brightness">Brightness</string>
@@ -168,6 +171,7 @@
     <string name="motion_type">Motion Type</string>
     <string name="pace">Pace</string>
     <string name="speed">Speed</string>
+    <string name="distance_today">Distance Today</string>
     <string name="total_distance">Total Distance</string>
 
     <string name="resistance">Resistance</string>
@@ -175,8 +179,10 @@
     <string name="beats_per_minute">beats per minute</string>
     <string name="quality">Quality</string>
 
+    <string name="steps_today">Steps Today</string>
     <string name="total_steps">Total Steps</string>
 
+    <string name="uv_today">UV Exposure Today</string>
     <string name="uv_index">UV Index</string>
 
     <string name="heart_rate_consent">You have not given this application consent to access heart rate data yet. Please press the Heart Rate Consent button.</string>

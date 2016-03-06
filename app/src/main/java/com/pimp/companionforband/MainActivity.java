@@ -60,8 +60,6 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
     protected static final int REQUEST_STORAGE_READ_ACCESS_PERMISSION = 101;
     protected static final int REQUEST_STORAGE_WRITE_ACCESS_PERMISSION = 102;
     private static final int REQUEST_SELECT_PICTURE = 0x01;
-    private static final int SAMPLE_IMAGE_MAX_SIZE_WIDTH = 200;
-    private static final int SAMPLE_IMAGE_MAX_SIZE_HEIGHT = 300;
     private static final String SAMPLE_CROPPED_IMAGE_NAME = "SampleCropImage.jpeg";
     SharedPreferences settings;
     SharedPreferences.Editor editor;
@@ -344,7 +342,7 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                         boolean flag;
                         if (drawerItem != null) {
                             flag = true;
-                            switch (drawerItem.getIdentifier()) {
+                            switch ((int) drawerItem.getIdentifier()) {
                                 case 1:
                                     mTracker.send(new HitBuilders.EventBuilder()
                                             .setCategory("Action")

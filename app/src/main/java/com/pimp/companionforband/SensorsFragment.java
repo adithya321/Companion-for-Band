@@ -71,6 +71,7 @@ public class SensorsFragment extends Fragment {
             distanceTV, gsrTV, gyroscopeTV, heartRateTV, pedometerTV, rrTV, skinTempTV, uvTV;
     int permissionCheck;
     private BandClient client = null;
+    boolean band2 = false;
     private BandAccelerometerEventListener mAccelerometerEventListener = new BandAccelerometerEventListener() {
         @Override
         public void onBandAccelerometerChanged(final BandAccelerometerEvent event) {
@@ -113,59 +114,71 @@ public class SensorsFragment extends Fragment {
         @Override
         public void onBandAltimeterChanged(final BandAltimeterEvent event) {
             if (event != null) {
-                appendToUI(new StringBuilder().append(getString(R.string.total_gain))
-                                .append(String.format(" = %d cm\n", event.getTotalGain()))
-                                .append(getString(R.string.total_loss))
-                                .append(String.format(" = %d cm\n", event.getTotalLoss()))
-                                .append(getString(R.string.stepping_gain))
-                                .append(String.format(" = %d cm\n", event.getSteppingGain()))
-                                .append(getString(R.string.stepping_loss))
-                                .append(String.format(" = %d cm\n", event.getSteppingLoss()))
-                                .append(getString(R.string.steps_ascended))
-                                .append(String.format(" = %d\n", event.getStepsAscended()))
-                                .append(getString(R.string.steps_descended))
-                                .append(String.format(" = %d\n", event.getStepsDescended()))
-                                .append(getString(R.string.alt_rate))
-                                .append(String.format(" = %f cm/s\n", event.getRate()))
-                                .append(getString(R.string.stairs_ascended))
-                                .append(String.format(" = %d\n", event.getFlightsAscended()))
-                                .append(getString(R.string.stairs_descended))
-                                .append(String.format(" = %d\n", event.getFlightsDescended())).toString()
-                        , altimeterTV);
-                if (getContext().getSharedPreferences("MyPrefs", 0).getBoolean("log", false)) {
-                    File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Altimeter");
-                    if (file.exists() || file.isDirectory()) {
-                        try {
-                            Date date = new Date();
-                            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
-                            if (new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Altimeter" + File.separator + "Altimeter_" + DateFormat.getDateInstance().format(date) + ".csv").exists()) {
-                                String str = DateFormat.getDateTimeInstance().format(event.getTimestamp());
-                                CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "Altimeter" + File.separator + "Altimeter_" + DateFormat.getDateInstance().format(date) + ".csv", true));
-                                csvWriter.writeNext(new String[]{String.valueOf(event.getTimestamp()), str,
-                                        String.valueOf(event.getTotalGain()),
-                                        String.valueOf(event.getTotalLoss()),
-                                        String.valueOf(event.getSteppingGain()),
-                                        String.valueOf(event.getSteppingLoss()),
-                                        String.valueOf(event.getStepsAscended()),
-                                        String.valueOf(event.getStepsDescended()),
-                                        String.valueOf(event.getRate()),
-                                        String.valueOf(event.getFlightsAscended()),
-                                        String.valueOf(event.getFlightsDescended())});
-                                csvWriter.close();
-                            } else {
-                                CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "Altimeter" + File.separator + "Altimeter_" + DateFormat.getDateInstance().format(date) + ".csv", true));
-                                csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time),
-                                        getString(R.string.total_gain), getString(R.string.total_loss), getString(R.string.stepping_gain),
-                                        getString(R.string.stepping_loss), getString(R.string.steps_ascended), getString(R.string.steps_descended),
-                                        getString(R.string.alt_rate), getString(R.string.stairs_ascended), getString(R.string.stairs_descended)});
-                                csvWriter.close();
+                try {
+                    appendToUI(new StringBuilder()
+                                    .append(getString(R.string.total_gain_today))
+                                    .append(String.format(" = %d cm\n", event.getTotalGainToday()))
+                                    .append(getString(R.string.total_gain))
+                                    .append(String.format(" = %d cm\n", event.getTotalGain()))
+                                    .append(getString(R.string.total_loss))
+                                    .append(String.format(" = %d cm\n", event.getTotalLoss()))
+                                    .append(getString(R.string.stepping_gain))
+                                    .append(String.format(" = %d cm\n", event.getSteppingGain()))
+                                    .append(getString(R.string.stepping_loss))
+                                    .append(String.format(" = %d cm\n", event.getSteppingLoss()))
+                                    .append(getString(R.string.steps_ascended))
+                                    .append(String.format(" = %d\n", event.getStepsAscended()))
+                                    .append(getString(R.string.steps_descended))
+                                    .append(String.format(" = %d\n", event.getStepsDescended()))
+                                    .append(getString(R.string.alt_rate))
+                                    .append(String.format(" = %f cm/s\n", event.getRate()))
+                                    .append(getString(R.string.stairs_ascended_today))
+                                    .append(String.format(" = %d\n", event.getFlightsAscendedToday()))
+                                    .append(getString(R.string.stairs_ascended))
+                                    .append(String.format(" = %d\n", event.getFlightsAscended()))
+                                    .append(getString(R.string.stairs_descended))
+                                    .append(String.format(" = %d\n", event.getFlightsDescended())).toString()
+                            , altimeterTV);
+
+                    if (getContext().getSharedPreferences("MyPrefs", 0).getBoolean("log", false)) {
+                        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Altimeter");
+                        if (file.exists() || file.isDirectory()) {
+                            try {
+                                Date date = new Date();
+                                String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+                                if (new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Altimeter" + File.separator + "Altimeter_" + DateFormat.getDateInstance().format(date) + ".csv").exists()) {
+                                    String str = DateFormat.getDateTimeInstance().format(event.getTimestamp());
+                                    CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "Altimeter" + File.separator + "Altimeter_" + DateFormat.getDateInstance().format(date) + ".csv", true));
+                                    csvWriter.writeNext(new String[]{String.valueOf(event.getTimestamp()), str,
+                                            String.valueOf(event.getTotalGainToday()),
+                                            String.valueOf(event.getTotalGain()),
+                                            String.valueOf(event.getTotalLoss()),
+                                            String.valueOf(event.getSteppingGain()),
+                                            String.valueOf(event.getSteppingLoss()),
+                                            String.valueOf(event.getStepsAscended()),
+                                            String.valueOf(event.getStepsDescended()),
+                                            String.valueOf(event.getRate()),
+                                            String.valueOf(event.getFlightsAscendedToday()),
+                                            String.valueOf(event.getFlightsAscended()),
+                                            String.valueOf(event.getFlightsDescended())});
+                                    csvWriter.close();
+                                } else {
+                                    CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "Altimeter" + File.separator + "Altimeter_" + DateFormat.getDateInstance().format(date) + ".csv", true));
+                                    csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.total_gain_today),
+                                            getString(R.string.total_gain), getString(R.string.total_loss), getString(R.string.stepping_gain),
+                                            getString(R.string.stepping_loss), getString(R.string.steps_ascended), getString(R.string.steps_descended),
+                                            getString(R.string.alt_rate), getString(R.string.stairs_ascended_today), getString(R.string.stairs_ascended), getString(R.string.stairs_descended)});
+                                    csvWriter.close();
+                                }
+                            } catch (IOException e) {
+                                Log.e("CSV", e.toString());
                             }
-                        } catch (IOException e) {
-                            Log.e("CSV", e.toString());
+                        } else {
+                            file.mkdirs();
                         }
-                    } else {
-                        file.mkdirs();
                     }
+                } catch (Exception e) {
+                    appendToUI(e.toString(), altimeterTV);
                 }
             }
         }
@@ -242,7 +255,16 @@ public class SensorsFragment extends Fragment {
         @Override
         public void onBandCaloriesChanged(BandCaloriesEvent bandCaloriesEvent) {
             if (bandCaloriesEvent != null) {
-                appendToUI(getString(R.string.calories) + " = " + bandCaloriesEvent.getCalories() + " kCal", caloriesTV);
+                if (band2) {
+                    try {
+                        appendToUI(getString(R.string.calories_today) + " = " + bandCaloriesEvent.getCaloriesToday() + " kCal\n" +
+                                getString(R.string.calories) + " = " + bandCaloriesEvent.getCalories() + " kCal", caloriesTV);
+                    } catch (Exception e) {
+                        appendToUI(e.toString(), caloriesTV);
+                    }
+                } else {
+                    appendToUI(getString(R.string.calories) + " = " + bandCaloriesEvent.getCalories() + " kCal", caloriesTV);
+                }
                 if (getContext().getSharedPreferences("MyPrefs", 0).getBoolean("log", false)) {
                     File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Calories");
                     if (file.exists() || file.isDirectory()) {
@@ -252,12 +274,25 @@ public class SensorsFragment extends Fragment {
                             if (new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Calories" + File.separator + "Calories_" + DateFormat.getDateInstance().format(date) + ".csv").exists()) {
                                 String str = DateFormat.getDateTimeInstance().format(bandCaloriesEvent.getTimestamp());
                                 CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "Calories" + File.separator + "Calories_" + DateFormat.getDateInstance().format(date) + ".csv", true));
-                                csvWriter.writeNext(new String[]{String.valueOf(bandCaloriesEvent.getTimestamp()),
-                                        str, String.valueOf(bandCaloriesEvent.getCalories())});
+                                if (band2) {
+                                    try {
+                                        csvWriter.writeNext(new String[]{String.valueOf(bandCaloriesEvent.getTimestamp()),
+                                                str, String.valueOf(bandCaloriesEvent.getCaloriesToday()),
+                                                String.valueOf(bandCaloriesEvent.getCalories())});
+                                    } catch (Exception e) {
+                                        appendToUI(e.toString(), caloriesTV);
+                                    }
+                                } else {
+                                    csvWriter.writeNext(new String[]{String.valueOf(bandCaloriesEvent.getTimestamp()),
+                                            str, String.valueOf(bandCaloriesEvent.getCalories())});
+                                }
                                 csvWriter.close();
                             } else {
                                 CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "Calories" + File.separator + "Calories_" + DateFormat.getDateInstance().format(date) + ".csv", true));
-                                csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.calories)});
+                                if (band2)
+                                    csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.calories_today), getString(R.string.calories)});
+                                else
+                                    csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.calories)});
                                 csvWriter.close();
                             }
                         } catch (IOException paramAnonymousBandCaloriesEvent) {
@@ -306,11 +341,24 @@ public class SensorsFragment extends Fragment {
         @Override
         public void onBandDistanceChanged(BandDistanceEvent bandDistanceEvent) {
             if (bandDistanceEvent != null) {
-                appendToUI(getString(R.string.motion_type) + " = " + bandDistanceEvent.getMotionType() +
-                        "\n" + getString(R.string.pace) + " (ms/m) = " + bandDistanceEvent.getPace() +
-                        "\n" + getString(R.string.speed) + " (cm/s) = " + bandDistanceEvent.getSpeed() +
-                        "\n" + getString(R.string.total_distance) + " = " + bandDistanceEvent.getTotalDistance() / 100000L +
-                        " km", distanceTV);
+                if (band2) {
+                    try {
+                        appendToUI(getString(R.string.motion_type) + " = " + bandDistanceEvent.getMotionType() +
+                                "\n" + getString(R.string.pace) + " (ms/m) = " + bandDistanceEvent.getPace() +
+                                "\n" + getString(R.string.speed) + " (cm/s) = " + bandDistanceEvent.getSpeed() +
+                                "\n" + getString(R.string.distance_today) + " = " + bandDistanceEvent.getDistanceToday() / 100000L +
+                                " km\n" + getString(R.string.total_distance) + " = " + bandDistanceEvent.getTotalDistance() / 100000L +
+                                " km", distanceTV);
+                    } catch (Exception e) {
+                        appendToUI(e.toString(), distanceTV);
+                    }
+                } else {
+                    appendToUI(getString(R.string.motion_type) + " = " + bandDistanceEvent.getMotionType() +
+                            "\n" + getString(R.string.pace) + " (ms/m) = " + bandDistanceEvent.getPace() +
+                            "\n" + getString(R.string.speed) + " (cm/s) = " + bandDistanceEvent.getSpeed() +
+                            "\n" + getString(R.string.total_distance) + " = " + bandDistanceEvent.getTotalDistance() / 100000L +
+                            " km", distanceTV);
+                }
                 if (getContext().getSharedPreferences("MyPrefs", 0).getBoolean("log", false)) {
                     File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Distance");
                     if (file.exists() || file.isDirectory()) {
@@ -320,15 +368,31 @@ public class SensorsFragment extends Fragment {
                             if (new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Distance" + File.separator + "Distance_" + DateFormat.getDateInstance().format(date) + ".csv").exists()) {
                                 String str = DateFormat.getDateTimeInstance().format(bandDistanceEvent.getTimestamp());
                                 CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "Distance" + File.separator + "Distance_" + DateFormat.getDateInstance().format(date) + ".csv", true));
-                                csvWriter.writeNext(new String[]{String.valueOf(bandDistanceEvent.getTimestamp()),
-                                        str, String.valueOf(bandDistanceEvent.getMotionType()),
-                                        String.valueOf(bandDistanceEvent.getPace()),
-                                        String.valueOf(bandDistanceEvent.getSpeed()),
-                                        String.valueOf(bandDistanceEvent.getTotalDistance())});
+                                if (band2) {
+                                    try {
+                                        csvWriter.writeNext(new String[]{String.valueOf(bandDistanceEvent.getTimestamp()),
+                                                str, String.valueOf(bandDistanceEvent.getMotionType()),
+                                                String.valueOf(bandDistanceEvent.getPace()),
+                                                String.valueOf(bandDistanceEvent.getSpeed()),
+                                                String.valueOf(bandDistanceEvent.getDistanceToday()),
+                                                String.valueOf(bandDistanceEvent.getTotalDistance())});
+                                    } catch (Exception e) {
+                                        appendToUI(e.toString(), distanceTV);
+                                    }
+                                } else {
+                                    csvWriter.writeNext(new String[]{String.valueOf(bandDistanceEvent.getTimestamp()),
+                                            str, String.valueOf(bandDistanceEvent.getMotionType()),
+                                            String.valueOf(bandDistanceEvent.getPace()),
+                                            String.valueOf(bandDistanceEvent.getSpeed()),
+                                            String.valueOf(bandDistanceEvent.getTotalDistance())});
+                                }
                                 csvWriter.close();
                             } else {
                                 CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "Distance" + File.separator + "Distance_" + DateFormat.getDateInstance().format(date) + ".csv", true));
-                                csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.motion_type), getString(R.string.pace), getString(R.string.speed), getString(R.string.total_distance)});
+                                if (band2)
+                                    csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.motion_type), getString(R.string.pace), getString(R.string.speed), getString(R.string.distance_today), getString(R.string.total_distance)});
+                                else
+                                    csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.motion_type), getString(R.string.pace), getString(R.string.speed), getString(R.string.total_distance)});
                                 csvWriter.close();
                             }
                         } catch (IOException e) {
@@ -456,7 +520,16 @@ public class SensorsFragment extends Fragment {
         @Override
         public void onBandPedometerChanged(BandPedometerEvent bandPedometerEvent) {
             if (bandPedometerEvent != null) {
-                appendToUI(getString(R.string.total_steps) + " = " + bandPedometerEvent.getTotalSteps(), pedometerTV);
+                if (band2) {
+                    try {
+                        appendToUI(getString(R.string.steps_today) + " = " + bandPedometerEvent.getStepsToday() + "\n" +
+                                getString(R.string.total_steps) + " = " + bandPedometerEvent.getTotalSteps(), pedometerTV);
+                    } catch (Exception e) {
+                        appendToUI(e.toString(), pedometerTV);
+                    }
+                } else {
+                    appendToUI(getString(R.string.total_steps) + " = " + bandPedometerEvent.getTotalSteps(), pedometerTV);
+                }
                 if (getContext().getSharedPreferences("MyPrefs", 0).getBoolean("log", false)) {
                     File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Pedometer");
                     if (file.exists() || file.isDirectory()) {
@@ -466,12 +539,24 @@ public class SensorsFragment extends Fragment {
                             if (new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Pedometer" + File.separator + "Pedometer_" + DateFormat.getDateInstance().format(date) + ".csv").exists()) {
                                 String str = DateFormat.getDateTimeInstance().format(bandPedometerEvent.getTimestamp());
                                 CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "Pedometer" + File.separator + "Pedometer_" + DateFormat.getDateInstance().format(date) + ".csv", true));
-                                csvWriter.writeNext(new String[]{String.valueOf(bandPedometerEvent.getTimestamp()),
-                                        str, String.valueOf(bandPedometerEvent.getTotalSteps())});
+                                if (band2) {
+                                    try {
+                                        csvWriter.writeNext(new String[]{String.valueOf(bandPedometerEvent.getTimestamp()),
+                                                str, String.valueOf(bandPedometerEvent.getStepsToday()), String.valueOf(bandPedometerEvent.getTotalSteps())});
+                                    } catch (Exception e) {
+                                        appendToUI(e.toString(), pedometerTV);
+                                    }
+                                } else {
+                                    csvWriter.writeNext(new String[]{String.valueOf(bandPedometerEvent.getTimestamp()),
+                                            str, String.valueOf(bandPedometerEvent.getTotalSteps())});
+                                }
                                 csvWriter.close();
                             } else {
                                 CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "Pedometer" + File.separator + "Pedometer_" + DateFormat.getDateInstance().format(date) + ".csv", true));
-                                csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.total_steps)});
+                                if (band2)
+                                    csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.steps_today), getString(R.string.total_steps)});
+                                else
+                                    csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.total_steps)});
                                 csvWriter.close();
                             }
                         } catch (IOException e) {
@@ -553,7 +638,16 @@ public class SensorsFragment extends Fragment {
         @Override
         public void onBandUVChanged(BandUVEvent bandUVEvent) {
             if (bandUVEvent != null) {
-                appendToUI(getString(R.string.uv_index) + " = " + bandUVEvent.getUVIndexLevel(), uvTV);
+                if (band2) {
+                    try {
+                        appendToUI(getString(R.string.uv_today) + " = " + bandUVEvent.getUVExposureToday() + "\n" +
+                                getString(R.string.uv_index) + " = " + bandUVEvent.getUVIndexLevel(), uvTV);
+                    } catch (Exception e) {
+                        appendToUI(e.toString(), uvTV);
+                    }
+                } else {
+                    appendToUI(getString(R.string.uv_index) + " = " + bandUVEvent.getUVIndexLevel(), uvTV);
+                }
                 if (getContext().getSharedPreferences("MyPrefs", 0).getBoolean("log", false)) {
                     File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "UV");
                     if (file.exists() || file.isDirectory()) {
@@ -563,12 +657,24 @@ public class SensorsFragment extends Fragment {
                             if (new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "UV" + File.separator + "UV_" + DateFormat.getDateInstance().format(date) + ".csv").exists()) {
                                 String str = DateFormat.getDateTimeInstance().format(bandUVEvent.getTimestamp());
                                 CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "UV" + File.separator + "UV_" + DateFormat.getDateInstance().format(date) + ".csv", true));
-                                csvWriter.writeNext(new String[]{String.valueOf(bandUVEvent.getTimestamp()),
-                                        str, String.valueOf(bandUVEvent.getUVIndexLevel())});
+                                if (band2) {
+                                    try {
+                                        csvWriter.writeNext(new String[]{String.valueOf(bandUVEvent.getTimestamp()),
+                                                str, String.valueOf(bandUVEvent.getUVExposureToday()), String.valueOf(bandUVEvent.getUVIndexLevel())});
+                                    } catch (Exception e) {
+                                        appendToUI(e.toString(), uvTV);
+                                    }
+                                } else {
+                                    csvWriter.writeNext(new String[]{String.valueOf(bandUVEvent.getTimestamp()),
+                                            str, String.valueOf(bandUVEvent.getUVIndexLevel())});
+                                }
                                 csvWriter.close();
                             } else {
                                 CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "UV" + File.separator + "UV_" + DateFormat.getDateInstance().format(date) + ".csv", true));
-                                csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.uv_index)});
+                                if (band2)
+                                    csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.uv_today), getString(R.string.uv_index)});
+                                else
+                                    csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.uv_index)});
                                 csvWriter.close();
                             }
                         } catch (IOException e) {
@@ -703,8 +809,8 @@ public class SensorsFragment extends Fragment {
         for (int i = 0; i < ids.length; i++) setSwitch(view, ids[i], strings[i], textViews[i]);
         reference = new WeakReference<Activity>(getActivity());
 
-        new Band1SubscriptionTask().execute();
         new Band2SubscriptionTask().execute();
+        new Band1SubscriptionTask().execute();
     }
 
     private void appendToUI(final String string, final TextView textView) {
@@ -896,12 +1002,14 @@ public class SensorsFragment extends Fragment {
                 if (getConnectedBandClient()) {
                     int hardwareVersion = Integer.parseInt(client.getHardwareVersion().await());
                     if (hardwareVersion >= 20) {
+                        band2 = true;
                         appendToUI(getString(R.string.band_connected) + "\n", statusTV);
                         client.getSensorManager().registerAltimeterEventListener(mAltimeterEventListener);
                         client.getSensorManager().registerAmbientLightEventListener(mAmbientLightEventListener);
                         client.getSensorManager().registerBarometerEventListener(mBarometerEventListener);
                         client.getSensorManager().registerGsrEventListener(mGsrEventListener);
                     } else {
+                        band2 = false;
                         appendToUI(getString(R.string.band_2_required) + "\n", band2TV);
                     }
                 } else {

@@ -4,7 +4,7 @@
     <string name="aboutLibraries_description_showIcon">true</string>
     <string name="aboutLibraries_description_showVersion">true</string>
     <string name="aboutLibraries_description_text">
-        <![CDATA[The only app you will need for your Microsoft Band<br /><b>Made with {gmd-favorite} in India.</b>]]>
+        <![CDATA[Developed by Adithya J<br />The only app you will need for your Microsoft Band<br /><b>Made with {gmd-favorite} in India.</b>]]>
     </string>
 
     <string name="aboutLibraries_description_special1_name">CHANGELOG</string>
@@ -44,7 +44,7 @@
     <string name="library_MaterialColorPicker_author">Simone Pessotto</string>
     <string name="library_MaterialColorPicker_authorWebsite">http://www.simonepessotto.it</string>
     <string name="library_MaterialColorPicker_libraryName">Android Material Color Picker Dialog</string>
-    <string name="library_MaterialColorPicker_libraryVersion">1.0.1</string>
+    <string name="library_MaterialColorPicker_libraryVersion">1.0.2</string>
     <string name="library_MaterialColorPicker_libraryWebsite">https://github.com/Pes8/android-material-color-picker-dialog</string>
     <string name="library_MaterialColorPicker_licenseId">mit</string>
     <string name="library_MaterialColorPicker_libraryDescription">
@@ -101,7 +101,7 @@
     <string name="library_uCrop_author">Yalantis</string>
     <string name="library_uCrop_authorWebsite">https://yalantis.com/</string>
     <string name="library_uCrop_libraryName">uCrop</string>
-    <string name="library_uCrop_libraryVersion">1.2.3</string>
+    <string name="library_uCrop_libraryVersion">1.3.0</string>
     <string name="library_uCrop_libraryWebsite">https://github.com/Yalantis/uCrop</string>
     <string name="library_uCrop_licenseId">apache_2_0</string>
     <string name="library_uCrop_libraryDescription">

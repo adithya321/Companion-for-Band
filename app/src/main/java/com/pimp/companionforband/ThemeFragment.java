@@ -33,8 +33,6 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class ThemeFragment extends Fragment {
-    private static int REQUEST_PICTURE = 1;
-    private static int REQUEST_CROP_PICTURE = 2;
     int base, highlight, lowlight, secondaryText, highContrast, muted;
     Button btnBase, btnHighlight, btnLowlight, btnSecondaryText, btnHighContrast, btnMuted;
     BitmapDrawable bitmapDrawable;

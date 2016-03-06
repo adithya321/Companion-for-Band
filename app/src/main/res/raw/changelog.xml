@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
+    <changelogversion changeDate="MAR 6, 2016" versionName="2.5.0">
+        <changelogimprovement>Current day's values for the Altimeter, Calories, Distance, Pedometer and UV sensors</changelogimprovement>
+        <changelogtext>Update to latest libraries</changelogtext>
+    </changelogversion>
+
+    <changelogversion changeDate="MAR 5, 2016" versionName="2.4.3">
+        <changelogimprovement>Get Colors from Me Tile Image</changelogimprovement>
+    </changelogversion>
+
     <changelogversion changeDate="FEB 10, 2016" versionName="2.4.2">
         <changelogimprovement>Switch camera and Flash mode from Camera Tile</changelogimprovement>
     </changelogversion>
