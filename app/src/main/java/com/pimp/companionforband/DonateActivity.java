@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.pimp.companionforband.util.IabHelper;
 import com.pimp.companionforband.util.IabResult;
@@ -117,6 +118,8 @@ public class DonateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_donate);
         setTitle(getString(R.string.support));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Toast.makeText(DonateActivity.this, "Loading...", Toast.LENGTH_SHORT).show();
 
         String base64EncodedPublicKey = getString(R.string.base64);
 

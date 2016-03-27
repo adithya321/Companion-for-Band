@@ -435,6 +435,7 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                                             .withAboutVersionShown(true)
                                             .withActivityTitle(getString(R.string.app_name))
                                             .withAboutIconShown(true)
+                                            .withLibraries("RecylcerView", "Support v4 Library", "AppCompat v7 Library")
                                             .withListener(libsListener)
                                             .start(MainActivity.this);
                                     break;

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
+    <changelogversion changeDate="MAR 27, 2016" versionName="2.5.2">
+        <changelogtext>Update to band sdk - 1.3.20307.2</changelogtext>
+    </changelogversion>
+
     <changelogversion changeDate="MAR 6, 2016" versionName="2.5.0">
         <changelogimprovement>Current day's values for the Altimeter, Calories, Distance, Pedometer and UV sensors</changelogimprovement>
         <changelogtext>Update to latest libraries</changelogtext>
