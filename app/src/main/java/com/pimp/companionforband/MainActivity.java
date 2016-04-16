@@ -47,6 +47,9 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 import com.yalantis.ucrop.UCrop;
 
+import net.rdrei.android.dirchooser.DirectoryChooserConfig;
+import net.rdrei.android.dirchooser.DirectoryChooserFragment;
+
 import java.io.File;
 
 import angtrim.com.fivestarslibrary.FiveStarsDialog;
@@ -55,7 +58,8 @@ import angtrim.com.fivestarslibrary.ReviewListener;
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 
-public class MainActivity extends AppCompatActivity implements NegativeReviewListener, ReviewListener {
+public class MainActivity extends AppCompatActivity implements NegativeReviewListener, ReviewListener,
+        DirectoryChooserFragment.OnFragmentInteractionListener {
 
     protected static final int REQUEST_STORAGE_READ_ACCESS_PERMISSION = 101;
     protected static final int REQUEST_STORAGE_WRITE_ACCESS_PERMISSION = 102;
@@ -463,6 +467,16 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
         AppUpdater appUpdater = new AppUpdater(this);
         appUpdater.start();
 
+        settings = getApplicationContext().getSharedPreferences("MyPrefs", 0);
+        editor = settings.edit();
+
+        final DirectoryChooserConfig config = DirectoryChooserConfig.builder()
+                .allowNewDirectoryNameModification(true)
+                .newDirectoryName("CfBCamera")
+                .initialDirectory(settings.getString("pic_location", "/storage/emulated/0/CompanionForBand/Camera"))
+                .build();
+        mDialog = DirectoryChooserFragment.newInstance(config);
+
         CustomActivityOnCrash.install(this);
     }
 
@@ -735,5 +749,23 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
             }
             return null;
         }
+    }
+
+    public void changePictureLocation(View view) {
+        mDialog.show(getFragmentManager(), null);
+    }
+
+    private DirectoryChooserFragment mDialog;
+
+    @Override
+    public void onSelectDirectory(@NonNull String path) {
+        editor.putString("pic_location", path);
+        editor.apply();
+        mDialog.dismiss();
+    }
+
+    @Override
+    public void onCancelChooser() {
+        mDialog.dismiss();
     }
 }

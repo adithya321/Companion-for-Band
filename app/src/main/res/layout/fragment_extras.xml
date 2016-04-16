@@ -54,6 +54,12 @@
                     android:text="@string/camera_tile" />
             </LinearLayout>
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="changePictureLocation"
+                android:text="@string/change_picture_location" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

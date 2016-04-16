@@ -2,10 +2,10 @@ package com.pimp.companionforband;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.SurfaceHolder;
@@ -49,19 +49,22 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         surfaceHolder.addCallback(this);
         surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
+        SharedPreferences s = getApplicationContext().getSharedPreferences("MyPrefs", 0);
+        final String location = s.getString("pic_location",
+                "/storage/emulated/0/CompanionForBand/Camera");
+
         jpegCallback = new Camera.PictureCallback() {
 
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
                 FileOutputStream outStream = null;
                 try {
-                    File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Camera");
+                    File file = new File(location);
                     if (!file.exists() && !file.isDirectory())
                         file.mkdirs();
 
-                    outStream = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath()
-                            + File.separator + "CompanionForBand" + File.separator
-                            + "Camera" + File.separator + System.currentTimeMillis() + ".jpg");
+                    outStream = new FileOutputStream(location + File.separator +
+                            System.currentTimeMillis() + ".jpg");
 
                     outStream.write(data);
                     outStream.close();
@@ -72,8 +75,8 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 } finally {
                 }
 
-                Toast.makeText(getApplicationContext(), getString(R.string.picture_saved) + " CompanionForBand/Camera",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.picture_saved) + " " +
+                        location, Toast.LENGTH_SHORT).show();
                 refreshCamera();
             }
         };

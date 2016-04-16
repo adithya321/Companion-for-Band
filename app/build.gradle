@@ -8,8 +8,8 @@ android {
         applicationId "com.pimp.companionforband"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 23
-        versionName "2.5.2"
+        versionCode 24
+        versionName "2.5.3"
     }
     buildTypes {
         release {
@@ -22,6 +22,7 @@ android {
 repositories {
     jcenter()
     mavenCentral()
+    maven { url 'http://guardian.github.com/maven/repo-releases' }
 }
 
 dependencies {
@@ -41,6 +42,7 @@ dependencies {
         exclude group: 'com.google.android', module: 'support-v4'
     }
     compile 'cat.ereza:customactivityoncrash:1.4.0'
+    compile 'net.rdrei.android.dirchooser:library:3.2'
     compile('com.mikepenz:materialdrawer:5.1.6@aar') {
         transitive = true
     }

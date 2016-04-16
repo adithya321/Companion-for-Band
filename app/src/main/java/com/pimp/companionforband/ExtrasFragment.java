@@ -81,6 +81,9 @@ public class ExtrasFragment extends Fragment {
     private UUID barcodeTileId = UUID.fromString("23d392df-dd0c-4e93-8c0d-63dd7b02eb52");
     private UUID flashlightTileId = UUID.fromString("c2187a9c-db5c-4e73-9f9d-d742113f91e8");
 
+    String barcode39 = "MK12345509";
+    String barcode417 = "901234567890123456";
+
     public static ExtrasFragment newInstance() {
         return new ExtrasFragment();
     }
@@ -149,28 +152,28 @@ public class ExtrasFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 1:
-                        name.setText(sharedPreferences.getString("name1", "CODE39"));
-                        number.setText(sharedPreferences.getString("no1", "MK12345509"));
+                        name.setText(sharedPreferences.getString("name1", "Barcode 1"));
+                        number.setText(sharedPreferences.getString("no1", barcode39));
                         typeSpinner.setSelection(sharedPreferences.getInt("type1", 1));
                         break;
                     case 2:
-                        name.setText(sharedPreferences.getString("name2", "PDF417"));
-                        number.setText(sharedPreferences.getString("no2", "901234567890123456"));
+                        name.setText(sharedPreferences.getString("name2", "Barcode 2"));
+                        number.setText(sharedPreferences.getString("no2", barcode417));
                         typeSpinner.setSelection(sharedPreferences.getInt("type2", 2));
                         break;
                     case 3:
-                        name.setText(sharedPreferences.getString("name3", "CODE39"));
-                        number.setText(sharedPreferences.getString("no3", "MK12345509"));
+                        name.setText(sharedPreferences.getString("name3", "Barcode 3"));
+                        number.setText(sharedPreferences.getString("no3", barcode39));
                         typeSpinner.setSelection(sharedPreferences.getInt("type3", 1));
                         break;
                     case 4:
-                        name.setText(sharedPreferences.getString("name4", "PDF417"));
-                        number.setText(sharedPreferences.getString("no4", "901234567890123456"));
+                        name.setText(sharedPreferences.getString("name4", "Barcode 4"));
+                        number.setText(sharedPreferences.getString("no4", barcode417));
                         typeSpinner.setSelection(sharedPreferences.getInt("type4", 2));
                         break;
                     case 5:
-                        name.setText(sharedPreferences.getString("name5", "CODE39"));
-                        number.setText(sharedPreferences.getString("no5", "MK12345509"));
+                        name.setText(sharedPreferences.getString("name5", "Barcode 5"));
+                        number.setText(sharedPreferences.getString("no5", barcode39));
                         typeSpinner.setSelection(sharedPreferences.getInt("type5", 1));
                         break;
                 }
@@ -529,11 +532,11 @@ public class ExtrasFragment extends Fragment {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyPrefs", 0);
         BandTile tile = new BandTile.Builder(barcodeTileId, getString(R.string.barcode_tile), tileIcon)
                 .setTileSmallIcon(badgeIcon).setPageLayouts(
-                        createBarcodeLayout(sharedPreferences.getInt("type1", 1) == 1 ? BarcodeType.CODE39 : BarcodeType.PDF417, 50, 51),
-                        createBarcodeLayout(sharedPreferences.getInt("type2", 1) == 1 ? BarcodeType.CODE39 : BarcodeType.PDF417, 52, 53),
-                        createBarcodeLayout(sharedPreferences.getInt("type3", 1) == 1 ? BarcodeType.CODE39 : BarcodeType.PDF417, 54, 55),
-                        createBarcodeLayout(sharedPreferences.getInt("type4", 1) == 1 ? BarcodeType.CODE39 : BarcodeType.PDF417, 56, 57),
-                        createBarcodeLayout(sharedPreferences.getInt("type5", 1) == 1 ? BarcodeType.CODE39 : BarcodeType.PDF417, 58, 59)).build();
+                        createBarcodeLayout(sharedPreferences.getInt("type5", 1) == 1 ? BarcodeType.CODE39 : BarcodeType.PDF417),
+                        createBarcodeLayout(sharedPreferences.getInt("type4", 2) == 1 ? BarcodeType.CODE39 : BarcodeType.PDF417),
+                        createBarcodeLayout(sharedPreferences.getInt("type3", 1) == 1 ? BarcodeType.CODE39 : BarcodeType.PDF417),
+                        createBarcodeLayout(sharedPreferences.getInt("type2", 2) == 1 ? BarcodeType.CODE39 : BarcodeType.PDF417),
+                        createBarcodeLayout(sharedPreferences.getInt("type1", 1) == 1 ? BarcodeType.CODE39 : BarcodeType.PDF417)).build();
         appendToUI(getString(R.string.barcode_tile_adding), Style.INFO);
         if (client.getTileManager().addTile(getActivity(), tile).await()) {
             appendToUI(getString(R.string.barcode_tile_added), Style.CONFIRM);
@@ -544,38 +547,42 @@ public class ExtrasFragment extends Fragment {
         }
     }
 
-    private PageLayout createBarcodeLayout(BarcodeType type, int id1, int id2) {
+    private PageLayout createBarcodeLayout(BarcodeType type) {
         return new PageLayout(
                 new FlowPanel(15, 0, 245, 105, FlowPanelOrientation.VERTICAL)
                         .addElements(new Barcode(0, 0, 221, 70, type)
-                                .setId(id1).setMargins(3, 0, 0, 0))
+                                .setId(11).setMargins(3, 0, 0, 0))
                         .addElements(new TextBlock(0, 0, 230, 30, TextBlockFont.SMALL, 0)
-                                .setId(id2).setColor(Color.RED)));
+                                .setId(21).setColor(Color.RED)));
     }
 
     private void updateBarcodePages() throws BandIOException {
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyPrefs", 0);
+        final SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyPrefs", 0);
+        final String no1 = sharedPreferences.getString("no1", barcode39);
+        final String no2 = sharedPreferences.getString("no2", barcode417);
+        final String no3 = sharedPreferences.getString("no3", barcode39);
+        final String no4 = sharedPreferences.getString("no4", barcode417);
+        final String no5 = sharedPreferences.getString("no5", barcode39);
         client.getTileManager().setPages(barcodeTileId,
-                new PageData(barcodeId5, 4)
-                        .update(new BarcodeData(59, sharedPreferences.getString("no5", "MK12345509"),
-                                (sharedPreferences.getInt("type5", 1) == 1) ? BarcodeType.CODE39 : BarcodeType.PDF417))
-                        .update(new TextBlockData(58, sharedPreferences.getString("no5", "MK12345509"))),
-                new PageData(barcodeId4, 3)
-                        .update(new BarcodeData(57, sharedPreferences.getString("no4", "901234567890123456"),
-                                (sharedPreferences.getInt("type4", 1) == 1) ? BarcodeType.CODE39 : BarcodeType.PDF417))
-                        .update(new TextBlockData(56, sharedPreferences.getString("no4", "901234567890123456"))),
-                new PageData(barcodeId3, 2)
-                        .update(new BarcodeData(55, sharedPreferences.getString("no3", "MK12345509"),
-                                (sharedPreferences.getInt("type3", 1) == 1) ? BarcodeType.CODE39 : BarcodeType.PDF417))
-                        .update(new TextBlockData(54, sharedPreferences.getString("no3", "MK12345509"))),
-                new PageData(barcodeId2, 1)
-                        .update(new BarcodeData(53, sharedPreferences.getString("no2", "901234567890123456"),
-                                (sharedPreferences.getInt("type2", 1) == 1) ? BarcodeType.CODE39 : BarcodeType.PDF417))
-                        .update(new TextBlockData(52, sharedPreferences.getString("no2", "901234567890123456"))),
                 new PageData(barcodeId1, 0)
-                        .update(new BarcodeData(51, sharedPreferences.getString("no1", "MK12345509"),
+                        .update(new BarcodeData(11, no5, (sharedPreferences.getInt("type5", 1) == 1) ? BarcodeType.CODE39 : BarcodeType.PDF417))
+                        .update(new TextBlockData(21, no5)),
+                new PageData(barcodeId2, 1)
+                        .update(new BarcodeData(11, no4,
+                                (sharedPreferences.getInt("type4", 2) == 1) ? BarcodeType.CODE39 : BarcodeType.PDF417))
+                        .update(new TextBlockData(21, no4)),
+                new PageData(barcodeId3, 2)
+                        .update(new BarcodeData(11, no3,
+                                (sharedPreferences.getInt("type3", 1) == 1) ? BarcodeType.CODE39 : BarcodeType.PDF417))
+                        .update(new TextBlockData(21, no3)),
+                new PageData(barcodeId4, 3)
+                        .update(new BarcodeData(11, no2,
+                                (sharedPreferences.getInt("type2", 2) == 1) ? BarcodeType.CODE39 : BarcodeType.PDF417))
+                        .update(new TextBlockData(21, no2)),
+                new PageData(barcodeId5, 4)
+                        .update(new BarcodeData(11, no1,
                                 (sharedPreferences.getInt("type1", 1) == 1) ? BarcodeType.CODE39 : BarcodeType.PDF417))
-                        .update(new TextBlockData(50, sharedPreferences.getString("no1", "MK12345509"))));
+                        .update(new TextBlockData(21, no1)));
     }
 
     private PageLayout createFlashlight1Layout() {

@@ -201,4 +201,6 @@
     <string name="toast_unexpected_error">Unexpected error</string>
 
     <string name="changelog">Changelog</string>
+
+    <string name="change_picture_location">CHANGE PICTURE LOCATION</string>
 </resources>

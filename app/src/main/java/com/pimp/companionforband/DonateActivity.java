@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.pimp.companionforband.util.IabHelper;
 import com.pimp.companionforband.util.IabResult;
@@ -57,26 +56,8 @@ public class DonateActivity extends AppCompatActivity {
     };
     IabHelper.QueryInventoryFinishedListener mQueryFinishedListener = new IabHelper.QueryInventoryFinishedListener() {
         public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-            if (mHelper == null) return;
-
-            if (result.isFailure()) {
-                complain("Failed to query inventory: " + result);
-                return;
-            }
-
-            String cokePrice = "Coke";
-            String coffeePrice = "Coffee";
-            String burgerPrice = "Burger";
-            String pizzaPrice = "Pizza";
-            String mealPrice = "Meal";
-            String[] title = {cokePrice, coffeePrice, burgerPrice, pizzaPrice, mealPrice};
-
-            cokePrice = inventory.getSkuDetails(SKU_COKE).getPrice();
-            coffeePrice = inventory.getSkuDetails(SKU_COFFEE).getPrice();
-            burgerPrice = inventory.getSkuDetails(SKU_BURGER).getPrice();
-            pizzaPrice = inventory.getSkuDetails(SKU_PIZZA).getPrice();
-            mealPrice = inventory.getSkuDetails(SKU_MEAL).getPrice();
-            String[] price = {cokePrice, coffeePrice, burgerPrice, pizzaPrice, mealPrice};
+            String[] title = {"Coke", "Coffee", "Burger", "Pizza", "Meal"};
+            String[] price = {"Rs. 10.00", "Rs. 50.00", "Rs. 100.00", "Rs. 500.00", "Rs. 1,000.00"};
 
             ListView listView = (ListView) findViewById(R.id.list);
             listView.setAdapter(new CustomAdapter(DonateActivity.this, title, price));
@@ -118,8 +99,6 @@ public class DonateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_donate);
         setTitle(getString(R.string.support));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Toast.makeText(DonateActivity.this, "Loading...", Toast.LENGTH_SHORT).show();
 
         String base64EncodedPublicKey = getString(R.string.base64);
 
