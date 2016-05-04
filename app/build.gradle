@@ -8,8 +8,8 @@ android {
         applicationId "com.pimp.companionforband"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 24
-        versionName "2.5.3"
+        versionCode 25
+        versionName "2.5.4"
     }
     buildTypes {
         release {
@@ -57,7 +57,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-analytics:8.4.0'
     compile 'com.google.android.gms:play-services-appinvite:8.4.0'
 
-    compile 'com.ramotion.foldingcell:folding-cell:1.0.0'
     compile 'com.robinhood.spark:spark:1.1.0'
 }
 

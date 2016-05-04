@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="spark_SparkViewStyle">@style/spark_SparkView</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -40,5 +42,21 @@
     <style name="TitleDialogTextStyle" parent="Base.DialogWindowTitle.AppCompat">
         <item name="android:textColor">@color/primary_dark</item>
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+    </style>
+
+    <style name="spark_SparkView">
+        <item name="spark_lineColor">@color/spark_line_color</item>
+        <item name="spark_lineWidth">@dimen/spark_line_width</item>
+        <item name="spark_cornerRadius">@dimen/spark_corner_radius</item>
+        <item name="spark_fill">false</item>
+
+        <item name="spark_baseLineColor">@color/spark_base_line_color</item>
+        <item name="spark_baseLineWidth">@dimen/spark_base_line_width</item>
+
+        <item name="spark_scrubLineColor">@color/spark_scrub_line_color</item>
+        <item name="spark_scrubLineWidth">@dimen/spark_scrub_line_width</item>
+        <item name="spark_scrubEnabled">true</item>
+
+        <item name="spark_animateChanges">false</item>
     </style>
 </resources>

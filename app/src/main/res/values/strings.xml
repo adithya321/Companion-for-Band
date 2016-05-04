@@ -203,4 +203,20 @@
     <string name="changelog">Changelog</string>
 
     <string name="change_picture_location">CHANGE PICTURE LOCATION</string>
+
+    <string name="scrub_empty">Tap and hold the graph for value.</string>
+    <string name="scrub_format">Value: %1$s</string>
+
+    <string-array name="chart_sensors_array">
+        <item>Acceleration X</item>
+        <item>Altimeter</item>
+        <item>Ambient Light</item>
+        <item>Barometer</item>
+        <item>Pace</item>
+        <item>GSR</item>
+        <item>Angular Velocity X</item>
+        <item>Heart Rate</item>
+        <item>RR Interval</item>
+        <item>Skin Temperature</item>
+    </string-array>
 </resources>

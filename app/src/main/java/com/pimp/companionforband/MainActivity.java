@@ -563,8 +563,11 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                 setSwitch(SlogStatus, logStatus, "log");
                 if (SlogStatus.isChecked())
                     SBacklogStatus.setVisibility(View.VISIBLE);
-                else
+                else {
+                    SBacklogStatus.setChecked(false);
+                    setSwitch(SBacklogStatus, backlogStatus, "backlog");
                     SBacklogStatus.setVisibility(View.GONE);
+                }
                 break;
             case R.id.backlog_switch:
                 setSwitch(SBacklogStatus, backlogStatus, "backlog");

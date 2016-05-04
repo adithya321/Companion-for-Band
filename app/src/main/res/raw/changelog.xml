@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
+    <changelogversion changeDate="MAY 4, 2016" versionName="2.5.4">
+        <changelogimprovement>Sparkline chart for Sensors</changelogimprovement>
+        <changelogbug>Fix Log in Background Switch</changelogbug>
+    </changelogversion>
+
     <changelogversion changeDate="APR 16, 2016" versionName="2.5.3">
         <changelogimprovement>Change Picture Location</changelogimprovement>
         <changelogbug>Fix Barcode Tile</changelogbug>

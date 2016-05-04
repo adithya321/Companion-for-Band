@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.RectF;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -55,6 +57,8 @@ import com.microsoft.band.sensors.BandUVEventListener;
 import com.microsoft.band.sensors.HeartRateConsentListener;
 import com.microsoft.band.sensors.SampleRate;
 import com.opencsv.CSVWriter;
+import com.robinhood.spark.SparkAdapter;
+import com.robinhood.spark.SparkView;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -64,6 +68,7 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class SensorsFragment extends Fragment {
+    Spinner chart_spinner;
     WeakReference<Activity> reference;
     TextView band2TV;
     TextView statusTV;
@@ -76,6 +81,14 @@ public class SensorsFragment extends Fragment {
         @Override
         public void onBandAccelerometerChanged(final BandAccelerometerEvent event) {
             if (event != null) {
+                if (chart_spinner.getSelectedItem().toString().equals("Acceleration X")) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mChartAdapter.add(event.getAccelerationX());
+                        }
+                    });
+                }
                 appendToUI(String.format(" X = %.3f (m/s²) \n Y = %.3f (m/s²)\n Z = %.3f (m/s²)",
                         event.getAccelerationX(),
                         event.getAccelerationY(),
@@ -114,6 +127,14 @@ public class SensorsFragment extends Fragment {
         @Override
         public void onBandAltimeterChanged(final BandAltimeterEvent event) {
             if (event != null) {
+                if (chart_spinner.getSelectedItem().toString().equals("Altimeter")) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mChartAdapter.add(event.getRate());
+                        }
+                    });
+                }
                 try {
                     appendToUI(new StringBuilder()
                                     .append(getString(R.string.total_gain_today))
@@ -187,6 +208,14 @@ public class SensorsFragment extends Fragment {
         @Override
         public void onBandAmbientLightChanged(final BandAmbientLightEvent event) {
             if (event != null) {
+                if (chart_spinner.getSelectedItem().toString().equals("Ambient Light")) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mChartAdapter.add((float) event.getBrightness());
+                        }
+                    });
+                }
                 appendToUI(getString(R.string.brightness) + String.format(" = %d lux\n", event.getBrightness()), ambientLightTV);
                 if (getContext().getSharedPreferences("MyPrefs", 0).getBoolean("log", false)) {
                     File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "AmbientLight");
@@ -219,6 +248,14 @@ public class SensorsFragment extends Fragment {
         @Override
         public void onBandBarometerChanged(final BandBarometerEvent event) {
             if (event != null) {
+                if (chart_spinner.getSelectedItem().toString().equals("Barometer")) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mChartAdapter.add((float) event.getAirPressure());
+                        }
+                    });
+                }
                 appendToUI(getString(R.string.air_pressure) + String.format(" = %.3f hPa\n", event.getAirPressure())
                                 + getString(R.string.air_temperature) + String.format(" = %.2f °C = %.2f F",
                         event.getTemperature(), 1.8 * event.getTemperature() + 32),
@@ -339,8 +376,16 @@ public class SensorsFragment extends Fragment {
     };
     private BandDistanceEventListener bandDistanceEventListener = new BandDistanceEventListener() {
         @Override
-        public void onBandDistanceChanged(BandDistanceEvent bandDistanceEvent) {
+        public void onBandDistanceChanged(final BandDistanceEvent bandDistanceEvent) {
             if (bandDistanceEvent != null) {
+                if (chart_spinner.getSelectedItem().toString().equals("Pace")) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mChartAdapter.add(bandDistanceEvent.getPace());
+                        }
+                    });
+                }
                 if (band2) {
                     try {
                         appendToUI(getString(R.string.motion_type) + " = " + bandDistanceEvent.getMotionType() +
@@ -409,6 +454,14 @@ public class SensorsFragment extends Fragment {
         @Override
         public void onBandGsrChanged(final BandGsrEvent event) {
             if (event != null) {
+                if (chart_spinner.getSelectedItem().toString().equals("GSR")) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mChartAdapter.add((float) event.getResistance());
+                        }
+                    });
+                }
                 appendToUI(getString(R.string.resistance) + String.format(" = %d kOhms\n", event.getResistance()), gsrTV);
                 if (getContext().getSharedPreferences("MyPrefs", 0).getBoolean("log", false)) {
                     File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "GSR");
@@ -439,8 +492,16 @@ public class SensorsFragment extends Fragment {
     };
     private BandGyroscopeEventListener bandGyroscopeEventListener = new BandGyroscopeEventListener() {
         @Override
-        public void onBandGyroscopeChanged(BandGyroscopeEvent bandGyroscopeEvent) {
+        public void onBandGyroscopeChanged(final BandGyroscopeEvent bandGyroscopeEvent) {
             if (bandGyroscopeEvent != null) {
+                if (chart_spinner.getSelectedItem().toString().equals("Angular Velocity X")) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mChartAdapter.add(bandGyroscopeEvent.getAngularVelocityX());
+                        }
+                    });
+                }
                 appendToUI(String.format("X = %.3f (m/s²) \nY = %.3f (m/s²)\nZ = %.3f (m/s²)\n" +
                                 "X = %.3f (°/sec)\nY = %.3f (°/sec)\nZ = %.3f (°/sec)",
                         bandGyroscopeEvent.getAccelerationX(),
@@ -486,6 +547,14 @@ public class SensorsFragment extends Fragment {
         @Override
         public void onBandHeartRateChanged(final BandHeartRateEvent event) {
             if (event != null) {
+                if (chart_spinner.getSelectedItem().toString().equals("Heart Rate")) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mChartAdapter.add((float) event.getHeartRate());
+                        }
+                    });
+                }
                 appendToUI(getString(R.string.heart_rate) + String.format(" = %d ", event.getHeartRate())
                         + getString(R.string.beats_per_minute) + "\n" + getString(R.string.quality)
                         + String.format(" = %s", event.getQuality()), heartRateTV);
@@ -573,6 +642,14 @@ public class SensorsFragment extends Fragment {
         @Override
         public void onBandRRIntervalChanged(final BandRRIntervalEvent event) {
             if (event != null) {
+                if (chart_spinner.getSelectedItem().toString().equals("RR Interval")) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mChartAdapter.add((float) event.getInterval());
+                        }
+                    });
+                }
                 appendToUI(getString(R.string.rr) + String.format(" = %.3f s\n", event.getInterval()), rrTV);
                 if (getContext().getSharedPreferences("MyPrefs", 0).getBoolean("log", false)) {
                     File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "RRInterval");
@@ -603,8 +680,16 @@ public class SensorsFragment extends Fragment {
     };
     private BandSkinTemperatureEventListener bandSkinTemperatureEventListener = new BandSkinTemperatureEventListener() {
         @Override
-        public void onBandSkinTemperatureChanged(BandSkinTemperatureEvent bandSkinTemperatureEvent) {
+        public void onBandSkinTemperatureChanged(final BandSkinTemperatureEvent bandSkinTemperatureEvent) {
             if (bandSkinTemperatureEvent != null) {
+                if (chart_spinner.getSelectedItem().toString().equals("Skin Temperature")) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mChartAdapter.add(bandSkinTemperatureEvent.getTemperature());
+                        }
+                    });
+                }
                 appendToUI(getString(R.string.temperature) + String.format(" = " + bandSkinTemperatureEvent.getTemperature() + " °C" + " = %.2f F",
                         1.8 * bandSkinTemperatureEvent.getTemperature() + 32), skinTempTV);
                 if (getContext().getSharedPreferences("MyPrefs", 0).getBoolean("log", false)) {
@@ -636,7 +721,7 @@ public class SensorsFragment extends Fragment {
     };
     private BandUVEventListener bandUVEventListener = new BandUVEventListener() {
         @Override
-        public void onBandUVChanged(BandUVEvent bandUVEvent) {
+        public void onBandUVChanged(final BandUVEvent bandUVEvent) {
             if (bandUVEvent != null) {
                 if (band2) {
                     try {
@@ -782,6 +867,12 @@ public class SensorsFragment extends Fragment {
             view.findViewById(R.id.logStatus).setVisibility(View.VISIBLE);
             view.findViewById(R.id.backlog_switch).setVisibility(View.VISIBLE);
         }
+        ((Switch) view.findViewById(R.id.backlog_switch)).setChecked(settings.getBoolean("backlog", false));
+        if (!settings.getBoolean("backlog", false))
+            view.findViewById(R.id.backlogStatus).setVisibility(View.GONE);
+        else
+            view.findViewById(R.id.backlogStatus).setVisibility(View.VISIBLE);
+
         ((Switch) view.findViewById(R.id.heart_rate_switch)).setChecked(settings.getBoolean("heart", true));
         if (!settings.getBoolean("heart", true))
             view.findViewById(R.id.heartStatus).setVisibility(View.GONE);
@@ -797,13 +888,13 @@ public class SensorsFragment extends Fragment {
             view.findViewById(R.id.rrStatus).setVisibility(View.VISIBLE);
         }
 
-        int[] ids = {R.id.backlog_switch, R.id.accelerometer_switch, R.id.altimeter_switch, R.id.light_switch,
+        int[] ids = {R.id.accelerometer_switch, R.id.altimeter_switch, R.id.light_switch,
                 R.id.barometer_switch, R.id.calories_switch, R.id.contact_switch, R.id.distance_switch,
                 R.id.gsr_switch, R.id.gyroscope_switch, R.id.pedometer_switch, R.id.temperature_switch,
                 R.id.UV_switch};
-        String[] strings = {"backlog", "acc", "alt", "light", "bar", "cal", "con", "dis", "gsr", "gyr", "ped",
+        String[] strings = {"acc", "alt", "light", "bar", "cal", "con", "dis", "gsr", "gyr", "ped",
                 "tem", "uv"};
-        TextView[] textViews = {backlogTV, accelerometerTV, altimeterTV, ambientLightTV, barometerTV,
+        TextView[] textViews = {accelerometerTV, altimeterTV, ambientLightTV, barometerTV,
                 caloriesTV, contactTV, distanceTV, gsrTV, gyroscopeTV, pedometerTV, skinTempTV, uvTV};
 
         for (int i = 0; i < ids.length; i++) setSwitch(view, ids[i], strings[i], textViews[i]);
@@ -811,6 +902,77 @@ public class SensorsFragment extends Fragment {
 
         new Band2SubscriptionTask().execute();
         new Band1SubscriptionTask().execute();
+
+        SparkView sparkView = (SparkView) view.findViewById(R.id.sparkview);
+
+        mChartAdapter = new ChartAdapter();
+        sparkView.setAdapter(mChartAdapter);
+        sparkView.setScrubListener(new SparkView.OnScrubListener() {
+            @Override
+            public void onScrubbed(Object value) {
+                if (value == null) {
+                    scrubInfoTextView.setText(R.string.scrub_empty);
+                } else {
+                    scrubInfoTextView.setText(getString(R.string.scrub_format, value));
+                }
+            }
+        });
+
+        scrubInfoTextView = (TextView) view.findViewById(R.id.scrub_info_textview);
+        chart_spinner = (Spinner) view.findViewById(R.id.chart_spinner);
+    }
+
+    private TextView scrubInfoTextView;
+    ChartAdapter mChartAdapter;
+
+    public static class ChartAdapter extends SparkAdapter {
+        private final float[] yData;
+        int i = 0;
+
+        public ChartAdapter() {
+            yData = new float[50];
+        }
+
+        public void add(Float y) {
+            yData[i] = y;
+            i = (i < 49) ? i + 1 : 0;
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getCount() {
+            return yData.length;
+        }
+
+        @Override
+        public Object getItem(int index) {
+            return yData[index];
+        }
+
+        @Override
+        public float getY(int index) {
+            return yData[index];
+        }
+
+        @Override
+        public float getX(int index) {
+            return super.getX(index);
+        }
+
+        @Override
+        public RectF getDataBounds() {
+            return super.getDataBounds();
+        }
+
+        @Override
+        public boolean hasBaseLine() {
+            return false;
+        }
+
+        @Override
+        public float getBaseLine() {
+            return super.getBaseLine();
+        }
     }
 
     private void appendToUI(final String string, final TextView textView) {
