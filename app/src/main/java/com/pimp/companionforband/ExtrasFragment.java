@@ -19,12 +19,8 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.microsoft.band.BandClient;
-import com.microsoft.band.BandClientManager;
 import com.microsoft.band.BandException;
 import com.microsoft.band.BandIOException;
-import com.microsoft.band.BandInfo;
-import com.microsoft.band.ConnectionState;
 import com.microsoft.band.notifications.MessageFlags;
 import com.microsoft.band.notifications.VibrationType;
 import com.microsoft.band.tiles.BandTile;
@@ -48,10 +44,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import de.keyboardsurfer.android.widget.crouton.Configuration;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
-
 public class ExtrasFragment extends Fragment {
     private static final UUID pageId1 = UUID.fromString("29411705-106f-48bc-a671-c6d7cb3e759a");
     private static final UUID pageId2 = UUID.fromString("3f34d8b4-e697-4b4b-89df-823cef78b744");
@@ -74,7 +66,6 @@ public class ExtrasFragment extends Fragment {
     Spinner hapticSpinner, typeSpinner, pageSpinner;
     Switch musicSwitch, cameraSwitch, messageSwitch, barcodeSwitch, flashlightSwitch;
     boolean message = false, music = false, camera = false, barcode = false, flashlight = false;
-    private BandClient client = null;
     private UUID tileId = UUID.fromString("3263f46a-38be-4229-afa1-85d4399b7798");
     private UUID musicTileId = UUID.fromString("48376b8f-1066-4b67-96c7-cecc9951bf3b");
     private UUID cameraTileId = UUID.fromString("006f9aa4-4092-44e2-b911-2f7262d198bc");
@@ -238,11 +229,11 @@ public class ExtrasFragment extends Fragment {
                         break;
                 }
                 try {
-                    client.getNotificationManager().vibrate(vibrationType).await();
+                    MainActivity.client.getNotificationManager().vibrate(vibrationType).await();
                 } catch (BandException e) {
-                    handleBandException(e);
+                    MainActivity.handleBandException(e);
                 } catch (Exception e) {
-                    appendToUI(e.getMessage(), Style.ALERT);
+                    MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
                 }
             }
         });
@@ -300,8 +291,8 @@ public class ExtrasFragment extends Fragment {
 
     private void removeTile(UUID uuid) throws InterruptedException, BandException {
         if (doesTileExist(uuid)) {
-            client.getTileManager().removeTile(uuid).await();
-            appendToUI(getString(R.string.band_done), Style.CONFIRM);
+            MainActivity.client.getTileManager().removeTile(uuid).await();
+            MainActivity.appendToUI(getString(R.string.band_done), "Style.CONFIRM");
         }
     }
 
@@ -324,12 +315,12 @@ public class ExtrasFragment extends Fragment {
 
         BandTile tile = new BandTile.Builder(tileId, getString(R.string.message_tile), tileIcon)
                 .setTileSmallIcon(badgeIcon).addPageLayout(createLayout()).build();
-        appendToUI(getString(R.string.message_tile_adding), Style.INFO);
-        if (client.getTileManager().addTile(getActivity(), tile).await()) {
-            appendToUI(getString(R.string.message_tile_added), Style.CONFIRM);
+        MainActivity.appendToUI(getString(R.string.message_tile_adding), "Style.INFO");
+        if (MainActivity.client.getTileManager().addTile(getActivity(), tile).await()) {
+            MainActivity.appendToUI(getString(R.string.message_tile_added), "Style.CONFIRM");
             return true;
         } else {
-            appendToUI(getString(R.string.message_tile_not_added), Style.ALERT);
+            MainActivity.appendToUI(getString(R.string.message_tile_not_added), "Style.ALERT");
             return false;
         }
     }
@@ -345,63 +336,24 @@ public class ExtrasFragment extends Fragment {
         BandTile tile = new BandTile.Builder(musicTileId, getString(R.string.music_tile), tileIcon)
                 .setTileSmallIcon(badgeIcon).addPageLayout(createMusic3Layout())
                 .addPageLayout(createMusic2Layout()).addPageLayout(createMusic1Layout()).build();
-        appendToUI(getString(R.string.music_tile_adding), Style.INFO);
-        if (client.getTileManager().addTile(getActivity(), tile).await()) {
-            appendToUI(getString(R.string.music_tile_added), Style.CONFIRM);
+        MainActivity.appendToUI(getString(R.string.music_tile_adding), "Style.INFO");
+        if (MainActivity.client.getTileManager().addTile(getActivity(), tile).await()) {
+            MainActivity.appendToUI(getString(R.string.music_tile_added), "Style.CONFIRM");
             return true;
         } else {
-            appendToUI(getString(R.string.music_tile_not_added), Style.ALERT);
+            MainActivity.appendToUI(getString(R.string.music_tile_not_added), "Style.ALERT");
             return false;
         }
     }
 
     private void sendMessage() throws BandIOException {
-        client.getNotificationManager().sendMessage(tileId, title.getText().toString(),
+        MainActivity.client.getNotificationManager().sendMessage(tileId, title.getText().toString(),
                 body.getText().toString(), new Date(), MessageFlags.SHOW_DIALOG);
     }
 
-    private boolean getConnectedBandClient() throws InterruptedException, BandException {
-        if (client == null) {
-            BandInfo[] devices = BandClientManager.getInstance().getPairedBands();
-            if (devices.length == 0) {
-                appendToUI(getString(R.string.band_not_paired), Style.ALERT);
-                return false;
-            }
-            client = BandClientManager.getInstance().create(getActivity(), devices[0]);
-        } else if (ConnectionState.CONNECTED == client.getConnectionState()) {
-            return true;
-        }
-
-        appendToUI(getString(R.string.band_connecting), Style.INFO);
-        return ConnectionState.CONNECTED == client.connect().await();
-    }
-
-    private void handleBandException(BandException e) {
-        String exceptionMessage;
-        switch (e.getErrorType()) {
-            case DEVICE_ERROR:
-                exceptionMessage = getString(R.string.band_not_found);
-                break;
-            case UNSUPPORTED_SDK_VERSION_ERROR:
-                exceptionMessage = getString(R.string.band_unsupported_sdk);
-                break;
-            case SERVICE_ERROR:
-                exceptionMessage = getString(R.string.band_service_unavailable);
-                break;
-            case BAND_FULL_ERROR:
-                exceptionMessage = getString(R.string.band_full);
-                break;
-            default:
-                exceptionMessage = getString(R.string.band_unknown_error) + " : " + e.getMessage();
-                break;
-        }
-        appendToUI(exceptionMessage, Style.ALERT);
-    }
-
     private boolean doesTileExist(UUID uuid) throws InterruptedException, BandException {
-        List<BandTile> tiles = client.getTileManager().getTiles().await();
+        List<BandTile> tiles = MainActivity.client.getTileManager().getTiles().await();
         for (BandTile tile : tiles) {
-            appendToUI(getString(R.string.band_grabbing_info), Style.INFO);
             if (tile.getTileId().equals(uuid)) {
                 return true;
             }
@@ -439,39 +391,14 @@ public class ExtrasFragment extends Fragment {
                         .setId(32).setPressedColor(-1)));
     }
 
-    private void updatePages()
-            throws BandIOException {
-        this.client.getTileManager().setPages(this.musicTileId,
+    private void updatePages() throws BandIOException {
+        MainActivity.client.getTileManager().setPages(this.musicTileId,
                 new PageData(pageId1, 0).update(new TextButtonData(31, "Volume Up"))
                         .update(new TextButtonData(32, "Volume Down")),
                 new PageData(pageId2, 1).update(new TextButtonData(11, "Play / Pause"))
                         .update(new TextButtonData(21, "Previous")),
                 new PageData(pageId3, 2).update(new TextButtonData(12, "Play / Pause"))
                         .update(new TextButtonData(22, "Next")));
-    }
-
-    private void appendToUI(final String string, final Style style) {
-        try {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Crouton.cancelAllCroutons();
-                    View view = getView();
-                    if (view != null) {
-                        Crouton crouton = Crouton.makeText(getActivity(), string,
-                                style, (ViewGroup) view.findViewById(R.id.extras));
-                        Configuration configuration = new Configuration.Builder()
-                                .setDuration(Configuration.DURATION_INFINITE)
-                                .setInAnimation(R.anim.fade_in)
-                                .build();
-                        crouton.setConfiguration(configuration);
-                        crouton.show();
-                    }
-                }
-            });
-        } catch (Exception e) {
-            //
-        }
     }
 
     private PageLayout createCamera1Layout() {
@@ -493,7 +420,7 @@ public class ExtrasFragment extends Fragment {
     }
 
     private void updateCameraPages() throws BandIOException {
-        this.client.getTileManager().setPages(this.cameraTileId,
+        MainActivity.client.getTileManager().setPages(this.cameraTileId,
                 new PageData(cameraPageId1, 0).update(new TextButtonData(93, "Flash Mode")),
                 new PageData(cameraPageId2, 1).update(new TextButtonData(92, "Switch Camera")),
                 new PageData(cameraPageId3, 2).update(new TextButtonData(91, "Capture")));
@@ -510,12 +437,12 @@ public class ExtrasFragment extends Fragment {
         BandTile tile = new BandTile.Builder(cameraTileId, getString(R.string.camera_tile), tileIcon)
                 .setTileSmallIcon(badgeIcon).addPageLayout(createCamera3Layout())
                 .addPageLayout(createCamera2Layout()).addPageLayout(createCamera1Layout()).build();
-        appendToUI(getString(R.string.camera_tile_adding), Style.INFO);
-        if (client.getTileManager().addTile(getActivity(), tile).await()) {
-            appendToUI(getString(R.string.camera_tile_added), Style.CONFIRM);
+        MainActivity.appendToUI(getString(R.string.camera_tile_adding), "Style.INFO");
+        if (MainActivity.client.getTileManager().addTile(getActivity(), tile).await()) {
+            MainActivity.appendToUI(getString(R.string.camera_tile_added), "Style.CONFIRM");
             return true;
         } else {
-            appendToUI(getString(R.string.camera_tile_not_added), Style.ALERT);
+            MainActivity.appendToUI(getString(R.string.camera_tile_not_added), "Style.ALERT");
             return false;
         }
     }
@@ -537,12 +464,12 @@ public class ExtrasFragment extends Fragment {
                         createBarcodeLayout(sharedPreferences.getInt("type3", 1) == 1 ? BarcodeType.CODE39 : BarcodeType.PDF417),
                         createBarcodeLayout(sharedPreferences.getInt("type2", 2) == 1 ? BarcodeType.CODE39 : BarcodeType.PDF417),
                         createBarcodeLayout(sharedPreferences.getInt("type1", 1) == 1 ? BarcodeType.CODE39 : BarcodeType.PDF417)).build();
-        appendToUI(getString(R.string.barcode_tile_adding), Style.INFO);
-        if (client.getTileManager().addTile(getActivity(), tile).await()) {
-            appendToUI(getString(R.string.barcode_tile_added), Style.CONFIRM);
+        MainActivity.appendToUI(getString(R.string.barcode_tile_adding), "Style.INFO");
+        if (MainActivity.client.getTileManager().addTile(getActivity(), tile).await()) {
+            MainActivity.appendToUI(getString(R.string.barcode_tile_added), "Style.CONFIRM");
             return true;
         } else {
-            appendToUI(getString(R.string.barcode_tile_not_added), Style.ALERT);
+            MainActivity.appendToUI(getString(R.string.barcode_tile_not_added), "Style.ALERT");
             return false;
         }
     }
@@ -563,7 +490,7 @@ public class ExtrasFragment extends Fragment {
         final String no3 = sharedPreferences.getString("no3", barcode39);
         final String no4 = sharedPreferences.getString("no4", barcode417);
         final String no5 = sharedPreferences.getString("no5", barcode39);
-        client.getTileManager().setPages(barcodeTileId,
+        MainActivity.client.getTileManager().setPages(barcodeTileId,
                 new PageData(barcodeId1, 0)
                         .update(new BarcodeData(11, no5, (sharedPreferences.getInt("type5", 1) == 1) ? BarcodeType.CODE39 : BarcodeType.PDF417))
                         .update(new TextBlockData(21, no5)),
@@ -591,7 +518,7 @@ public class ExtrasFragment extends Fragment {
     }
 
     private void updateFlashlightPages() throws BandIOException {
-        this.client.getTileManager().setPages(flashlightTileId,
+        MainActivity.client.getTileManager().setPages(flashlightTileId,
                 new PageData(flashlightPageId1, 0)
                         .update(new FilledButtonData(12, Color.WHITE)),
                 new PageData(flashlightPageId2, 1)
@@ -609,12 +536,12 @@ public class ExtrasFragment extends Fragment {
         BandTile tile = new BandTile.Builder(flashlightTileId, getString(R.string.flashlight_tile), tileIcon)
                 .setTileSmallIcon(badgeIcon).addPageLayout(createFlashlight1Layout())
                 .addPageLayout(createFlashlight1Layout()).build();
-        appendToUI(getString(R.string.flashlight_tile_adding), Style.INFO);
-        if (client.getTileManager().addTile(getActivity(), tile).await()) {
-            appendToUI(getString(R.string.flashlight_tile_added), Style.CONFIRM);
+        MainActivity.appendToUI(getString(R.string.flashlight_tile_adding), "Style.INFO");
+        if (MainActivity.client.getTileManager().addTile(getActivity(), tile).await()) {
+            MainActivity.appendToUI(getString(R.string.flashlight_tile_added), "Style.CONFIRM");
             return true;
         } else {
-            appendToUI(getString(R.string.flashlight_tile_not_added), Style.ALERT);
+            MainActivity.appendToUI(getString(R.string.flashlight_tile_not_added), "Style.ALERT");
             return false;
         }
     }
@@ -624,8 +551,8 @@ public class ExtrasFragment extends Fragment {
         protected Void doInBackground(UUID... params) {
             try {
                 if (doesTileExist(params[0])) {
-                    client.getTileManager().removeTile(params[0]).await();
-                    appendToUI(getString(R.string.band_done), Style.CONFIRM);
+                    MainActivity.client.getTileManager().removeTile(params[0]).await();
+                    MainActivity.appendToUI(getString(R.string.band_done), "Style.CONFIRM");
                 }
             } catch (Exception e) {
                 //
@@ -638,11 +565,11 @@ public class ExtrasFragment extends Fragment {
         @Override
         protected Boolean doInBackground(UUID... params) {
             try {
-                List<BandTile> tiles = client.getTileManager().getTiles().await();
+                List<BandTile> tiles = MainActivity.client.getTileManager().getTiles().await();
                 for (BandTile tile : tiles) {
-                    appendToUI(getString(R.string.band_grabbing_info), Style.INFO);
+                    MainActivity.appendToUI(getString(R.string.band_grabbing_info), "Style.INFO");
                     if (tile.getTileId().equals(params[0])) {
-                        appendToUI(getString(R.string.band_tile_added), Style.CONFIRM);
+                        MainActivity.appendToUI(getString(R.string.band_tile_added), "Style.CONFIRM");
                         return true;
                     }
                 }
@@ -657,9 +584,10 @@ public class ExtrasFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (getConnectedBandClient()) {
-                    appendToUI(getString(R.string.band_connected), Style.CONFIRM);
+                if (MainActivity.getConnectedBandClient()) {
                     try {
+                        MainActivity.appendToUI(getString(R.string.band_grabbing_info), "Style.INFO");
+
                         if (doesTileExist(tileId))
                             message = true;
                         if (doesTileExist(musicTileId))
@@ -671,7 +599,7 @@ public class ExtrasFragment extends Fragment {
                         if (doesTileExist(flashlightTileId))
                             flashlight = true;
 
-                        appendToUI(getString(R.string.band_done), Style.CONFIRM);
+                        MainActivity.appendToUI(getString(R.string.band_done), "Style.CONFIRM");
                     } catch (Exception e) {
                         //
                     }
@@ -682,12 +610,12 @@ public class ExtrasFragment extends Fragment {
                         }
                     });
                 } else {
-                    appendToUI(getString(R.string.band_not_found), Style.ALERT);
+                    MainActivity.appendToUI(getString(R.string.band_not_found), "Style.ALERT");
                 }
             } catch (BandException e) {
-                handleBandException(e);
+                MainActivity.handleBandException(e);
             } catch (Exception e) {
-                appendToUI(e.getMessage(), Style.ALERT);
+                MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }
             return null;
         }
@@ -697,7 +625,7 @@ public class ExtrasFragment extends Fragment {
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                if (getConnectedBandClient()) {
+                if (MainActivity.getConnectedBandClient()) {
                     if (doesTileExist(tileId)) {
                         sendMessage();
                     } else {
@@ -706,14 +634,14 @@ public class ExtrasFragment extends Fragment {
                         }
                     }
                 } else {
-                    appendToUI(getString(R.string.band_not_found), Style.ALERT);
+                    MainActivity.appendToUI(getString(R.string.band_not_found), "Style.ALERT");
                     return false;
                 }
             } catch (BandException e) {
-                handleBandException(e);
+                MainActivity.handleBandException(e);
                 return false;
             } catch (Exception e) {
-                appendToUI(e.getMessage(), Style.ALERT);
+                MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
                 return false;
             }
 
@@ -725,7 +653,7 @@ public class ExtrasFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (getConnectedBandClient()) {
+                if (MainActivity.getConnectedBandClient()) {
                     if (doesTileExist(musicTileId)) {
                         removeTile(musicTileId);
                     } else {
@@ -734,9 +662,9 @@ public class ExtrasFragment extends Fragment {
                     }
                 }
             } catch (BandException e) {
-                handleBandException(e);
+                MainActivity.handleBandException(e);
             } catch (Exception e) {
-                appendToUI(e.getMessage(), Style.ALERT);
+                MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }
             return null;
         }
@@ -746,7 +674,7 @@ public class ExtrasFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (getConnectedBandClient()) {
+                if (MainActivity.getConnectedBandClient()) {
                     if (doesTileExist(cameraTileId)) {
                         removeTile(cameraTileId);
                     } else {
@@ -755,9 +683,9 @@ public class ExtrasFragment extends Fragment {
                     }
                 }
             } catch (BandException e) {
-                handleBandException(e);
+                MainActivity.handleBandException(e);
             } catch (Exception e) {
-                appendToUI(e.getMessage(), Style.ALERT);
+                MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }
             return null;
         }
@@ -767,7 +695,7 @@ public class ExtrasFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (getConnectedBandClient()) {
+                if (MainActivity.getConnectedBandClient()) {
                     if (doesTileExist(flashlightTileId)) {
                         removeTile(flashlightTileId);
                     } else {
@@ -776,9 +704,9 @@ public class ExtrasFragment extends Fragment {
                     }
                 }
             } catch (BandException e) {
-                handleBandException(e);
+                MainActivity.handleBandException(e);
             } catch (Exception e) {
-                appendToUI(e.getMessage(), Style.ALERT);
+                MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }
             return null;
         }
@@ -788,19 +716,19 @@ public class ExtrasFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (getConnectedBandClient()) {
+                if (MainActivity.getConnectedBandClient()) {
                     if (doesTileExist(barcodeTileId)) {
                         updateBarcodePages();
-                        appendToUI(getString(R.string.band_done), Style.CONFIRM);
+                        MainActivity.appendToUI(getString(R.string.band_done), "Style.CONFIRM");
                     } else {
                         addBarcodeTile();
                         updateBarcodePages();
                     }
                 }
             } catch (BandException e) {
-                handleBandException(e);
+                MainActivity.handleBandException(e);
             } catch (Exception e) {
-                appendToUI(e.getMessage(), Style.ALERT);
+                MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }
             return null;
         }

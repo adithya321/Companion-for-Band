@@ -59,4 +59,8 @@
 
         <item name="spark_animateChanges">false</item>
     </style>
+
+    <style name="GittyTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
 </resources>

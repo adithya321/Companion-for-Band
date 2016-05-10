@@ -44,10 +44,10 @@
 
         <activity
             android:name=".DonateActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/MaterialDrawerTheme.ActionBar" />
         <activity
             android:name=".ChangelogActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/MaterialDrawerTheme.ActionBar" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -64,5 +64,9 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <activity android:name="net.rdrei.android.dirchooser.DirectoryChooserActivity" />
+
+        <activity
+            android:name=".GittyActivity"
+            android:theme="@style/GittyTheme" />
     </application>
 </manifest>

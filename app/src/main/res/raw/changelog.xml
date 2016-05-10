@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
+    <changelogversion changeDate="MAY 11, 2016" versionName="2.6.0">
+        <changelogbug>Fix for GSR sensor</changelogbug>
+        <changelogtext>Updated to latest libraries</changelogtext>
+    </changelogversion>
+
     <changelogversion changeDate="MAY 4, 2016" versionName="2.5.4">
         <changelogimprovement>Sparkline chart for Sensors</changelogimprovement>
         <changelogbug>Fix Log in Background Switch</changelogbug>
@@ -15,7 +20,9 @@
     </changelogversion>
 
     <changelogversion changeDate="MAR 6, 2016" versionName="2.5.0">
-        <changelogimprovement>Current day's values for the Altimeter, Calories, Distance, Pedometer and UV sensors</changelogimprovement>
+        <changelogimprovement>Current day's values for the Altimeter, Calories, Distance, Pedometer
+            and UV sensors
+        </changelogimprovement>
         <changelogtext>Update to latest libraries</changelogtext>
     </changelogversion>
 

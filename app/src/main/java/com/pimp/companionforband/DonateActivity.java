@@ -98,7 +98,8 @@ public class DonateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donate);
         setTitle(getString(R.string.support));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         String base64EncodedPublicKey = getString(R.string.base64);
 

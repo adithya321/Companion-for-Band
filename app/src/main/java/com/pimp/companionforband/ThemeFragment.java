@@ -6,38 +6,31 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.graphics.Palette;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.microsoft.band.BandClient;
-import com.microsoft.band.BandClientManager;
 import com.microsoft.band.BandException;
-import com.microsoft.band.BandInfo;
 import com.microsoft.band.BandTheme;
-import com.microsoft.band.ConnectionState;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-
-import de.keyboardsurfer.android.widget.crouton.Configuration;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class ThemeFragment extends Fragment {
     int base, highlight, lowlight, secondaryText, highContrast, muted;
     Button btnBase, btnHighlight, btnLowlight, btnSecondaryText, btnHighContrast, btnMuted;
     BitmapDrawable bitmapDrawable;
-    boolean band2 = true;
-    private BandClient client = null;
     private ImageView imageView;
     private Button btnUpdateMe, btnPickMe, btnUpdateTheme, btnGetMeTile, btnGetTheme, btnGetColors;
 
@@ -57,11 +50,21 @@ public class ThemeFragment extends Fragment {
 
         imageView = (ImageView) view.findViewById(R.id.selected_me_tile_image_view);
 
+        SharedPreferences settings = getActivity().getSharedPreferences("MyPrefs", 0);
+        Drawable meTileDrawable = null;
+        String encoded = settings.getString("me_tile_image", "null");
+        if (!encoded.equals("null")) {
+            byte[] imageAsBytes = Base64.decode(encoded.getBytes(), Base64.DEFAULT);
+            meTileDrawable = new BitmapDrawable(BitmapFactory
+                    .decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
+        }
+        if (meTileDrawable != null)
+            imageView.setImageDrawable(meTileDrawable);
+
         btnPickMe = (Button) view.findViewById(R.id.pick_me_tile_button);
         btnPickMe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new pickTask().execute();
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
                 startActivityForResult(intent, 9);
@@ -124,8 +127,6 @@ public class ThemeFragment extends Fragment {
         btnHighContrast.setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & highContrast))));
         btnMuted.setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & muted))));
 
-        new task().execute();
-
         btnGetColors = (Button) view.findViewById(R.id.get_colors_button);
         btnGetColors.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,43 +163,6 @@ public class ThemeFragment extends Fragment {
     };
 
     @Override
-    public void onDestroy() {
-        if (client != null) {
-            try {
-                client.disconnect().await();
-            } catch (InterruptedException e) {
-                // Do nothing as this is happening during destroy
-            } catch (BandException e) {
-                // Do nothing as this is happening during destroy
-            }
-        }
-        super.onDestroy();
-    }
-
-    private void appendToUI(final String string, final Style style) {
-        try {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Crouton.cancelAllCroutons();
-                    if (getView() != null) {
-                        Crouton crouton = Crouton.makeText(getActivity(), string,
-                                style, (ViewGroup) getView().findViewById(R.id.theme));
-                        Configuration configuration = new Configuration.Builder()
-                                .setDuration(Configuration.DURATION_INFINITE)
-                                .setInAnimation(R.anim.fade_in)
-                                .build();
-                        crouton.setConfiguration(configuration);
-                        crouton.show();
-                    }
-                }
-            });
-        } catch (Exception e) {
-            //
-        }
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 9) {
@@ -206,7 +170,7 @@ public class ThemeFragment extends Fragment {
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                if (band2)
+                if (MainActivity.band2)
                     imageView.setImageBitmap(Bitmap.createScaledBitmap(selectedImage, 310, 128, false));
                 else
                     imageView.setImageBitmap(Bitmap.createScaledBitmap(selectedImage, 310, 102, false));
@@ -216,79 +180,34 @@ public class ThemeFragment extends Fragment {
         }
     }
 
-    private boolean getConnectedBandClient() throws InterruptedException, BandException {
-        if (client == null) {
-            BandInfo[] devices = BandClientManager.getInstance().getPairedBands();
-            if (devices.length == 0) {
-                appendToUI(getString(R.string.band_not_paired), Style.ALERT);
-                return false;
-            }
-            client = BandClientManager.getInstance().create(getActivity(), devices[0]);
-        } else if (ConnectionState.CONNECTED == client.getConnectionState()) {
-            return true;
-        }
-
-        appendToUI(getString(R.string.band_connecting), Style.INFO);
-        return ConnectionState.CONNECTED == client.connect().await();
-    }
-
-    private void handleBandException(BandException e) {
-        String exceptionMessage;
-        switch (e.getErrorType()) {
-            case DEVICE_ERROR:
-                exceptionMessage = getString(R.string.band_not_found);
-                break;
-            case UNSUPPORTED_SDK_VERSION_ERROR:
-                exceptionMessage = getString(R.string.band_unsupported_sdk);
-                break;
-            case SERVICE_ERROR:
-                exceptionMessage = getString(R.string.band_service_unavailable);
-                break;
-            case BAND_FULL_ERROR:
-                exceptionMessage = getString(R.string.band_full);
-                break;
-            default:
-                exceptionMessage = getString(R.string.band_unknown_error) + " : " + e.getMessage();
-                break;
-        }
-        appendToUI(exceptionMessage, Style.ALERT);
-    }
-
-    private class pickTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                if (getConnectedBandClient()) {
-                    appendToUI(getString(R.string.band_connected), Style.CONFIRM);
-                    band2 = Integer.parseInt(client.getHardwareVersion().await()) >= 20;
-                }
-            } catch (Exception exception) {
-                //
-            }
-            return null;
-        }
-    }
-
     private class getMeTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (getConnectedBandClient()) {
-                    appendToUI(getString(R.string.band_grabbing_info), Style.INFO);
-                    final Bitmap bitmap = client.getPersonalizationManager().getMeTileImage().await();
+                if (MainActivity.getConnectedBandClient()) {
+                    MainActivity.appendToUI(getString(R.string.band_grabbing_info), "Style.INFO");
+                    final Bitmap bitmap = MainActivity.client.getPersonalizationManager().getMeTileImage().await();
 
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             imageView.setImageBitmap(bitmap);
-                            appendToUI(getString(R.string.band_done), Style.CONFIRM);
+                            MainActivity.appendToUI(getString(R.string.band_done), "Style.CONFIRM");
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                            byte[] b = baos.toByteArray();
+                            String encoded = Base64.encodeToString(b, Base64.DEFAULT);
+                            SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyPrefs", 0);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("me_tile_image", encoded);
+                            editor.apply();
                         }
                     });
                 }
             } catch (BandException exception) {
-                handleBandException(exception);
+                MainActivity.handleBandException(exception);
             } catch (Exception e) {
-                //
+                MainActivity.appendToUI(e.toString(), "Style.ALERT");
             }
             return null;
         }
@@ -301,14 +220,14 @@ public class ThemeFragment extends Fragment {
         protected BandTheme doInBackground(final View... params) {
             view = params[0];
             try {
-                if (getConnectedBandClient()) {
-                    appendToUI(getString(R.string.band_grabbing_info), Style.INFO);
-                    return client.getPersonalizationManager().getTheme().await();
+                if (MainActivity.getConnectedBandClient()) {
+                    MainActivity.appendToUI(getString(R.string.band_grabbing_info), "Style.INFO");
+                    return MainActivity.client.getPersonalizationManager().getTheme().await();
                 }
             } catch (BandException exception) {
-                handleBandException(exception);
+                MainActivity.handleBandException(exception);
             } catch (Exception e) {
-                //
+                MainActivity.appendToUI(e.toString(), "Style.ALERT");
             }
             return null;
         }
@@ -347,31 +266,7 @@ public class ThemeFragment extends Fragment {
                     .setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & highContrast))));
             view.findViewById(R.id.muted)
                     .setBackgroundColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & muted))));
-            appendToUI(getString(R.string.band_done), Style.CONFIRM);
-        }
-    }
-
-    private class task extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            client = null;
-            try {
-                SharedPreferences settings = getContext().getSharedPreferences("MyPrefs", 0);
-                SharedPreferences.Editor editor = settings.edit();
-                if (getConnectedBandClient()) {
-                    band2 = Integer.parseInt(client.getHardwareVersion().await()) >= 20;
-                    appendToUI(getString(R.string.band_connected), Style.CONFIRM);
-                } else {
-                    appendToUI(getString(R.string.band_not_found), Style.ALERT);
-                }
-                editor.putBoolean("band2", band2);
-                editor.apply();
-            } catch (BandException e) {
-                handleBandException(e);
-            } catch (Exception e) {
-                appendToUI(e.getMessage(), Style.ALERT);
-            }
-            return null;
+            MainActivity.appendToUI(getString(R.string.band_done), "Style.CONFIRM");
         }
     }
 
@@ -379,31 +274,30 @@ public class ThemeFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (getConnectedBandClient()) {
-                    appendToUI(getString(R.string.band_connected), Style.CONFIRM);
-                    appendToUI(getString(R.string.me_tile_updating), Style.INFO);
+                if (MainActivity.getConnectedBandClient()) {
+                    MainActivity.appendToUI(getString(R.string.me_tile_updating), "Style.INFO");
 
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     options.inScaled = false;
                     options.inPreferredConfig = Bitmap.Config.ARGB_8888;
                     Bitmap image;
-                    int hardwareVersion = Integer.parseInt(client.getHardwareVersion().await());
+                    int hardwareVersion = Integer.parseInt(MainActivity.client.getHardwareVersion().await());
                     if (hardwareVersion >= 20) {
                         image = Bitmap.createScaledBitmap(bitmapDrawable.getBitmap(), 310, 128, false);
                     } else {
                         image = Bitmap.createScaledBitmap(bitmapDrawable.getBitmap(), 310, 102, false);
                     }
 
-                    client.getPersonalizationManager().setMeTileImage(image).await();
-                    appendToUI(getString(R.string.me_tile_updated), Style.CONFIRM);
+                    MainActivity.client.getPersonalizationManager().setMeTileImage(image).await();
+                    MainActivity.appendToUI(getString(R.string.me_tile_updated), "Style.CONFIRM");
                 } else {
-                    appendToUI(getString(R.string.band_not_found), Style.ALERT);
+                    MainActivity.appendToUI(getString(R.string.band_not_found), "Style.ALERT");
                 }
 
             } catch (BandException e) {
-                handleBandException(e);
+                MainActivity.handleBandException(e);
             } catch (Exception e) {
-                appendToUI(e.getMessage(), Style.ALERT);
+                MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }
             return null;
         }
@@ -414,9 +308,8 @@ public class ThemeFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (getConnectedBandClient()) {
-                    appendToUI(getString(R.string.band_connected), Style.CONFIRM);
-                    appendToUI(getString(R.string.theme_updating), Style.INFO);
+                if (MainActivity.getConnectedBandClient()) {
+                    MainActivity.appendToUI(getString(R.string.theme_updating), "Style.INFO");
 
                     SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyPrefs", 0);
 
@@ -428,23 +321,23 @@ public class ThemeFragment extends Fragment {
                     muted = sharedPreferences.getInt("muted", -16777216);
 
                     try {
-                        client.getPersonalizationManager().setTheme(new
+                        MainActivity.client.getPersonalizationManager().setTheme(new
                                 BandTheme(base, highlight, lowlight, secondaryText, highContrast,
                                 muted)).await();
                     } catch (InterruptedException e) {
-                        //
+                        MainActivity.appendToUI(e.toString(), "Style.ALERT");
                     } catch (BandException e) {
-                        handleBandException(e);
+                        MainActivity.handleBandException(e);
                     }
-                    appendToUI(getString(R.string.theme_updated), Style.CONFIRM);
+                    MainActivity.appendToUI(getString(R.string.theme_updated), "Style.CONFIRM");
                 } else {
-                    appendToUI(getString(R.string.band_not_found), Style.ALERT);
+                    MainActivity.appendToUI(getString(R.string.band_not_found), "Style.ALERT");
                 }
 
             } catch (BandException e) {
-                handleBandException(e);
+                MainActivity.handleBandException(e);
             } catch (Exception e) {
-                appendToUI(e.getMessage(), Style.ALERT);
+                MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }
             return null;
         }

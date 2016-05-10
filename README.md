@@ -16,15 +16,17 @@
 
 ## Third Party Libraries
 * [AboutLibraries](https://github.com/mikepenz/AboutLibraries)
+* [Android DirectoryChooser](https://github.com/passy/Android-DirectoryChooser)
 * [Android Five Stars Library](https://github.com/Angtrim/Android-Five-Stars-Library)
 * [Android Material Color Picker Dialog](https://github.com/Pes8/android-material-color-picker-dialog)
 * [Android-Iconics](https://github.com/mikepenz/Android-Iconics)
 * [AppUpdater](https://github.com/javiersantos/AppUpdater)
 * [ChangeLog Library](https://github.com/gabrielemariotti/changeloglib)
-* [Crouton](https://github.com/keyboardsurfer/Crouton)
 * [Custom Activity On Crash](https://github.com/Ereza/CustomActivityOnCrash)
+* [Gitty Reporter](https://github.com/PaoloRotolo/GittyReporter)
 * [MaterialDrawer](https://github.com/mikepenz/MaterialDrawer)
 * [RxCamera](https://github.com/ragnraok/RxCamera)
+* [Spark](https://github.com/robinhood/spark)
 * [uCrop](https://github.com/Yalantis/uCrop)
 
 ## License

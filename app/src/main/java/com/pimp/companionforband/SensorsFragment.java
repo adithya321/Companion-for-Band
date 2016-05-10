@@ -19,12 +19,8 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.microsoft.band.BandClient;
-import com.microsoft.band.BandClientManager;
 import com.microsoft.band.BandException;
 import com.microsoft.band.BandIOException;
-import com.microsoft.band.BandInfo;
-import com.microsoft.band.ConnectionState;
 import com.microsoft.band.UserConsent;
 import com.microsoft.band.sensors.BandAccelerometerEvent;
 import com.microsoft.band.sensors.BandAccelerometerEventListener;
@@ -54,6 +50,7 @@ import com.microsoft.band.sensors.BandSkinTemperatureEvent;
 import com.microsoft.band.sensors.BandSkinTemperatureEventListener;
 import com.microsoft.band.sensors.BandUVEvent;
 import com.microsoft.band.sensors.BandUVEventListener;
+import com.microsoft.band.sensors.GsrSampleRate;
 import com.microsoft.band.sensors.HeartRateConsentListener;
 import com.microsoft.band.sensors.SampleRate;
 import com.opencsv.CSVWriter;
@@ -71,12 +68,9 @@ public class SensorsFragment extends Fragment {
     Spinner chart_spinner;
     WeakReference<Activity> reference;
     TextView band2TV;
-    TextView statusTV;
     TextView logTV, backlogTV, accelerometerTV, altimeterTV, ambientLightTV, barometerTV, caloriesTV, contactTV,
             distanceTV, gsrTV, gyroscopeTV, heartRateTV, pedometerTV, rrTV, skinTempTV, uvTV;
     int permissionCheck;
-    private BandClient client = null;
-    boolean band2 = false;
     private BandAccelerometerEventListener mAccelerometerEventListener = new BandAccelerometerEventListener() {
         @Override
         public void onBandAccelerometerChanged(final BandAccelerometerEvent event) {
@@ -292,7 +286,7 @@ public class SensorsFragment extends Fragment {
         @Override
         public void onBandCaloriesChanged(BandCaloriesEvent bandCaloriesEvent) {
             if (bandCaloriesEvent != null) {
-                if (band2) {
+                if (MainActivity.band2) {
                     try {
                         appendToUI(getString(R.string.calories_today) + " = " + bandCaloriesEvent.getCaloriesToday() + " kCal\n" +
                                 getString(R.string.calories) + " = " + bandCaloriesEvent.getCalories() + " kCal", caloriesTV);
@@ -311,7 +305,7 @@ public class SensorsFragment extends Fragment {
                             if (new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Calories" + File.separator + "Calories_" + DateFormat.getDateInstance().format(date) + ".csv").exists()) {
                                 String str = DateFormat.getDateTimeInstance().format(bandCaloriesEvent.getTimestamp());
                                 CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "Calories" + File.separator + "Calories_" + DateFormat.getDateInstance().format(date) + ".csv", true));
-                                if (band2) {
+                                if (MainActivity.band2) {
                                     try {
                                         csvWriter.writeNext(new String[]{String.valueOf(bandCaloriesEvent.getTimestamp()),
                                                 str, String.valueOf(bandCaloriesEvent.getCaloriesToday()),
@@ -326,7 +320,7 @@ public class SensorsFragment extends Fragment {
                                 csvWriter.close();
                             } else {
                                 CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "Calories" + File.separator + "Calories_" + DateFormat.getDateInstance().format(date) + ".csv", true));
-                                if (band2)
+                                if (MainActivity.band2)
                                     csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.calories_today), getString(R.string.calories)});
                                 else
                                     csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.calories)});
@@ -386,7 +380,7 @@ public class SensorsFragment extends Fragment {
                         }
                     });
                 }
-                if (band2) {
+                if (MainActivity.band2) {
                     try {
                         appendToUI(getString(R.string.motion_type) + " = " + bandDistanceEvent.getMotionType() +
                                 "\n" + getString(R.string.pace) + " (ms/m) = " + bandDistanceEvent.getPace() +
@@ -413,7 +407,7 @@ public class SensorsFragment extends Fragment {
                             if (new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Distance" + File.separator + "Distance_" + DateFormat.getDateInstance().format(date) + ".csv").exists()) {
                                 String str = DateFormat.getDateTimeInstance().format(bandDistanceEvent.getTimestamp());
                                 CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "Distance" + File.separator + "Distance_" + DateFormat.getDateInstance().format(date) + ".csv", true));
-                                if (band2) {
+                                if (MainActivity.band2) {
                                     try {
                                         csvWriter.writeNext(new String[]{String.valueOf(bandDistanceEvent.getTimestamp()),
                                                 str, String.valueOf(bandDistanceEvent.getMotionType()),
@@ -434,7 +428,7 @@ public class SensorsFragment extends Fragment {
                                 csvWriter.close();
                             } else {
                                 CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "Distance" + File.separator + "Distance_" + DateFormat.getDateInstance().format(date) + ".csv", true));
-                                if (band2)
+                                if (MainActivity.band2)
                                     csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.motion_type), getString(R.string.pace), getString(R.string.speed), getString(R.string.distance_today), getString(R.string.total_distance)});
                                 else
                                     csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.motion_type), getString(R.string.pace), getString(R.string.speed), getString(R.string.total_distance)});
@@ -589,7 +583,7 @@ public class SensorsFragment extends Fragment {
         @Override
         public void onBandPedometerChanged(BandPedometerEvent bandPedometerEvent) {
             if (bandPedometerEvent != null) {
-                if (band2) {
+                if (MainActivity.band2) {
                     try {
                         appendToUI(getString(R.string.steps_today) + " = " + bandPedometerEvent.getStepsToday() + "\n" +
                                 getString(R.string.total_steps) + " = " + bandPedometerEvent.getTotalSteps(), pedometerTV);
@@ -608,7 +602,7 @@ public class SensorsFragment extends Fragment {
                             if (new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Pedometer" + File.separator + "Pedometer_" + DateFormat.getDateInstance().format(date) + ".csv").exists()) {
                                 String str = DateFormat.getDateTimeInstance().format(bandPedometerEvent.getTimestamp());
                                 CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "Pedometer" + File.separator + "Pedometer_" + DateFormat.getDateInstance().format(date) + ".csv", true));
-                                if (band2) {
+                                if (MainActivity.band2) {
                                     try {
                                         csvWriter.writeNext(new String[]{String.valueOf(bandPedometerEvent.getTimestamp()),
                                                 str, String.valueOf(bandPedometerEvent.getStepsToday()), String.valueOf(bandPedometerEvent.getTotalSteps())});
@@ -622,7 +616,7 @@ public class SensorsFragment extends Fragment {
                                 csvWriter.close();
                             } else {
                                 CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "Pedometer" + File.separator + "Pedometer_" + DateFormat.getDateInstance().format(date) + ".csv", true));
-                                if (band2)
+                                if (MainActivity.band2)
                                     csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.steps_today), getString(R.string.total_steps)});
                                 else
                                     csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.total_steps)});
@@ -723,7 +717,7 @@ public class SensorsFragment extends Fragment {
         @Override
         public void onBandUVChanged(final BandUVEvent bandUVEvent) {
             if (bandUVEvent != null) {
-                if (band2) {
+                if (MainActivity.band2) {
                     try {
                         appendToUI(getString(R.string.uv_today) + " = " + bandUVEvent.getUVExposureToday() + "\n" +
                                 getString(R.string.uv_index) + " = " + bandUVEvent.getUVIndexLevel(), uvTV);
@@ -742,7 +736,7 @@ public class SensorsFragment extends Fragment {
                             if (new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "UV" + File.separator + "UV_" + DateFormat.getDateInstance().format(date) + ".csv").exists()) {
                                 String str = DateFormat.getDateTimeInstance().format(bandUVEvent.getTimestamp());
                                 CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "UV" + File.separator + "UV_" + DateFormat.getDateInstance().format(date) + ".csv", true));
-                                if (band2) {
+                                if (MainActivity.band2) {
                                     try {
                                         csvWriter.writeNext(new String[]{String.valueOf(bandUVEvent.getTimestamp()),
                                                 str, String.valueOf(bandUVEvent.getUVExposureToday()), String.valueOf(bandUVEvent.getUVIndexLevel())});
@@ -756,7 +750,7 @@ public class SensorsFragment extends Fragment {
                                 csvWriter.close();
                             } else {
                                 CSVWriter csvWriter = new CSVWriter(new FileWriter(path + File.separator + "CompanionForBand" + File.separator + "UV" + File.separator + "UV_" + DateFormat.getDateInstance().format(date) + ".csv", true));
-                                if (band2)
+                                if (MainActivity.band2)
                                     csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.uv_today), getString(R.string.uv_index)});
                                 else
                                     csvWriter.writeNext(new String[]{getString(R.string.timestamp), getString(R.string.date_time), getString(R.string.uv_index)});
@@ -797,7 +791,6 @@ public class SensorsFragment extends Fragment {
             logTV.setText(getResources().getString(R.string.log_text));
 
         backlogTV = (TextView) view.findViewById(R.id.backlogStatus);
-        statusTV = (TextView) view.findViewById(R.id.SensorTxtStatus);
         band2TV = (TextView) view.findViewById(R.id.band2TxtStatus);
         accelerometerTV = (TextView) view.findViewById(R.id.accelerometerStatus);
         altimeterTV = (TextView) view.findViewById(R.id.altimeterStatus);
@@ -825,7 +818,7 @@ public class SensorsFragment extends Fragment {
                     editor.apply();
                     heartRateTV.setVisibility(View.GONE);
                     try {
-                        client.getSensorManager().unregisterHeartRateEventListeners();
+                        MainActivity.client.getSensorManager().unregisterHeartRateEventListeners();
                     } catch (Exception e) {
                         //
                     }
@@ -847,7 +840,7 @@ public class SensorsFragment extends Fragment {
                     editor.apply();
                     rrTV.setVisibility(View.GONE);
                     try {
-                        client.getSensorManager().unregisterRRIntervalEventListeners();
+                        MainActivity.client.getSensorManager().unregisterRRIntervalEventListeners();
                     } catch (Exception e) {
                         //
                     }
@@ -988,33 +981,17 @@ public class SensorsFragment extends Fragment {
         }
     }
 
-    private boolean getConnectedBandClient() throws InterruptedException, BandException {
-        if (client == null) {
-            BandInfo[] devices = BandClientManager.getInstance().getPairedBands();
-            if (devices.length == 0) {
-                appendToUI(getString(R.string.band_not_paired) + "\n", statusTV);
-                return false;
-            }
-            client = BandClientManager.getInstance().create(getActivity(), devices[0]);
-        } else if (ConnectionState.CONNECTED == client.getConnectionState()) {
-            return true;
-        }
-
-        appendToUI(getString(R.string.band_connecting) + "\n", statusTV);
-        return ConnectionState.CONNECTED == client.connect().await();
-    }
-
     @Override
     public void onPause() {
         super.onPause();
 
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyPrefs", 0);
         if (!sharedPreferences.getBoolean("backlog", false)) {
-            if (client != null) {
+            if (MainActivity.client != null) {
                 try {
-                    client.getSensorManager().unregisterAllListeners();
+                    MainActivity.client.getSensorManager().unregisterAllListeners();
                 } catch (BandIOException e) {
-                    appendToUI(e.getMessage(), statusTV);
+                    MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
                 }
             }
         }
@@ -1036,27 +1013,13 @@ public class SensorsFragment extends Fragment {
         new Band2SubscriptionTask().execute();
     }
 
-    @Override
-    public void onDestroy() {
-        if (client != null) {
-            try {
-                client.disconnect().await();
-            } catch (InterruptedException e) {
-                // Do nothing as this is happening during destroy
-            } catch (BandException e) {
-                // Do nothing as this is happening during destroy
-            }
-        }
-        super.onDestroy();
-    }
-
     private class HeartRateSubscriptionTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (getConnectedBandClient()) {
-                    if (client.getSensorManager().getCurrentHeartRateConsent() == UserConsent.GRANTED) {
-                        client.getSensorManager().registerHeartRateEventListener(mHeartRateEventListener);
+                if (MainActivity.getConnectedBandClient()) {
+                    if (MainActivity.client.getSensorManager().getCurrentHeartRateConsent() == UserConsent.GRANTED) {
+                        MainActivity.client.getSensorManager().registerHeartRateEventListener(mHeartRateEventListener);
                     } else {
                         getActivity().runOnUiThread(new Runnable() {
                             @SuppressWarnings("unchecked")
@@ -1068,12 +1031,12 @@ public class SensorsFragment extends Fragment {
                         appendToUI(getString(R.string.heart_rate_consent) + "\n", heartRateTV);
                     }
                 } else {
-                    appendToUI(getString(R.string.band_not_found) + "\n", statusTV);
+                    MainActivity.appendToUI(getString(R.string.band_not_found), "Style.ALERT");
                 }
             } catch (BandException e) {
-                handleBandException(e);
+                MainActivity.handleBandException(e);
             } catch (Exception e) {
-                appendToUI(e.getMessage(), statusTV);
+                MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }
             return null;
         }
@@ -1083,22 +1046,22 @@ public class SensorsFragment extends Fragment {
         @Override
         protected Void doInBackground(WeakReference<Activity>... params) {
             try {
-                if (getConnectedBandClient()) {
+                if (MainActivity.getConnectedBandClient()) {
 
                     if (params[0].get() != null) {
-                        client.getSensorManager().requestHeartRateConsent(params[0].get(), new HeartRateConsentListener() {
+                        MainActivity.client.getSensorManager().requestHeartRateConsent(params[0].get(), new HeartRateConsentListener() {
                             @Override
                             public void userAccepted(boolean consentGiven) {
                             }
                         });
                     }
                 } else {
-                    appendToUI(getString(R.string.band_not_found) + "\n", statusTV);
+                    MainActivity.appendToUI(getString(R.string.band_not_found), "Style.ALERT");
                 }
             } catch (BandException e) {
-                handleBandException(e);
+                MainActivity.handleBandException(e);
             } catch (Exception e) {
-                appendToUI(e.getMessage(), statusTV);
+                MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }
             return null;
         }
@@ -1108,11 +1071,11 @@ public class SensorsFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (getConnectedBandClient()) {
-                    int hardwareVersion = Integer.parseInt(client.getHardwareVersion().await());
+                if (MainActivity.getConnectedBandClient()) {
+                    int hardwareVersion = Integer.parseInt(MainActivity.client.getHardwareVersion().await());
                     if (hardwareVersion >= 20) {
-                        if (client.getSensorManager().getCurrentHeartRateConsent() == UserConsent.GRANTED) {
-                            client.getSensorManager().registerRRIntervalEventListener(mRRIntervalEventListener);
+                        if (MainActivity.client.getSensorManager().getCurrentHeartRateConsent() == UserConsent.GRANTED) {
+                            MainActivity.client.getSensorManager().registerRRIntervalEventListener(mRRIntervalEventListener);
                         } else {
                             appendToUI(getString(R.string.heart_rate_consent) + "\n", rrTV);
                         }
@@ -1120,12 +1083,12 @@ public class SensorsFragment extends Fragment {
                         //appendToUI("The RR Interval sensor is not supported with your Band version. Microsoft Band 2 is required.\n");
                     }
                 } else {
-                    appendToUI(getString(R.string.band_not_found) + "\n", statusTV);
+                    MainActivity.appendToUI(getString(R.string.band_not_found), "Style.ALERT");
                 }
             } catch (BandException e) {
-                handleBandException(e);
+                MainActivity.handleBandException(e);
             } catch (Exception e) {
-                appendToUI(e.getMessage(), statusTV);
+                MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }
             return null;
         }
@@ -1135,23 +1098,22 @@ public class SensorsFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (getConnectedBandClient()) {
-                    appendToUI(getString(R.string.band_connected) + "\n", statusTV);
-                    client.getSensorManager().registerAccelerometerEventListener(mAccelerometerEventListener, SampleRate.MS128);
-                    client.getSensorManager().registerCaloriesEventListener(bandCaloriesEventListener);
-                    client.getSensorManager().registerContactEventListener(bandContactEventListener);
-                    client.getSensorManager().registerDistanceEventListener(bandDistanceEventListener);
-                    client.getSensorManager().registerGyroscopeEventListener(bandGyroscopeEventListener, SampleRate.MS128);
-                    client.getSensorManager().registerPedometerEventListener(bandPedometerEventListener);
-                    client.getSensorManager().registerSkinTemperatureEventListener(bandSkinTemperatureEventListener);
-                    client.getSensorManager().registerUVEventListener(bandUVEventListener);
+                if (MainActivity.getConnectedBandClient()) {
+                    MainActivity.client.getSensorManager().registerAccelerometerEventListener(mAccelerometerEventListener, SampleRate.MS128);
+                    MainActivity.client.getSensorManager().registerCaloriesEventListener(bandCaloriesEventListener);
+                    MainActivity.client.getSensorManager().registerContactEventListener(bandContactEventListener);
+                    MainActivity.client.getSensorManager().registerDistanceEventListener(bandDistanceEventListener);
+                    MainActivity.client.getSensorManager().registerGyroscopeEventListener(bandGyroscopeEventListener, SampleRate.MS128);
+                    MainActivity.client.getSensorManager().registerPedometerEventListener(bandPedometerEventListener);
+                    MainActivity.client.getSensorManager().registerSkinTemperatureEventListener(bandSkinTemperatureEventListener);
+                    MainActivity.client.getSensorManager().registerUVEventListener(bandUVEventListener);
                 } else {
-                    appendToUI(getString(R.string.band_not_found) + "\n", statusTV);
+                    MainActivity.appendToUI(getString(R.string.band_not_found), "Style.ALERT");
                 }
             } catch (BandException e) {
-                handleBandException(e);
+                MainActivity.handleBandException(e);
             } catch (Exception e) {
-                appendToUI(e.getMessage(), statusTV);
+                MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }
             return null;
         }
@@ -1161,45 +1123,25 @@ public class SensorsFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (getConnectedBandClient()) {
-                    int hardwareVersion = Integer.parseInt(client.getHardwareVersion().await());
-                    if (hardwareVersion >= 20) {
-                        band2 = true;
-                        appendToUI(getString(R.string.band_connected) + "\n", statusTV);
-                        client.getSensorManager().registerAltimeterEventListener(mAltimeterEventListener);
-                        client.getSensorManager().registerAmbientLightEventListener(mAmbientLightEventListener);
-                        client.getSensorManager().registerBarometerEventListener(mBarometerEventListener);
-                        client.getSensorManager().registerGsrEventListener(mGsrEventListener);
+                if (MainActivity.getConnectedBandClient()) {
+                    if (MainActivity.band2) {
+                        MainActivity.client.getSensorManager().registerAltimeterEventListener(mAltimeterEventListener);
+                        MainActivity.client.getSensorManager().registerAmbientLightEventListener(mAmbientLightEventListener);
+                        MainActivity.client.getSensorManager().registerBarometerEventListener(mBarometerEventListener);
+                        MainActivity.client.getSensorManager().registerGsrEventListener(mGsrEventListener, GsrSampleRate.MS200);
                     } else {
-                        band2 = false;
                         appendToUI(getString(R.string.band_2_required) + "\n", band2TV);
                     }
                 } else {
-                    appendToUI(getString(R.string.band_not_found) + "\n", statusTV);
+                    MainActivity.appendToUI(getString(R.string.band_not_found), "Style.ALERT");
                 }
             } catch (BandException e) {
-                handleBandException(e);
+                MainActivity.handleBandException(e);
             } catch (Exception e) {
-                appendToUI(e.getMessage(), statusTV);
+                MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }
             return null;
         }
-    }
-
-    private void handleBandException(BandException e) {
-        String exceptionMessage;
-        switch (e.getErrorType()) {
-            case UNSUPPORTED_SDK_VERSION_ERROR:
-                exceptionMessage = getString(R.string.band_unsupported_sdk) + "\n";
-                break;
-            case SERVICE_ERROR:
-                exceptionMessage = getString(R.string.band_service_unavailable) + "\n";
-                break;
-            default:
-                exceptionMessage = getString(R.string.band_unknown_error) + " : " + e.getMessage() + "\n";
-                break;
-        }
-        appendToUI(exceptionMessage, statusTV);
     }
 
     private void setSwitch(View view, int id, String string, TextView textView) {

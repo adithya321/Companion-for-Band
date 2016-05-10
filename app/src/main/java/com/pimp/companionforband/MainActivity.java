@@ -1,16 +1,23 @@
 package com.pimp.companionforband;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -21,6 +28,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -33,16 +41,23 @@ import com.github.javiersantos.appupdater.AppUpdater;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.appinvite.AppInviteInvitation;
+import com.microsoft.band.BandClient;
+import com.microsoft.band.BandClientManager;
+import com.microsoft.band.BandException;
+import com.microsoft.band.BandInfo;
+import com.microsoft.band.ConnectionState;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.LibsConfiguration;
 import com.mikepenz.aboutlibraries.entity.Library;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 import com.yalantis.ucrop.UCrop;
@@ -56,10 +71,93 @@ import angtrim.com.fivestarslibrary.FiveStarsDialog;
 import angtrim.com.fivestarslibrary.NegativeReviewListener;
 import angtrim.com.fivestarslibrary.ReviewListener;
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
 
 public class MainActivity extends AppCompatActivity implements NegativeReviewListener, ReviewListener,
         DirectoryChooserFragment.OnFragmentInteractionListener {
+
+    static Context sContext;
+    static Activity sActivity;
+
+    static BandClient client = null;
+    static boolean band2 = false;
+    static BandInfo[] devices;
+
+    static boolean getConnectedBandClient() throws InterruptedException, BandException {
+        if (client == null) {
+            devices = BandClientManager.getInstance().getPairedBands();
+            if (devices.length == 0) {
+                appendToUI(sContext.getString(R.string.band_not_paired), "Style.ALERT");
+                return false;
+            }
+            client = BandClientManager.getInstance().create(sContext, devices[0]);
+        } else if (ConnectionState.CONNECTED == client.getConnectionState()) {
+            appendToUI(sContext.getString(R.string.band_connected), "Style.CONFIRM");
+            return true;
+        }
+
+        appendToUI(sContext.getString(R.string.band_connecting), "Style.INFO");
+        return ConnectionState.CONNECTED == client.connect().await();
+    }
+
+    static void handleBandException(BandException e) {
+        String exceptionMessage;
+        switch (e.getErrorType()) {
+            case DEVICE_ERROR:
+                exceptionMessage = sContext.getString(R.string.band_not_found);
+                break;
+            case UNSUPPORTED_SDK_VERSION_ERROR:
+                exceptionMessage = sContext.getString(R.string.band_unsupported_sdk);
+                break;
+            case SERVICE_ERROR:
+                exceptionMessage = sContext.getString(R.string.band_service_unavailable);
+                break;
+            case BAND_FULL_ERROR:
+                exceptionMessage = sContext.getString(R.string.band_full);
+                break;
+            default:
+                exceptionMessage = sContext.getString(R.string.band_unknown_error) + " : " + e.getMessage();
+                break;
+        }
+        appendToUI(exceptionMessage, "Style.ALERT");
+    }
+
+    static void appendToUI(String string, String style) {
+        Snackbar snackbar = Snackbar.make(sActivity.findViewById(R.id.main_content), string, Snackbar.LENGTH_SHORT);
+        View view = snackbar.getView();
+        switch (style) {
+            case "Style.CONFIRM":
+                view.setBackgroundColor(sContext.getResources().getColor(R.color.style_confirm));
+                break;
+            case "Style.INFO":
+                view.setBackgroundColor(sContext.getResources().getColor(R.color.style_info));
+                break;
+            case "Style.ALERT":
+                view.setBackgroundColor(sContext.getResources().getColor(R.color.style_alert));
+                break;
+        }
+        snackbar.show();
+    }
+
+    private class task extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                if (MainActivity.getConnectedBandClient()) {
+                    MainActivity.band2 = Integer.parseInt(MainActivity.client.getHardwareVersion().await()) >= 20;
+                    editor.putString("device_name", devices[0].getName());
+                    editor.putString("device_mac", devices[0].getMacAddress());
+                    editor.apply();
+                } else {
+                    MainActivity.appendToUI(getString(R.string.band_not_found), "Style.ALERT");
+                }
+            } catch (BandException e) {
+                MainActivity.handleBandException(e);
+            } catch (Exception e) {
+                MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
+            }
+            return null;
+        }
+    }
 
     protected static final int REQUEST_STORAGE_READ_ACCESS_PERMISSION = 101;
     protected static final int REQUEST_STORAGE_WRITE_ACCESS_PERMISSION = 102;
@@ -229,6 +327,12 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sContext = getApplicationContext();
+        sActivity = this;
+
+        settings = getApplicationContext().getSharedPreferences("MyPrefs", 0);
+        editor = settings.edit();
+
         mDestinationUri = Uri.fromFile(new File(getCacheDir(), SAMPLE_CROPPED_IMAGE_NAME));
 
         SectionsPagerAdapter mSectionsPagerAdapter;
@@ -321,24 +425,42 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        Drawable headerBackground = null;
+        String encoded = settings.getString("me_tile_image", "null");
+        if (!encoded.equals("null")) {
+            byte[] imageAsBytes = Base64.decode(encoded.getBytes(), Base64.DEFAULT);
+            headerBackground = new BitmapDrawable(BitmapFactory
+                    .decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
+        }
+
+        AccountHeader accountHeader = new AccountHeaderBuilder().withActivity(this)
+                .withCompactStyle(true)
+                .withHeaderBackground((headerBackground == null) ?
+                        getResources().getDrawable(R.drawable.pipboy) : headerBackground)
+                .addProfiles(
+                        new ProfileDrawerItem().withName(settings.getString("device_name", "Companion For Band"))
+                                .withEmail(settings.getString("device_mac", "pimplay69@gmail.com"))
+                                .withIcon(getResources().getDrawable(R.drawable.band))
+                )
+                .build();
+
         result = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withActionBarDrawerToggleAnimated(true)
+                .withAccountHeader(accountHeader)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName(getString(R.string.home)).withIcon(GoogleMaterial.Icon.gmd_home).withIdentifier(1),
-                        new DividerDrawerItem(),
                         new PrimaryDrawerItem().withName(getString(R.string.rate)).withIcon(GoogleMaterial.Icon.gmd_rate_review).withIdentifier(2),
                         new PrimaryDrawerItem().withName(getString(R.string.feedback)).withIcon(GoogleMaterial.Icon.gmd_feedback).withIdentifier(3),
                         new DividerDrawerItem(),
                         new PrimaryDrawerItem().withName(getString(R.string.share)).withIcon(GoogleMaterial.Icon.gmd_share).withIdentifier(4),
-                        new PrimaryDrawerItem().withName(getString(R.string.other)).withIcon(GoogleMaterial.Icon.gmd_apps).withIdentifier(5)
-                )
-                .addStickyDrawerItems(
-                        new SecondaryDrawerItem().withName(getString(R.string.report)).withIcon(GoogleMaterial.Icon.gmd_bug_report).withIdentifier(6),
-                        new SecondaryDrawerItem().withName(getString(R.string.translate)).withIcon(GoogleMaterial.Icon.gmd_translate).withIdentifier(9),
-                        new SecondaryDrawerItem().withName(getString(R.string.support)).withIcon(GoogleMaterial.Icon.gmd_attach_money).withIdentifier(7),
-                        new SecondaryDrawerItem().withName(getString(R.string.aboutLib)).withIcon(GoogleMaterial.Icon.gmd_info).withIdentifier(8)
+                        new PrimaryDrawerItem().withName(getString(R.string.other)).withIcon(GoogleMaterial.Icon.gmd_apps).withIdentifier(5),
+                        new DividerDrawerItem(),
+                        new PrimaryDrawerItem().withName(getString(R.string.report)).withIcon(GoogleMaterial.Icon.gmd_bug_report).withIdentifier(6),
+                        new PrimaryDrawerItem().withName(getString(R.string.translate)).withIcon(GoogleMaterial.Icon.gmd_translate).withIdentifier(9),
+                        new DividerDrawerItem(),
+                        new PrimaryDrawerItem().withName(getString(R.string.support)).withIcon(GoogleMaterial.Icon.gmd_attach_money).withIdentifier(7),
+                        new PrimaryDrawerItem().withName(getString(R.string.aboutLib)).withIcon(GoogleMaterial.Icon.gmd_info).withIdentifier(8)
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -347,13 +469,6 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                         if (drawerItem != null) {
                             flag = true;
                             switch ((int) drawerItem.getIdentifier()) {
-                                case 1:
-                                    mTracker.send(new HitBuilders.EventBuilder()
-                                            .setCategory("Action")
-                                            .setAction("Home")
-                                            .build());
-                                    result.closeDrawer();
-                                    break;
                                 case 2:
                                     mTracker.send(new HitBuilders.EventBuilder()
                                             .setCategory("Action")
@@ -416,9 +531,7 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                                             .setCategory("Action")
                                             .setAction("Report Bugs")
                                             .build());
-                                    Intent report = new Intent(Intent.ACTION_VIEW,
-                                            Uri.parse("https://github.com/adithya321/Companion-for-Band/issues"));
-                                    startActivity(report);
+                                    startActivity(new Intent(MainActivity.this, GittyActivity.class));
                                     break;
                                 case 7:
                                     mTracker.send(new HitBuilders.EventBuilder()
@@ -439,7 +552,6 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                                             .withAboutVersionShown(true)
                                             .withActivityTitle(getString(R.string.app_name))
                                             .withAboutIconShown(true)
-                                            .withLibraries("RecylcerView", "Support v4 Library", "AppCompat v7 Library")
                                             .withListener(libsListener)
                                             .start(MainActivity.this);
                                     break;
@@ -467,15 +579,14 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
         AppUpdater appUpdater = new AppUpdater(this);
         appUpdater.start();
 
-        settings = getApplicationContext().getSharedPreferences("MyPrefs", 0);
-        editor = settings.edit();
-
         final DirectoryChooserConfig config = DirectoryChooserConfig.builder()
                 .allowNewDirectoryNameModification(true)
                 .newDirectoryName("CfBCamera")
                 .initialDirectory(settings.getString("pic_location", "/storage/emulated/0/CompanionForBand/Camera"))
                 .build();
         mDialog = DirectoryChooserFragment.newInstance(config);
+
+        new task().execute();
 
         CustomActivityOnCrash.install(this);
     }
@@ -537,8 +648,6 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
     }
 
     void pickColor(final String string, final int id) {
-        settings = getApplicationContext().getSharedPreferences("MyPrefs", 0);
-        editor = settings.edit();
         base = settings.getInt(string, -16777216);
         r = (base >> 16 & 0xFF);
         g = (base >> 8 & 0xFF);
@@ -612,8 +721,6 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
     }
 
     void setSwitch(Switch s, TextView textView, String string) {
-        settings = getApplicationContext().getSharedPreferences("MyPrefs", 0);
-        editor = settings.edit();
         if (!s.isChecked()) {
             editor.putBoolean(string, false);
             editor.apply();
@@ -627,7 +734,13 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
 
     @Override
     protected void onDestroy() {
-        Crouton.cancelAllCroutons();
+        if (client != null) {
+            try {
+                client.disconnect().await();
+            } catch (Exception e) {
+                // Do nothing as this is happening during destroy
+            }
+        }
         super.onDestroy();
     }
 
@@ -684,8 +797,6 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
     }
 
     private void startCropActivity(@NonNull Uri uri) {
-        SharedPreferences settings = getSharedPreferences("MyPrefs", 0);
-        boolean band2 = settings.getBoolean("band2", true);
         UCrop uCrop = UCrop.of(uri, mDestinationUri);
         if (band2) uCrop.withAspectRatio(310, 128);
         else uCrop.withAspectRatio(310, 102);
