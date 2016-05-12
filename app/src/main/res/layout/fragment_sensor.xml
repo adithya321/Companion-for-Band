@@ -78,6 +78,36 @@
             android:padding="8dp"
             android:text="@string/accelerometer" />
 
+        <RadioGroup
+            android:id="@+id/accelerometer_radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <RadioButton
+                android:id="@+id/accelerometer_ms16"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="16 Hz" />
+
+            <RadioButton
+                android:id="@+id/accelerometer_ms32"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="32 Hz" />
+
+            <RadioButton
+                android:id="@+id/accelerometer_ms128"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="128 Hz" />
+        </RadioGroup>
+
         <TextView
             android:id="@+id/accelerometerStatus"
             android:layout_width="match_parent"
@@ -176,6 +206,29 @@
             android:padding="8dp"
             android:text="@string/gsr" />
 
+        <RadioGroup
+            android:id="@+id/gsr_radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <RadioButton
+                android:id="@+id/gsr_ms200"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="200 Hz" />
+
+            <RadioButton
+                android:id="@+id/gsr_ms5000"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="5000 Hz" />
+        </RadioGroup>
+
         <TextView
             android:id="@+id/gsrStatus"
             android:layout_width="match_parent"
@@ -189,6 +242,36 @@
             android:onClick="SwitchClick"
             android:padding="8dp"
             android:text="@string/gyroscope" />
+
+        <RadioGroup
+            android:id="@+id/gyroscope_radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <RadioButton
+                android:id="@+id/gyroscope_ms16"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="16 Hz" />
+
+            <RadioButton
+                android:id="@+id/gyroscope_ms32"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="32 Hz" />
+
+            <RadioButton
+                android:id="@+id/gyroscope_ms128"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="128 Hz" />
+        </RadioGroup>
 
         <TextView
             android:id="@+id/gyroscopeStatus"

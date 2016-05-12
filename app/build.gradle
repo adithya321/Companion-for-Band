@@ -8,8 +8,8 @@ android {
         applicationId "com.pimp.companionforband"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 26
-        versionName "2.6.0"
+        versionCode 27
+        versionName "2.6.1"
     }
     buildTypes {
         release {

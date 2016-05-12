@@ -33,6 +33,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -163,8 +164,8 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
     protected static final int REQUEST_STORAGE_WRITE_ACCESS_PERMISSION = 102;
     private static final int REQUEST_SELECT_PICTURE = 0x01;
     private static final String SAMPLE_CROPPED_IMAGE_NAME = "SampleCropImage.jpeg";
-    SharedPreferences settings;
-    SharedPreferences.Editor editor;
+    static SharedPreferences sharedPreferences;
+    static SharedPreferences.Editor editor;
     int base = 0;
     int r, g, b;
     Drawer result;
@@ -226,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
     private TextView accelerometerStatus, altimeterStatus, baroStatus, caloriesStatus,
             contactStatus, distanceStatus, gsrStatus, gyroscopeStatus, lightStatus,
             logStatus, backlogStatus, pedometerStatus, skinTempStatus, uvStatus;
+    private RadioGroup accelerometerRG, gyroscopeRG, gsrRG;
     private Tracker mTracker;
     private AlertDialog mAlertDialog;
     private Uri mDestinationUri;
@@ -330,8 +332,8 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
         sContext = getApplicationContext();
         sActivity = this;
 
-        settings = getApplicationContext().getSharedPreferences("MyPrefs", 0);
-        editor = settings.edit();
+        sharedPreferences = getApplicationContext().getSharedPreferences("MyPrefs", 0);
+        editor = sharedPreferences.edit();
 
         mDestinationUri = Uri.fromFile(new File(getCacheDir(), SAMPLE_CROPPED_IMAGE_NAME));
 
@@ -416,6 +418,10 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                 pedometerStatus = (TextView) findViewById(R.id.pedometerStatus);
                 skinTempStatus = (TextView) findViewById(R.id.temperatureStatus);
                 uvStatus = (TextView) findViewById(R.id.UVStatus);
+
+                accelerometerRG = (RadioGroup) findViewById(R.id.accelerometer_radioGroup);
+                gyroscopeRG = (RadioGroup) findViewById(R.id.gyroscope_radioGroup);
+                gsrRG = (RadioGroup) findViewById(R.id.gsr_radioGroup);
             }
 
             @Override
@@ -426,7 +432,7 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
         tabLayout.setupWithViewPager(mViewPager);
 
         Drawable headerBackground = null;
-        String encoded = settings.getString("me_tile_image", "null");
+        String encoded = sharedPreferences.getString("me_tile_image", "null");
         if (!encoded.equals("null")) {
             byte[] imageAsBytes = Base64.decode(encoded.getBytes(), Base64.DEFAULT);
             headerBackground = new BitmapDrawable(BitmapFactory
@@ -438,8 +444,8 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                 .withHeaderBackground((headerBackground == null) ?
                         getResources().getDrawable(R.drawable.pipboy) : headerBackground)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(settings.getString("device_name", "Companion For Band"))
-                                .withEmail(settings.getString("device_mac", "pimplay69@gmail.com"))
+                        new ProfileDrawerItem().withName(sharedPreferences.getString("device_name", "Companion For Band"))
+                                .withEmail(sharedPreferences.getString("device_mac", "pimplay69@gmail.com"))
                                 .withIcon(getResources().getDrawable(R.drawable.band))
                 )
                 .build();
@@ -582,7 +588,7 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
         final DirectoryChooserConfig config = DirectoryChooserConfig.builder()
                 .allowNewDirectoryNameModification(true)
                 .newDirectoryName("CfBCamera")
-                .initialDirectory(settings.getString("pic_location", "/storage/emulated/0/CompanionForBand/Camera"))
+                .initialDirectory(sharedPreferences.getString("pic_location", "/storage/emulated/0/CompanionForBand/Camera"))
                 .build();
         mDialog = DirectoryChooserFragment.newInstance(config);
 
@@ -648,7 +654,7 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
     }
 
     void pickColor(final String string, final int id) {
-        base = settings.getInt(string, -16777216);
+        base = sharedPreferences.getInt(string, -16777216);
         r = (base >> 16 & 0xFF);
         g = (base >> 8 & 0xFF);
         b = (base & 0xFF);
@@ -682,7 +688,7 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                 setSwitch(SBacklogStatus, backlogStatus, "backlog");
                 break;
             case R.id.accelerometer_switch:
-                setSwitch(SaccelerometerStatus, accelerometerStatus, "acc");
+                setSwitch(SaccelerometerStatus, accelerometerRG, accelerometerStatus, "acc");
                 break;
             case R.id.altimeter_switch:
                 setSwitch(SaltimeterStatus, altimeterStatus, "alt");
@@ -703,10 +709,10 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                 setSwitch(SdistanceStatus, distanceStatus, "dis");
                 break;
             case R.id.gsr_switch:
-                setSwitch(SgsrStatus, gsrStatus, "gsr");
+                setSwitch(SgsrStatus, gsrRG, gsrStatus, "gsr");
                 break;
             case R.id.gyroscope_switch:
-                setSwitch(SgyroscopeStatus, gyroscopeStatus, "gyr");
+                setSwitch(SgyroscopeStatus, gyroscopeRG, gyroscopeStatus, "gyr");
                 break;
             case R.id.pedometer_switch:
                 setSwitch(SpedometerStatus, pedometerStatus, "ped");
@@ -728,6 +734,20 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
         } else {
             editor.putBoolean(string, true);
             editor.apply();
+            textView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    void setSwitch(Switch s, RadioGroup radioGroup, TextView textView, String string) {
+        if (!s.isChecked()) {
+            editor.putBoolean(string, false);
+            editor.apply();
+            radioGroup.setVisibility(View.GONE);
+            textView.setVisibility(View.GONE);
+        } else {
+            editor.putBoolean(string, true);
+            editor.apply();
+            radioGroup.setVisibility(View.VISIBLE);
             textView.setVisibility(View.VISIBLE);
         }
     }

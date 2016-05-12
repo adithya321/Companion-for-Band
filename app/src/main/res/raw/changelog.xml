@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
+    <changelogversion changeDate="MAY 12, 2016" versionName="2.6.1">
+        <changelogimprovement>Change Frequencies of Accelerometer, Gyroscope and GSR sensors
+        </changelogimprovement>
+    </changelogversion>
+
     <changelogversion changeDate="MAY 11, 2016" versionName="2.6.0">
         <changelogbug>Fix for GSR sensor</changelogbug>
         <changelogtext>Updated to latest libraries</changelogtext>
