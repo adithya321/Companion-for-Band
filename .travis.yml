@@ -3,13 +3,16 @@ sudo: required
 
 android:
   components:
-    - platform-tools
-    - tools
-    - build-tools-23.0.3
-    - android-23
-    - extra-android-support
-    - extra-google-google_play_services
-    - extra-android-m2repository
+  - platform-tools
+  - tools
+  - build-tools-23.0.3
+  - android-23
+  - extra-android-support
+  - extra-google-google_play_services
+  - extra-android-m2repository
+  - extra-google-m2repository
+  licenses:
+  - '.+'
 
 before_install:
  - chmod +x gradlew
