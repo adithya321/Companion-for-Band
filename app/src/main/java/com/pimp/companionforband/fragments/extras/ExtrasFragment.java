@@ -41,7 +41,7 @@ import com.microsoft.band.tiles.pages.TextButton;
 import com.microsoft.band.tiles.pages.TextButtonData;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
-import com.pimp.companionforband.utils.band.ConnectToBand;
+import com.pimp.companionforband.utils.band.BandUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -233,7 +233,7 @@ public class ExtrasFragment extends Fragment {
                 try {
                     MainActivity.client.getNotificationManager().vibrate(vibrationType).await();
                 } catch (BandException e) {
-                    MainActivity.handleBandException(e);
+                    BandUtils.handleBandException(e);
                 } catch (Exception e) {
                     MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
                 }
@@ -586,7 +586,7 @@ public class ExtrasFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (ConnectToBand.getConnectedBandClient()) {
+                if (BandUtils.getConnectedBandClient()) {
                     try {
                         MainActivity.appendToUI(getString(R.string.band_grabbing_info), "Style.INFO");
 
@@ -615,7 +615,7 @@ public class ExtrasFragment extends Fragment {
                     MainActivity.appendToUI(getString(R.string.band_not_found), "Style.ALERT");
                 }
             } catch (BandException e) {
-                MainActivity.handleBandException(e);
+                BandUtils.handleBandException(e);
             } catch (Exception e) {
                 MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }
@@ -627,7 +627,7 @@ public class ExtrasFragment extends Fragment {
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                if (ConnectToBand.getConnectedBandClient()) {
+                if (BandUtils.getConnectedBandClient()) {
                     if (doesTileExist(tileId)) {
                         sendMessage();
                     } else {
@@ -640,7 +640,7 @@ public class ExtrasFragment extends Fragment {
                     return false;
                 }
             } catch (BandException e) {
-                MainActivity.handleBandException(e);
+                BandUtils.handleBandException(e);
                 return false;
             } catch (Exception e) {
                 MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
@@ -655,7 +655,7 @@ public class ExtrasFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (ConnectToBand.getConnectedBandClient()) {
+                if (BandUtils.getConnectedBandClient()) {
                     if (doesTileExist(musicTileId)) {
                         removeTile(musicTileId);
                     } else {
@@ -664,7 +664,7 @@ public class ExtrasFragment extends Fragment {
                     }
                 }
             } catch (BandException e) {
-                MainActivity.handleBandException(e);
+                BandUtils.handleBandException(e);
             } catch (Exception e) {
                 MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }
@@ -676,7 +676,7 @@ public class ExtrasFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (ConnectToBand.getConnectedBandClient()) {
+                if (BandUtils.getConnectedBandClient()) {
                     if (doesTileExist(cameraTileId)) {
                         removeTile(cameraTileId);
                     } else {
@@ -685,7 +685,7 @@ public class ExtrasFragment extends Fragment {
                     }
                 }
             } catch (BandException e) {
-                MainActivity.handleBandException(e);
+                BandUtils.handleBandException(e);
             } catch (Exception e) {
                 MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }
@@ -697,7 +697,7 @@ public class ExtrasFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (ConnectToBand.getConnectedBandClient()) {
+                if (BandUtils.getConnectedBandClient()) {
                     if (doesTileExist(flashlightTileId)) {
                         removeTile(flashlightTileId);
                     } else {
@@ -706,7 +706,7 @@ public class ExtrasFragment extends Fragment {
                     }
                 }
             } catch (BandException e) {
-                MainActivity.handleBandException(e);
+                BandUtils.handleBandException(e);
             } catch (Exception e) {
                 MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }
@@ -718,7 +718,7 @@ public class ExtrasFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (ConnectToBand.getConnectedBandClient()) {
+                if (BandUtils.getConnectedBandClient()) {
                     if (doesTileExist(barcodeTileId)) {
                         updateBarcodePages();
                         MainActivity.appendToUI(getString(R.string.band_done), "Style.CONFIRM");
@@ -728,7 +728,7 @@ public class ExtrasFragment extends Fragment {
                     }
                 }
             } catch (BandException e) {
-                MainActivity.handleBandException(e);
+                BandUtils.handleBandException(e);
             } catch (Exception e) {
                 MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }

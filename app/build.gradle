@@ -22,8 +22,8 @@ android {
         applicationId "com.pimp.companionforband"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 27
-        versionName "2.6.1"
+        versionCode 28
+        versionName "2.6.2"
     }
 
     buildTypes {
@@ -62,7 +62,7 @@ dependencies {
     compile 'com.github.Angtrim:Android-Five-Stars-Library:v3.1'
     compile 'com.pes.materialcolorpicker:library:1.0.2'
     compile 'com.mikepenz:google-material-typeface:2.2.0.1.original@aar'
-    compile 'com.github.javiersantos:AppUpdater:2.1'
+    compile 'com.github.javiersantos:AppUpdater:2.1.1'
     compile 'com.github.gabrielemariotti.changeloglib:changelog:2.1.0'
     compile 'cat.ereza:customactivityoncrash:1.5.0'
     compile('net.rdrei.android.dirchooser:library:3.2@aar') {

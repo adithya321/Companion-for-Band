@@ -24,7 +24,7 @@ import com.microsoft.band.BandException;
 import com.microsoft.band.BandTheme;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
-import com.pimp.companionforband.utils.band.ConnectToBand;
+import com.pimp.companionforband.utils.band.BandUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -186,7 +186,7 @@ public class ThemeFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (ConnectToBand.getConnectedBandClient()) {
+                if (BandUtils.getConnectedBandClient()) {
                     MainActivity.appendToUI(getString(R.string.band_grabbing_info), "Style.INFO");
                     final Bitmap bitmap = MainActivity.client.getPersonalizationManager().getMeTileImage().await();
 
@@ -207,7 +207,7 @@ public class ThemeFragment extends Fragment {
                     });
                 }
             } catch (BandException exception) {
-                MainActivity.handleBandException(exception);
+                BandUtils.handleBandException(exception);
             } catch (Exception e) {
                 MainActivity.appendToUI(e.toString(), "Style.ALERT");
             }
@@ -222,12 +222,12 @@ public class ThemeFragment extends Fragment {
         protected BandTheme doInBackground(final View... params) {
             view = params[0];
             try {
-                if (ConnectToBand.getConnectedBandClient()) {
+                if (BandUtils.getConnectedBandClient()) {
                     MainActivity.appendToUI(getString(R.string.band_grabbing_info), "Style.INFO");
                     return MainActivity.client.getPersonalizationManager().getTheme().await();
                 }
             } catch (BandException exception) {
-                MainActivity.handleBandException(exception);
+                BandUtils.handleBandException(exception);
             } catch (Exception e) {
                 MainActivity.appendToUI(e.toString(), "Style.ALERT");
             }
@@ -276,7 +276,7 @@ public class ThemeFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (ConnectToBand.getConnectedBandClient()) {
+                if (BandUtils.getConnectedBandClient()) {
                     MainActivity.appendToUI(getString(R.string.me_tile_updating), "Style.INFO");
 
                     BitmapFactory.Options options = new BitmapFactory.Options();
@@ -297,7 +297,7 @@ public class ThemeFragment extends Fragment {
                 }
 
             } catch (BandException e) {
-                MainActivity.handleBandException(e);
+                BandUtils.handleBandException(e);
             } catch (Exception e) {
                 MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }
@@ -310,7 +310,7 @@ public class ThemeFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (ConnectToBand.getConnectedBandClient()) {
+                if (BandUtils.getConnectedBandClient()) {
                     MainActivity.appendToUI(getString(R.string.theme_updating), "Style.INFO");
 
                     SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyPrefs", 0);
@@ -329,7 +329,7 @@ public class ThemeFragment extends Fragment {
                     } catch (InterruptedException e) {
                         MainActivity.appendToUI(e.toString(), "Style.ALERT");
                     } catch (BandException e) {
-                        MainActivity.handleBandException(e);
+                        BandUtils.handleBandException(e);
                     }
                     MainActivity.appendToUI(getString(R.string.theme_updated), "Style.CONFIRM");
                 } else {
@@ -337,7 +337,7 @@ public class ThemeFragment extends Fragment {
                 }
 
             } catch (BandException e) {
-                MainActivity.handleBandException(e);
+                BandUtils.handleBandException(e);
             } catch (Exception e) {
                 MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }

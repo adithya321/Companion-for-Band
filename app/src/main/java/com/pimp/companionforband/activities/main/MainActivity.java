@@ -39,7 +39,6 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.microsoft.band.BandClient;
-import com.microsoft.band.BandException;
 import com.microsoft.band.BandInfo;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
@@ -60,7 +59,7 @@ import com.pimp.companionforband.activities.support.ChangelogActivity;
 import com.pimp.companionforband.activities.donate.DonateActivity;
 import com.pimp.companionforband.activities.support.GittyActivity;
 import com.pimp.companionforband.R;
-import com.pimp.companionforband.utils.band.ConnectToBand;
+import com.pimp.companionforband.utils.band.BandUtils;
 import com.yalantis.ucrop.UCrop;
 
 import net.rdrei.android.dirchooser.DirectoryChooserConfig;
@@ -157,28 +156,6 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
     private AlertDialog mAlertDialog;
     private Uri mDestinationUri;
     private DirectoryChooserFragment mDialog;
-
-    public static void handleBandException(BandException e) {
-        String exceptionMessage;
-        switch (e.getErrorType()) {
-            case DEVICE_ERROR:
-                exceptionMessage = sContext.getString(R.string.band_not_found);
-                break;
-            case UNSUPPORTED_SDK_VERSION_ERROR:
-                exceptionMessage = sContext.getString(R.string.band_unsupported_sdk);
-                break;
-            case SERVICE_ERROR:
-                exceptionMessage = sContext.getString(R.string.band_service_unavailable);
-                break;
-            case BAND_FULL_ERROR:
-                exceptionMessage = sContext.getString(R.string.band_full);
-                break;
-            default:
-                exceptionMessage = sContext.getString(R.string.band_unknown_error) + " : " + e.getMessage();
-                break;
-        }
-        appendToUI(exceptionMessage, "Style.ALERT");
-    }
 
     public static void appendToUI(String string, String style) {
         Snackbar snackbar = Snackbar.make(sActivity.findViewById(R.id.main_content), string, Snackbar.LENGTH_SHORT);
@@ -557,7 +534,7 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                 .build();
         mDialog = DirectoryChooserFragment.newInstance(config);
 
-        new ConnectToBand().execute();
+        new BandUtils().execute();
 
         CustomActivityOnCrash.install(this);
     }

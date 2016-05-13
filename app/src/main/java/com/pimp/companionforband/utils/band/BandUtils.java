@@ -8,7 +8,7 @@ import com.microsoft.band.ConnectionState;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
 
-public class ConnectToBand extends AsyncTask<Void, Void, Void> {
+public class BandUtils extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... params) {
         try {
@@ -23,7 +23,7 @@ public class ConnectToBand extends AsyncTask<Void, Void, Void> {
                         "Style.ALERT");
             }
         } catch (BandException e) {
-            MainActivity.handleBandException(e);
+            handleBandException(e);
         } catch (Exception e) {
             MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
         }
@@ -49,5 +49,28 @@ public class ConnectToBand extends AsyncTask<Void, Void, Void> {
         MainActivity.appendToUI(MainActivity.sContext.getString(R.string.band_connecting),
                 "Style.INFO");
         return ConnectionState.CONNECTED == MainActivity.client.connect().await();
+    }
+
+    public static void handleBandException(BandException e) {
+        String exceptionMessage;
+        switch (e.getErrorType()) {
+            case DEVICE_ERROR:
+                exceptionMessage = MainActivity.sContext.getString(R.string.band_not_found);
+                break;
+            case UNSUPPORTED_SDK_VERSION_ERROR:
+                exceptionMessage = MainActivity.sContext.getString(R.string.band_unsupported_sdk);
+                break;
+            case SERVICE_ERROR:
+                exceptionMessage = MainActivity.sContext.getString(R.string.band_service_unavailable);
+                break;
+            case BAND_FULL_ERROR:
+                exceptionMessage = MainActivity.sContext.getString(R.string.band_full);
+                break;
+            default:
+                exceptionMessage = MainActivity.sContext.getString(R.string.band_unknown_error)
+                        + " : " + e.getMessage();
+                break;
+        }
+        MainActivity.appendToUI(exceptionMessage, "Style.ALERT");
     }
 }
