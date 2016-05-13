@@ -13,6 +13,11 @@ apply plugin: 'jacoco-android'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
+
+    lintOptions {
+        abortOnError false
+    }
+
     defaultConfig {
         applicationId "com.pimp.companionforband"
         minSdkVersion 17
