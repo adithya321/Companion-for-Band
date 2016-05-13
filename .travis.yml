@@ -16,8 +16,7 @@ before_install:
 
 script:
  - cd $TRAVIS_BUILD_DIR/
- — ./gradlew build jacocoTestReport
+ - ./gradlew build jacocoTestReport
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  
