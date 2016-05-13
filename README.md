@@ -1,5 +1,10 @@
 <h1 align="center">Companion for Band</h1>
 
+<p align="center">
+  <a target="_blank" href="https://travis-ci.org/adithya321/Companion-for-Band"><img src="https://travis-ci.org/adithya321/Companion-for-Band.svg?branch=master"></a>
+  <a target="_blank" href="https://codecov.io/gh/adithya321/Companion-for-Band"><img src="https://codecov.io/gh/adithya321/Companion-for-Band/branch/master/graph/badge.svg"></a>
+</p>
+
 <p align="center">The only app you will need for your Microsoft Band.</p>
 <p align="center"><a target="_blank" href="https://play.google.com/store/apps/details?id=com.pimp.companionforband&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-AC-global-none-all-co-pr-py-PartBadges-Oct1515-1"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" height="60" width="180"></a></p>
 
