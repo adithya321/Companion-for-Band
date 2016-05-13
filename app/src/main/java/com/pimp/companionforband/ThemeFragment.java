@@ -31,8 +31,29 @@ public class ThemeFragment extends Fragment {
     int base, highlight, lowlight, secondaryText, highContrast, muted;
     Button btnBase, btnHighlight, btnLowlight, btnSecondaryText, btnHighContrast, btnMuted;
     BitmapDrawable bitmapDrawable;
+    Palette.PaletteAsyncListener paletteListener = new Palette.PaletteAsyncListener() {
+        public void onGenerated(Palette palette) {
+            int def = Color.WHITE;
+
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyPrefs", 0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("base", palette.getVibrantColor(def));
+            editor.putInt("highLight", palette.getLightVibrantColor(def));
+            editor.putInt("lowLight", palette.getDarkVibrantColor(def));
+            editor.putInt("secondaryText", palette.getMutedColor(def));
+            editor.putInt("highContrast", palette.getLightMutedColor(def));
+            editor.putInt("muted", palette.getDarkMutedColor(def));
+            editor.apply();
+
+            btnBase.setBackgroundColor(palette.getVibrantColor(def));
+            btnHighlight.setBackgroundColor(palette.getLightVibrantColor(def));
+            btnLowlight.setBackgroundColor(palette.getDarkVibrantColor(def));
+            btnSecondaryText.setBackgroundColor(palette.getMutedColor(def));
+            btnHighContrast.setBackgroundColor(palette.getLightMutedColor(def));
+            btnMuted.setBackgroundColor(palette.getDarkMutedColor(def));
+        }
+    };
     private ImageView imageView;
-    private Button btnUpdateMe, btnPickMe, btnUpdateTheme, btnGetMeTile, btnGetTheme, btnGetColors;
 
     public static ThemeFragment newInstance() {
         return new ThemeFragment();
@@ -55,12 +76,13 @@ public class ThemeFragment extends Fragment {
         String encoded = settings.getString("me_tile_image", "null");
         if (!encoded.equals("null")) {
             byte[] imageAsBytes = Base64.decode(encoded.getBytes(), Base64.DEFAULT);
-            meTileDrawable = new BitmapDrawable(BitmapFactory
+            meTileDrawable = new BitmapDrawable(getResources(), BitmapFactory
                     .decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
         }
         if (meTileDrawable != null)
             imageView.setImageDrawable(meTileDrawable);
 
+        Button btnUpdateMe, btnPickMe, btnUpdateTheme, btnGetMeTile, btnGetTheme, btnGetColors;
         btnPickMe = (Button) view.findViewById(R.id.pick_me_tile_button);
         btnPickMe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,29 +160,6 @@ public class ThemeFragment extends Fragment {
             }
         });
     }
-
-    Palette.PaletteAsyncListener paletteListener = new Palette.PaletteAsyncListener() {
-        public void onGenerated(Palette palette) {
-            int def = Color.WHITE;
-
-            SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyPrefs", 0);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt("base", palette.getVibrantColor(def));
-            editor.putInt("highLight", palette.getLightVibrantColor(def));
-            editor.putInt("lowLight", palette.getDarkVibrantColor(def));
-            editor.putInt("secondaryText", palette.getMutedColor(def));
-            editor.putInt("highContrast", palette.getLightMutedColor(def));
-            editor.putInt("muted", palette.getDarkMutedColor(def));
-            editor.apply();
-
-            btnBase.setBackgroundColor(palette.getVibrantColor(def));
-            btnHighlight.setBackgroundColor(palette.getLightVibrantColor(def));
-            btnLowlight.setBackgroundColor(palette.getDarkVibrantColor(def));
-            btnSecondaryText.setBackgroundColor(palette.getMutedColor(def));
-            btnHighContrast.setBackgroundColor(palette.getLightMutedColor(def));
-            btnMuted.setBackgroundColor(palette.getDarkMutedColor(def));
-        }
-    };
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

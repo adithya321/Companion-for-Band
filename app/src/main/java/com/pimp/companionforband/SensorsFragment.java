@@ -73,6 +73,7 @@ public class SensorsFragment extends Fragment {
     TextView logTV, backlogTV, accelerometerTV, altimeterTV, ambientLightTV, barometerTV, caloriesTV, contactTV,
             distanceTV, gsrTV, gyroscopeTV, heartRateTV, pedometerTV, rrTV, skinTempTV, uvTV;
     int permissionCheck;
+    ChartAdapter mChartAdapter;
     private BandAccelerometerEventListener mAccelerometerEventListener = new BandAccelerometerEventListener() {
         @Override
         public void onBandAccelerometerChanged(final BandAccelerometerEvent event) {
@@ -539,6 +540,62 @@ public class SensorsFragment extends Fragment {
             }
         }
     };
+    View.OnClickListener sampleRateRadioButtonClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            try {
+                SharedPreferences sharedPreferences = MainActivity.sharedPreferences;
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                switch (v.getId()) {
+                    case R.id.accelerometer_ms16:
+                        MainActivity.client.getSensorManager().registerAccelerometerEventListener(
+                                mAccelerometerEventListener, SampleRate.MS16);
+                        editor.putInt("acc_hz", R.id.accelerometer_ms16);
+                        break;
+                    case R.id.accelerometer_ms32:
+                        MainActivity.client.getSensorManager().registerAccelerometerEventListener(
+                                mAccelerometerEventListener, SampleRate.MS32);
+                        editor.putInt("acc_hz", R.id.accelerometer_ms32);
+                        break;
+                    case R.id.accelerometer_ms128:
+                        MainActivity.client.getSensorManager().registerAccelerometerEventListener(
+                                mAccelerometerEventListener, SampleRate.MS128);
+                        editor.putInt("acc_hz", R.id.accelerometer_ms128);
+                        break;
+                    case R.id.gyroscope_ms16:
+                        MainActivity.client.getSensorManager().registerGyroscopeEventListener(
+                                bandGyroscopeEventListener, SampleRate.MS16);
+                        editor.putInt("gyr_hz", R.id.gyroscope_ms16);
+                        break;
+                    case R.id.gyroscope_ms32:
+                        MainActivity.client.getSensorManager().registerGyroscopeEventListener(
+                                bandGyroscopeEventListener, SampleRate.MS32);
+                        editor.putInt("gyr_hz", R.id.gyroscope_ms32);
+                        break;
+                    case R.id.gyroscope_ms128:
+                        MainActivity.client.getSensorManager().registerGyroscopeEventListener(
+                                bandGyroscopeEventListener, SampleRate.MS128);
+                        editor.putInt("gyr_hz", R.id.gyroscope_ms128);
+                        break;
+                    case R.id.gsr_ms200:
+                        if (MainActivity.band2)
+                            MainActivity.client.getSensorManager().registerGsrEventListener(
+                                    mGsrEventListener, GsrSampleRate.MS200);
+                        editor.putInt("gsr_hz", R.id.gsr_ms200);
+                        break;
+                    case R.id.gsr_ms5000:
+                        if (MainActivity.band2)
+                            MainActivity.client.getSensorManager().registerGsrEventListener(
+                                    mGsrEventListener, GsrSampleRate.MS5000);
+                        editor.putInt("gsr_hz", R.id.gsr_ms5000);
+                        break;
+                }
+                editor.apply();
+            } catch (Exception e) {
+                //
+            }
+        }
+    };
     private BandHeartRateEventListener mHeartRateEventListener = new BandHeartRateEventListener() {
         @Override
         public void onBandHeartRateChanged(final BandHeartRateEvent event) {
@@ -768,6 +825,7 @@ public class SensorsFragment extends Fragment {
             }
         }
     };
+    private TextView scrubInfoTextView;
 
     public static SensorsFragment newInstance() {
         return new SensorsFragment();
@@ -929,65 +987,74 @@ public class SensorsFragment extends Fragment {
         view.findViewById(R.id.gsr_ms5000).setOnClickListener(sampleRateRadioButtonClickListener);
     }
 
-    View.OnClickListener sampleRateRadioButtonClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            try {
-                SharedPreferences sharedPreferences = MainActivity.sharedPreferences;
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                switch (v.getId()) {
-                    case R.id.accelerometer_ms16:
-                        MainActivity.client.getSensorManager().registerAccelerometerEventListener(
-                                mAccelerometerEventListener, SampleRate.MS16);
-                        editor.putInt("acc_hz", R.id.accelerometer_ms16);
-                        break;
-                    case R.id.accelerometer_ms32:
-                        MainActivity.client.getSensorManager().registerAccelerometerEventListener(
-                                mAccelerometerEventListener, SampleRate.MS32);
-                        editor.putInt("acc_hz", R.id.accelerometer_ms32);
-                        break;
-                    case R.id.accelerometer_ms128:
-                        MainActivity.client.getSensorManager().registerAccelerometerEventListener(
-                                mAccelerometerEventListener, SampleRate.MS128);
-                        editor.putInt("acc_hz", R.id.accelerometer_ms128);
-                        break;
-                    case R.id.gyroscope_ms16:
-                        MainActivity.client.getSensorManager().registerGyroscopeEventListener(
-                                bandGyroscopeEventListener, SampleRate.MS16);
-                        editor.putInt("gyr_hz", R.id.gyroscope_ms16);
-                        break;
-                    case R.id.gyroscope_ms32:
-                        MainActivity.client.getSensorManager().registerGyroscopeEventListener(
-                                bandGyroscopeEventListener, SampleRate.MS32);
-                        editor.putInt("gyr_hz", R.id.gyroscope_ms32);
-                        break;
-                    case R.id.gyroscope_ms128:
-                        MainActivity.client.getSensorManager().registerGyroscopeEventListener(
-                                bandGyroscopeEventListener, SampleRate.MS128);
-                        editor.putInt("gyr_hz", R.id.gyroscope_ms128);
-                        break;
-                    case R.id.gsr_ms200:
-                        if (MainActivity.band2)
-                            MainActivity.client.getSensorManager().registerGsrEventListener(
-                                    mGsrEventListener, GsrSampleRate.MS200);
-                        editor.putInt("gsr_hz", R.id.gsr_ms200);
-                        break;
-                    case R.id.gsr_ms5000:
-                        if (MainActivity.band2)
-                            MainActivity.client.getSensorManager().registerGsrEventListener(
-                                    mGsrEventListener, GsrSampleRate.MS5000);
-                        editor.putInt("gsr_hz", R.id.gsr_ms5000);
-                        break;
+    private void appendToUI(final String string, final TextView textView) {
+        try {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    textView.setText(string);
                 }
-                editor.apply();
-            } catch (Exception e) {
-                //
+            });
+        } catch (Exception e) {
+            //
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        SharedPreferences sharedPreferences = MainActivity.sharedPreferences;
+        if (!sharedPreferences.getBoolean("backlog", false)) {
+            if (MainActivity.client != null) {
+                try {
+                    MainActivity.client.getSensorManager().unregisterAllListeners();
+                } catch (BandIOException e) {
+                    MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
+                }
             }
         }
-    };
+    }
 
-    private TextView scrubInfoTextView;
-    ChartAdapter mChartAdapter;
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        SharedPreferences sharedPreferences = MainActivity.sharedPreferences;
+
+        if (sharedPreferences.getBoolean("rr", true))
+            new RRIntervalSubscriptionTask().execute();
+
+        if (sharedPreferences.getBoolean("heart", true))
+            new HeartRateSubscriptionTask().execute();
+
+        new Band1SubscriptionTask().execute();
+        new Band2SubscriptionTask().execute();
+    }
+
+    private void setSwitch(View view, int id, String string, TextView textView) {
+        ((Switch) view.findViewById(id)).setChecked(MainActivity.sharedPreferences.getBoolean(string, true));
+        if (!MainActivity.sharedPreferences.getBoolean(string, true))
+            textView.setVisibility(View.GONE);
+        else
+            textView.setVisibility(View.VISIBLE);
+    }
+
+    private void setSwitch(View view, int id, String string, TextView textView, int radioGroupId) {
+        int radioButtonId = MainActivity.sharedPreferences.getInt(string + "_hz", R.id.accelerometer_ms128);
+        RadioGroup radioGroup = (RadioGroup) view.findViewById(radioGroupId);
+        RadioButton radioButton = (RadioButton) view.findViewById(radioButtonId);
+        radioButton.setChecked(true);
+
+        ((Switch) view.findViewById(id)).setChecked(MainActivity.sharedPreferences.getBoolean(string, true));
+        if (!MainActivity.sharedPreferences.getBoolean(string, true)) {
+            textView.setVisibility(View.GONE);
+            radioGroup.setVisibility(View.GONE);
+        } else {
+            textView.setVisibility(View.VISIBLE);
+            radioGroup.setVisibility(View.VISIBLE);
+        }
+    }
 
     public static class ChartAdapter extends SparkAdapter {
         private final float[] yData;
@@ -1037,51 +1104,6 @@ public class SensorsFragment extends Fragment {
         public float getBaseLine() {
             return super.getBaseLine();
         }
-    }
-
-    private void appendToUI(final String string, final TextView textView) {
-        try {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    textView.setText(string);
-                }
-            });
-        } catch (Exception e) {
-            //
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        SharedPreferences sharedPreferences = MainActivity.sharedPreferences;
-        if (!sharedPreferences.getBoolean("backlog", false)) {
-            if (MainActivity.client != null) {
-                try {
-                    MainActivity.client.getSensorManager().unregisterAllListeners();
-                } catch (BandIOException e) {
-                    MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        SharedPreferences sharedPreferences = MainActivity.sharedPreferences;
-
-        if (sharedPreferences.getBoolean("rr", true))
-            new RRIntervalSubscriptionTask().execute();
-
-        if (sharedPreferences.getBoolean("heart", true))
-            new HeartRateSubscriptionTask().execute();
-
-        new Band1SubscriptionTask().execute();
-        new Band2SubscriptionTask().execute();
     }
 
     private class HeartRateSubscriptionTask extends AsyncTask<Void, Void, Void> {
@@ -1150,8 +1172,6 @@ public class SensorsFragment extends Fragment {
                         } else {
                             appendToUI(getString(R.string.heart_rate_consent) + "\n", rrTV);
                         }
-                    } else {
-                        //appendToUI("The RR Interval sensor is not supported with your Band version. Microsoft Band 2 is required.\n");
                     }
                 } else {
                     MainActivity.appendToUI(getString(R.string.band_not_found), "Style.ALERT");
@@ -1241,30 +1261,6 @@ public class SensorsFragment extends Fragment {
                 MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
             }
             return null;
-        }
-    }
-
-    private void setSwitch(View view, int id, String string, TextView textView) {
-        ((Switch) view.findViewById(id)).setChecked(MainActivity.sharedPreferences.getBoolean(string, true));
-        if (!MainActivity.sharedPreferences.getBoolean(string, true))
-            textView.setVisibility(View.GONE);
-        else
-            textView.setVisibility(View.VISIBLE);
-    }
-
-    private void setSwitch(View view, int id, String string, TextView textView, int radioGroupId) {
-        int radioButtonId = MainActivity.sharedPreferences.getInt(string + "_hz", R.id.accelerometer_ms128);
-        RadioGroup radioGroup = (RadioGroup) view.findViewById(radioGroupId);
-        RadioButton radioButton = (RadioButton) view.findViewById(radioButtonId);
-        radioButton.setChecked(true);
-
-        ((Switch) view.findViewById(id)).setChecked(MainActivity.sharedPreferences.getBoolean(string, true));
-        if (!MainActivity.sharedPreferences.getBoolean(string, true)) {
-            textView.setVisibility(View.GONE);
-            radioGroup.setVisibility(View.GONE);
-        } else {
-            textView.setVisibility(View.VISIBLE);
-            radioGroup.setVisibility(View.VISIBLE);
         }
     }
 }

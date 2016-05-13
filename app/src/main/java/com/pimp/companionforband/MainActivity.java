@@ -76,94 +76,15 @@ import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 public class MainActivity extends AppCompatActivity implements NegativeReviewListener, ReviewListener,
         DirectoryChooserFragment.OnFragmentInteractionListener {
 
-    static Context sContext;
-    static Activity sActivity;
-
-    static BandClient client = null;
-    static boolean band2 = false;
-    static BandInfo[] devices;
-
-    static boolean getConnectedBandClient() throws InterruptedException, BandException {
-        if (client == null) {
-            devices = BandClientManager.getInstance().getPairedBands();
-            if (devices.length == 0) {
-                appendToUI(sContext.getString(R.string.band_not_paired), "Style.ALERT");
-                return false;
-            }
-            client = BandClientManager.getInstance().create(sContext, devices[0]);
-        } else if (ConnectionState.CONNECTED == client.getConnectionState()) {
-            appendToUI(sContext.getString(R.string.band_connected), "Style.CONFIRM");
-            return true;
-        }
-
-        appendToUI(sContext.getString(R.string.band_connecting), "Style.INFO");
-        return ConnectionState.CONNECTED == client.connect().await();
-    }
-
-    static void handleBandException(BandException e) {
-        String exceptionMessage;
-        switch (e.getErrorType()) {
-            case DEVICE_ERROR:
-                exceptionMessage = sContext.getString(R.string.band_not_found);
-                break;
-            case UNSUPPORTED_SDK_VERSION_ERROR:
-                exceptionMessage = sContext.getString(R.string.band_unsupported_sdk);
-                break;
-            case SERVICE_ERROR:
-                exceptionMessage = sContext.getString(R.string.band_service_unavailable);
-                break;
-            case BAND_FULL_ERROR:
-                exceptionMessage = sContext.getString(R.string.band_full);
-                break;
-            default:
-                exceptionMessage = sContext.getString(R.string.band_unknown_error) + " : " + e.getMessage();
-                break;
-        }
-        appendToUI(exceptionMessage, "Style.ALERT");
-    }
-
-    static void appendToUI(String string, String style) {
-        Snackbar snackbar = Snackbar.make(sActivity.findViewById(R.id.main_content), string, Snackbar.LENGTH_SHORT);
-        View view = snackbar.getView();
-        switch (style) {
-            case "Style.CONFIRM":
-                view.setBackgroundColor(sContext.getResources().getColor(R.color.style_confirm));
-                break;
-            case "Style.INFO":
-                view.setBackgroundColor(sContext.getResources().getColor(R.color.style_info));
-                break;
-            case "Style.ALERT":
-                view.setBackgroundColor(sContext.getResources().getColor(R.color.style_alert));
-                break;
-        }
-        snackbar.show();
-    }
-
-    private class task extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                if (MainActivity.getConnectedBandClient()) {
-                    MainActivity.band2 = Integer.parseInt(MainActivity.client.getHardwareVersion().await()) >= 20;
-                    editor.putString("device_name", devices[0].getName());
-                    editor.putString("device_mac", devices[0].getMacAddress());
-                    editor.apply();
-                } else {
-                    MainActivity.appendToUI(getString(R.string.band_not_found), "Style.ALERT");
-                }
-            } catch (BandException e) {
-                MainActivity.handleBandException(e);
-            } catch (Exception e) {
-                MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
-            }
-            return null;
-        }
-    }
-
     protected static final int REQUEST_STORAGE_READ_ACCESS_PERMISSION = 101;
     protected static final int REQUEST_STORAGE_WRITE_ACCESS_PERMISSION = 102;
     private static final int REQUEST_SELECT_PICTURE = 0x01;
     private static final String SAMPLE_CROPPED_IMAGE_NAME = "SampleCropImage.jpeg";
+    static Context sContext;
+    static Activity sActivity;
+    static BandClient client = null;
+    static boolean band2 = false;
+    static BandInfo[] devices;
     static SharedPreferences sharedPreferences;
     static SharedPreferences.Editor editor;
     int base = 0;
@@ -231,6 +152,63 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
     private Tracker mTracker;
     private AlertDialog mAlertDialog;
     private Uri mDestinationUri;
+    private DirectoryChooserFragment mDialog;
+
+    static boolean getConnectedBandClient() throws InterruptedException, BandException {
+        if (client == null) {
+            devices = BandClientManager.getInstance().getPairedBands();
+            if (devices.length == 0) {
+                appendToUI(sContext.getString(R.string.band_not_paired), "Style.ALERT");
+                return false;
+            }
+            client = BandClientManager.getInstance().create(sContext, devices[0]);
+        } else if (ConnectionState.CONNECTED == client.getConnectionState()) {
+            appendToUI(sContext.getString(R.string.band_connected), "Style.CONFIRM");
+            return true;
+        }
+
+        appendToUI(sContext.getString(R.string.band_connecting), "Style.INFO");
+        return ConnectionState.CONNECTED == client.connect().await();
+    }
+
+    static void handleBandException(BandException e) {
+        String exceptionMessage;
+        switch (e.getErrorType()) {
+            case DEVICE_ERROR:
+                exceptionMessage = sContext.getString(R.string.band_not_found);
+                break;
+            case UNSUPPORTED_SDK_VERSION_ERROR:
+                exceptionMessage = sContext.getString(R.string.band_unsupported_sdk);
+                break;
+            case SERVICE_ERROR:
+                exceptionMessage = sContext.getString(R.string.band_service_unavailable);
+                break;
+            case BAND_FULL_ERROR:
+                exceptionMessage = sContext.getString(R.string.band_full);
+                break;
+            default:
+                exceptionMessage = sContext.getString(R.string.band_unknown_error) + " : " + e.getMessage();
+                break;
+        }
+        appendToUI(exceptionMessage, "Style.ALERT");
+    }
+
+    static void appendToUI(String string, String style) {
+        Snackbar snackbar = Snackbar.make(sActivity.findViewById(R.id.main_content), string, Snackbar.LENGTH_SHORT);
+        View view = snackbar.getView();
+        switch (style) {
+            case "Style.CONFIRM":
+                view.setBackgroundColor(sContext.getResources().getColor(R.color.style_confirm));
+                break;
+            case "Style.INFO":
+                view.setBackgroundColor(sContext.getResources().getColor(R.color.style_info));
+                break;
+            case "Style.ALERT":
+                view.setBackgroundColor(sContext.getResources().getColor(R.color.style_alert));
+                break;
+        }
+        snackbar.show();
+    }
 
     @Override
     public void onNegativeReview(int stars) {
@@ -846,6 +824,43 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
         pickFromGallery();
     }
 
+    public void changePictureLocation(View view) {
+        mDialog.show(getFragmentManager(), null);
+    }
+
+    @Override
+    public void onSelectDirectory(@NonNull String path) {
+        editor.putString("pic_location", path);
+        editor.apply();
+        mDialog.dismiss();
+    }
+
+    @Override
+    public void onCancelChooser() {
+        mDialog.dismiss();
+    }
+
+    private class task extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                if (MainActivity.getConnectedBandClient()) {
+                    MainActivity.band2 = Integer.parseInt(MainActivity.client.getHardwareVersion().await()) >= 20;
+                    editor.putString("device_name", devices[0].getName());
+                    editor.putString("device_mac", devices[0].getMacAddress());
+                    editor.apply();
+                } else {
+                    MainActivity.appendToUI(getString(R.string.band_not_found), "Style.ALERT");
+                }
+            } catch (BandException e) {
+                MainActivity.handleBandException(e);
+            } catch (Exception e) {
+                MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
+            }
+            return null;
+        }
+    }
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -883,23 +898,5 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
             }
             return null;
         }
-    }
-
-    public void changePictureLocation(View view) {
-        mDialog.show(getFragmentManager(), null);
-    }
-
-    private DirectoryChooserFragment mDialog;
-
-    @Override
-    public void onSelectDirectory(@NonNull String path) {
-        editor.putString("pic_location", path);
-        editor.apply();
-        mDialog.dismiss();
-    }
-
-    @Override
-    public void onCancelChooser() {
-        mDialog.dismiss();
     }
 }

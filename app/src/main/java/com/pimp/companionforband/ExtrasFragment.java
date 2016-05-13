@@ -66,14 +66,13 @@ public class ExtrasFragment extends Fragment {
     Spinner hapticSpinner, typeSpinner, pageSpinner;
     Switch musicSwitch, cameraSwitch, messageSwitch, barcodeSwitch, flashlightSwitch;
     boolean message = false, music = false, camera = false, barcode = false, flashlight = false;
+    String barcode39 = "MK12345509";
+    String barcode417 = "901234567890123456";
     private UUID tileId = UUID.fromString("3263f46a-38be-4229-afa1-85d4399b7798");
     private UUID musicTileId = UUID.fromString("48376b8f-1066-4b67-96c7-cecc9951bf3b");
     private UUID cameraTileId = UUID.fromString("006f9aa4-4092-44e2-b911-2f7262d198bc");
     private UUID barcodeTileId = UUID.fromString("23d392df-dd0c-4e93-8c0d-63dd7b02eb52");
     private UUID flashlightTileId = UUID.fromString("c2187a9c-db5c-4e73-9f9d-d742113f91e8");
-
-    String barcode39 = "MK12345509";
-    String barcode417 = "901234567890123456";
 
     public static ExtrasFragment newInstance() {
         return new ExtrasFragment();
