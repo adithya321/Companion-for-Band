@@ -1,4 +1,4 @@
-package com.pimp.companionforband;
+package com.pimp.companionforband.fragments.extras;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 
 import com.microsoft.band.tiles.TileButtonEvent;
 import com.microsoft.band.tiles.TileEvent;
+import com.pimp.companionforband.fragments.extras.CameraActivity;
 
 public class TileEventReceiver extends BroadcastReceiver {
 

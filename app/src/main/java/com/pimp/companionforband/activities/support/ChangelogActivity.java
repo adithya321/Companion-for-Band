@@ -1,9 +1,11 @@
-package com.pimp.companionforband;
+package com.pimp.companionforband.activities.support;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
+import com.pimp.companionforband.R;
 
 public class ChangelogActivity extends AppCompatActivity {
     @Override

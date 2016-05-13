@@ -1,4 +1,4 @@
-package com.pimp.companionforband;
+package com.pimp.companionforband.activities.donate;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,10 +11,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.pimp.companionforband.util.IabHelper;
-import com.pimp.companionforband.util.IabResult;
-import com.pimp.companionforband.util.Inventory;
-import com.pimp.companionforband.util.Purchase;
+import com.pimp.companionforband.R;
+import com.pimp.companionforband.utils.iab.IabHelper;
+import com.pimp.companionforband.utils.iab.IabResult;
+import com.pimp.companionforband.utils.iab.Inventory;
+import com.pimp.companionforband.utils.iab.Purchase;
 
 import java.util.ArrayList;
 import java.util.List;

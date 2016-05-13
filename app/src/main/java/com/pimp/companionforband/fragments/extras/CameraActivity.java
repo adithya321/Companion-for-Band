@@ -1,4 +1,4 @@
-package com.pimp.companionforband;
+package com.pimp.companionforband.fragments.extras;
 
 import android.Manifest;
 import android.content.Intent;
@@ -15,6 +15,8 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.microsoft.band.tiles.TileEvent;
+import com.pimp.companionforband.R;
+import com.pimp.companionforband.activities.main.MainActivity;
 
 import java.io.File;
 import java.io.FileNotFoundException;

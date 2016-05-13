@@ -1,4 +1,4 @@
-package com.pimp.companionforband;
+package com.pimp.companionforband.fragments.extras;
 
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -39,6 +39,9 @@ import com.microsoft.band.tiles.pages.TextBlockData;
 import com.microsoft.band.tiles.pages.TextBlockFont;
 import com.microsoft.band.tiles.pages.TextButton;
 import com.microsoft.band.tiles.pages.TextButtonData;
+import com.pimp.companionforband.R;
+import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.utils.band.ConnectToBand;
 
 import java.util.Date;
 import java.util.List;
@@ -583,7 +586,7 @@ public class ExtrasFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (MainActivity.getConnectedBandClient()) {
+                if (ConnectToBand.getConnectedBandClient()) {
                     try {
                         MainActivity.appendToUI(getString(R.string.band_grabbing_info), "Style.INFO");
 
@@ -624,7 +627,7 @@ public class ExtrasFragment extends Fragment {
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                if (MainActivity.getConnectedBandClient()) {
+                if (ConnectToBand.getConnectedBandClient()) {
                     if (doesTileExist(tileId)) {
                         sendMessage();
                     } else {
@@ -652,7 +655,7 @@ public class ExtrasFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (MainActivity.getConnectedBandClient()) {
+                if (ConnectToBand.getConnectedBandClient()) {
                     if (doesTileExist(musicTileId)) {
                         removeTile(musicTileId);
                     } else {
@@ -673,7 +676,7 @@ public class ExtrasFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (MainActivity.getConnectedBandClient()) {
+                if (ConnectToBand.getConnectedBandClient()) {
                     if (doesTileExist(cameraTileId)) {
                         removeTile(cameraTileId);
                     } else {
@@ -694,7 +697,7 @@ public class ExtrasFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (MainActivity.getConnectedBandClient()) {
+                if (ConnectToBand.getConnectedBandClient()) {
                     if (doesTileExist(flashlightTileId)) {
                         removeTile(flashlightTileId);
                     } else {
@@ -715,7 +718,7 @@ public class ExtrasFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (MainActivity.getConnectedBandClient()) {
+                if (ConnectToBand.getConnectedBandClient()) {
                     if (doesTileExist(barcodeTileId)) {
                         updateBarcodePages();
                         MainActivity.appendToUI(getString(R.string.band_done), "Style.CONFIRM");

@@ -1,4 +1,4 @@
-package com.pimp.companionforband;
+package com.pimp.companionforband.activities.donate;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.pimp.companionforband.R;
 
 public class CustomAdapter extends BaseAdapter {
     String[] title, amount;

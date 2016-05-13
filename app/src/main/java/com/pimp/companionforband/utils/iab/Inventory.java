@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.pimp.companionforband.util;
+package com.pimp.companionforband.utils.iab;
 
 import java.util.ArrayList;
 import java.util.HashMap;

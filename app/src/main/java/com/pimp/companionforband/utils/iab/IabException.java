@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.pimp.companionforband.util;
+package com.pimp.companionforband.utils.iab;
 
 /**
  * Exception thrown when something went wrong with in-app billing.

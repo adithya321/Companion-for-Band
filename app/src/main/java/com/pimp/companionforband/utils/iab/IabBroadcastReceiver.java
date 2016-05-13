@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.pimp.companionforband.util;
+package com.pimp.companionforband.utils.iab;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

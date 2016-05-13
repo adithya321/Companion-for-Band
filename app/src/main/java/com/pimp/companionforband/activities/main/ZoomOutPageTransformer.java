@@ -1,4 +1,4 @@
-package com.pimp.companionforband;
+package com.pimp.companionforband.activities.main;
 
 import android.support.v4.view.ViewPager;
 import android.view.View;

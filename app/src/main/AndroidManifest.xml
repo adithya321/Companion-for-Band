@@ -21,7 +21,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true">
         <activity
-            android:name=".MainActivity"
+            android:name="com.pimp.companionforband.activities.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/MaterialDrawerTheme">
             <intent-filter>
@@ -31,7 +31,7 @@
         </activity>
 
         <receiver
-            android:name=".TileEventReceiver"
+            android:name=".fragments.extras.TileEventReceiver"
             android:enabled="true"
             android:exported="true"
             android:label="@string/app_name">
@@ -43,10 +43,10 @@
         </receiver>
 
         <activity
-            android:name=".DonateActivity"
+            android:name=".activities.donate.DonateActivity"
             android:theme="@style/MaterialDrawerTheme.ActionBar" />
         <activity
-            android:name=".ChangelogActivity"
+            android:name=".activities.support.ChangelogActivity"
             android:theme="@style/MaterialDrawerTheme.ActionBar" />
 
         <meta-data
@@ -54,7 +54,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".CameraActivity"
+            android:name=".fragments.extras.CameraActivity"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar.FullScreen" />
 
@@ -66,7 +66,7 @@
         <activity android:name="net.rdrei.android.dirchooser.DirectoryChooserActivity" />
 
         <activity
-            android:name=".GittyActivity"
+            android:name=".activities.support.GittyActivity"
             android:theme="@style/GittyTheme" />
     </application>
 </manifest>

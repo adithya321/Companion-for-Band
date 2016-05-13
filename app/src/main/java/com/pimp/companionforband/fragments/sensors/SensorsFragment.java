@@ -1,4 +1,4 @@
-package com.pimp.companionforband;
+package com.pimp.companionforband.fragments.sensors;
 
 import android.Manifest;
 import android.app.Activity;
@@ -56,6 +56,9 @@ import com.microsoft.band.sensors.GsrSampleRate;
 import com.microsoft.band.sensors.HeartRateConsentListener;
 import com.microsoft.band.sensors.SampleRate;
 import com.opencsv.CSVWriter;
+import com.pimp.companionforband.R;
+import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.utils.band.ConnectToBand;
 import com.robinhood.spark.SparkAdapter;
 import com.robinhood.spark.SparkView;
 
@@ -1110,7 +1113,7 @@ public class SensorsFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (MainActivity.getConnectedBandClient()) {
+                if (ConnectToBand.getConnectedBandClient()) {
                     if (MainActivity.client.getSensorManager().getCurrentHeartRateConsent() == UserConsent.GRANTED) {
                         MainActivity.client.getSensorManager().registerHeartRateEventListener(mHeartRateEventListener);
                     } else {
@@ -1139,7 +1142,7 @@ public class SensorsFragment extends Fragment {
         @Override
         protected Void doInBackground(WeakReference<Activity>... params) {
             try {
-                if (MainActivity.getConnectedBandClient()) {
+                if (ConnectToBand.getConnectedBandClient()) {
 
                     if (params[0].get() != null) {
                         MainActivity.client.getSensorManager().requestHeartRateConsent(params[0].get(), new HeartRateConsentListener() {
@@ -1164,7 +1167,7 @@ public class SensorsFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (MainActivity.getConnectedBandClient()) {
+                if (ConnectToBand.getConnectedBandClient()) {
                     int hardwareVersion = Integer.parseInt(MainActivity.client.getHardwareVersion().await());
                     if (hardwareVersion >= 20) {
                         if (MainActivity.client.getSensorManager().getCurrentHeartRateConsent() == UserConsent.GRANTED) {
@@ -1189,7 +1192,7 @@ public class SensorsFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (MainActivity.getConnectedBandClient()) {
+                if (ConnectToBand.getConnectedBandClient()) {
                     switch (MainActivity.sharedPreferences.getInt("acc_hz", R.id.accelerometer_ms128)) {
                         case R.id.accelerometer_ms16:
                             MainActivity.client.getSensorManager().registerAccelerometerEventListener(mAccelerometerEventListener, SampleRate.MS16);
@@ -1234,7 +1237,7 @@ public class SensorsFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (MainActivity.getConnectedBandClient()) {
+                if (ConnectToBand.getConnectedBandClient()) {
                     if (MainActivity.band2) {
                         MainActivity.client.getSensorManager().registerAltimeterEventListener(mAltimeterEventListener);
                         MainActivity.client.getSensorManager().registerAmbientLightEventListener(mAmbientLightEventListener);

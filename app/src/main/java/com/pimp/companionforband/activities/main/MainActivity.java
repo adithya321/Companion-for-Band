@@ -1,4 +1,4 @@
-package com.pimp.companionforband;
+package com.pimp.companionforband.activities.main;
 
 import android.Manifest;
 import android.app.Activity;
@@ -12,7 +12,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,9 +19,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -43,10 +39,8 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.microsoft.band.BandClient;
-import com.microsoft.band.BandClientManager;
 import com.microsoft.band.BandException;
 import com.microsoft.band.BandInfo;
-import com.microsoft.band.ConnectionState;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.LibsConfiguration;
@@ -61,6 +55,12 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
+import com.pimp.companionforband.AnalyticsApplication;
+import com.pimp.companionforband.activities.support.ChangelogActivity;
+import com.pimp.companionforband.activities.donate.DonateActivity;
+import com.pimp.companionforband.activities.support.GittyActivity;
+import com.pimp.companionforband.R;
+import com.pimp.companionforband.utils.band.ConnectToBand;
 import com.yalantis.ucrop.UCrop;
 
 import net.rdrei.android.dirchooser.DirectoryChooserConfig;
@@ -80,13 +80,17 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
     protected static final int REQUEST_STORAGE_WRITE_ACCESS_PERMISSION = 102;
     private static final int REQUEST_SELECT_PICTURE = 0x01;
     private static final String SAMPLE_CROPPED_IMAGE_NAME = "SampleCropImage.jpeg";
-    static Context sContext;
-    static Activity sActivity;
-    static BandClient client = null;
-    static boolean band2 = false;
-    static BandInfo[] devices;
-    static SharedPreferences sharedPreferences;
-    static SharedPreferences.Editor editor;
+
+    public static Context sContext;
+    public static Activity sActivity;
+
+    public static BandClient client = null;
+    public static boolean band2 = false;
+    public static BandInfo[] devices;
+
+    public static SharedPreferences sharedPreferences;
+    public static SharedPreferences.Editor editor;
+
     int base = 0;
     int r, g, b;
     Drawer result;
@@ -154,24 +158,7 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
     private Uri mDestinationUri;
     private DirectoryChooserFragment mDialog;
 
-    static boolean getConnectedBandClient() throws InterruptedException, BandException {
-        if (client == null) {
-            devices = BandClientManager.getInstance().getPairedBands();
-            if (devices.length == 0) {
-                appendToUI(sContext.getString(R.string.band_not_paired), "Style.ALERT");
-                return false;
-            }
-            client = BandClientManager.getInstance().create(sContext, devices[0]);
-        } else if (ConnectionState.CONNECTED == client.getConnectionState()) {
-            appendToUI(sContext.getString(R.string.band_connected), "Style.CONFIRM");
-            return true;
-        }
-
-        appendToUI(sContext.getString(R.string.band_connecting), "Style.INFO");
-        return ConnectionState.CONNECTED == client.connect().await();
-    }
-
-    static void handleBandException(BandException e) {
+    public static void handleBandException(BandException e) {
         String exceptionMessage;
         switch (e.getErrorType()) {
             case DEVICE_ERROR:
@@ -193,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
         appendToUI(exceptionMessage, "Style.ALERT");
     }
 
-    static void appendToUI(String string, String style) {
+    public static void appendToUI(String string, String style) {
         Snackbar snackbar = Snackbar.make(sActivity.findViewById(R.id.main_content), string, Snackbar.LENGTH_SHORT);
         View view = snackbar.getView();
         switch (style) {
@@ -570,7 +557,7 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                 .build();
         mDialog = DirectoryChooserFragment.newInstance(config);
 
-        new task().execute();
+        new ConnectToBand().execute();
 
         CustomActivityOnCrash.install(this);
     }
@@ -838,65 +825,5 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
     @Override
     public void onCancelChooser() {
         mDialog.dismiss();
-    }
-
-    private class task extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                if (MainActivity.getConnectedBandClient()) {
-                    MainActivity.band2 = Integer.parseInt(MainActivity.client.getHardwareVersion().await()) >= 20;
-                    editor.putString("device_name", devices[0].getName());
-                    editor.putString("device_mac", devices[0].getMacAddress());
-                    editor.apply();
-                } else {
-                    MainActivity.appendToUI(getString(R.string.band_not_found), "Style.ALERT");
-                }
-            } catch (BandException e) {
-                MainActivity.handleBandException(e);
-            } catch (Exception e) {
-                MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
-            }
-            return null;
-        }
-    }
-
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return ThemeFragment.newInstance();
-                case 1:
-                    return SensorsFragment.newInstance();
-                case 2:
-                    return ExtrasFragment.newInstance();
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return getString(R.string.theme);
-                case 1:
-                    return getString(R.string.sensors);
-                case 2:
-                    return getString(R.string.extras);
-            }
-            return null;
-        }
     }
 }

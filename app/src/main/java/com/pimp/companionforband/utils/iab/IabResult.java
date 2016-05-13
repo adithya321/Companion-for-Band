@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.pimp.companionforband.util;
+package com.pimp.companionforband.utils.iab;
 
 /**
  * Represents the result of an in-app billing operation.

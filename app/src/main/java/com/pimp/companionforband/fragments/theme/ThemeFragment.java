@@ -1,4 +1,4 @@
-package com.pimp.companionforband;
+package com.pimp.companionforband.fragments.theme;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,6 +22,9 @@ import android.widget.ImageView;
 
 import com.microsoft.band.BandException;
 import com.microsoft.band.BandTheme;
+import com.pimp.companionforband.R;
+import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.utils.band.ConnectToBand;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -183,7 +186,7 @@ public class ThemeFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (MainActivity.getConnectedBandClient()) {
+                if (ConnectToBand.getConnectedBandClient()) {
                     MainActivity.appendToUI(getString(R.string.band_grabbing_info), "Style.INFO");
                     final Bitmap bitmap = MainActivity.client.getPersonalizationManager().getMeTileImage().await();
 
@@ -219,7 +222,7 @@ public class ThemeFragment extends Fragment {
         protected BandTheme doInBackground(final View... params) {
             view = params[0];
             try {
-                if (MainActivity.getConnectedBandClient()) {
+                if (ConnectToBand.getConnectedBandClient()) {
                     MainActivity.appendToUI(getString(R.string.band_grabbing_info), "Style.INFO");
                     return MainActivity.client.getPersonalizationManager().getTheme().await();
                 }
@@ -273,7 +276,7 @@ public class ThemeFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (MainActivity.getConnectedBandClient()) {
+                if (ConnectToBand.getConnectedBandClient()) {
                     MainActivity.appendToUI(getString(R.string.me_tile_updating), "Style.INFO");
 
                     BitmapFactory.Options options = new BitmapFactory.Options();
@@ -307,7 +310,7 @@ public class ThemeFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (MainActivity.getConnectedBandClient()) {
+                if (ConnectToBand.getConnectedBandClient()) {
                     MainActivity.appendToUI(getString(R.string.theme_updating), "Style.INFO");
 
                     SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyPrefs", 0);
