@@ -1,14 +1,19 @@
 <h1 align="center">Companion for Band</h1>
 
 <p align="center">
-  <a target="_blank" href="https://travis-ci.org/adithya321/Companion-for-Band"><img src="https://travis-ci.org/adithya321/Companion-for-Band.svg?branch=master"></a>
-  <a target="_blank" href="https://codecov.io/gh/adithya321/Companion-for-Band"><img src="https://codecov.io/gh/adithya321/Companion-for-Band/branch/master/graph/badge.svg"></a>
+  <a href="https://travis-ci.org/adithya321/Companion-for-Band"><img src="https://travis-ci.org/adithya321/Companion-for-Band.svg?branch=master"></a>
+  <a href="https://codecov.io/gh/adithya321/Companion-for-Band"><img src="https://codecov.io/gh/adithya321/Companion-for-Band/branch/master/graph/badge.svg"></a>
   <a href="https://android-arsenal.com/api?level=17"><img src="https://img.shields.io/badge/API-17%2B-brightgreen.svg?style=flat" alt="API"></a>
   <a href="https://www.gnu.org/licenses/gpl.html"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg?style=flat" alt="License"></a>
 </p>
 
 <p align="center">The only app you will need for your Microsoft Band.</p>
-<p align="center"><a target="_blank" href="https://play.google.com/store/apps/details?id=com.pimp.companionforband&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-AC-global-none-all-co-pr-py-PartBadges-Oct1515-1"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" height="60" width="180"></a></p>
+<p align="center"><a href='https://play.google.com/store/apps/details?id=com.pimp.companionforband&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="60" width="180"/></a></p>
+<p align="center">
+<a href="https://github.com/adithya321/Companion-for-Band/releases"><img src="https://img.shields.io/github/release/adithya321/Companion-for-Band.svg" alt="Release Version"></a>
+<a href="https://play.google.com/store/apps/details?id=com.pimp.companionforband"><img src="https://img.shields.io/badge/rating-4.6-green.svg" alt="Average Rating"></a>
+<a href="https://play.google.com/store/apps/details?id=com.pimp.companionforband"><img src="https://img.shields.io/badge/downloads-5k%2B-lightgrey.svg" alt="Total Downloads"></a>
+</p>
 
 ### Features
 * Change Me Tile image and Theme Colors
