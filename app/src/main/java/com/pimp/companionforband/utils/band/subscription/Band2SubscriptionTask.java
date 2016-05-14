@@ -8,10 +8,6 @@ import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 import com.pimp.companionforband.utils.band.BandUtils;
-import com.pimp.companionforband.utils.band.listeners.AltimeterEventListener;
-import com.pimp.companionforband.utils.band.listeners.AmbientLightEventListener;
-import com.pimp.companionforband.utils.band.listeners.BarometerEventListener;
-import com.pimp.companionforband.utils.band.listeners.GsrEventListener;
 
 public class Band2SubscriptionTask extends AsyncTask<Void, Void, Void> {
     @Override
@@ -19,14 +15,14 @@ public class Band2SubscriptionTask extends AsyncTask<Void, Void, Void> {
         try {
             if (BandUtils.getConnectedBandClient()) {
                 if (MainActivity.band2) {
-                    MainActivity.client.getSensorManager().registerAltimeterEventListener(new AltimeterEventListener());
-                    MainActivity.client.getSensorManager().registerAmbientLightEventListener(new AmbientLightEventListener());
-                    MainActivity.client.getSensorManager().registerBarometerEventListener(new BarometerEventListener());
+                    MainActivity.client.getSensorManager().registerAltimeterEventListener(SensorsFragment.bandAltimeterEventListener);
+                    MainActivity.client.getSensorManager().registerAmbientLightEventListener(SensorsFragment.bandAmbientLightEventListener);
+                    MainActivity.client.getSensorManager().registerBarometerEventListener(SensorsFragment.bandBarometerEventListener);
 
                     if (MainActivity.sharedPreferences.getInt("gsr_hz", R.id.gsr_ms200) == R.id.gsr_ms200)
-                        MainActivity.client.getSensorManager().registerGsrEventListener(new GsrEventListener(), GsrSampleRate.MS200);
+                        MainActivity.client.getSensorManager().registerGsrEventListener(SensorsFragment.bandGsrEventListener, GsrSampleRate.MS200);
                     else
-                        MainActivity.client.getSensorManager().registerGsrEventListener(new GsrEventListener(), GsrSampleRate.MS5000);
+                        MainActivity.client.getSensorManager().registerGsrEventListener(SensorsFragment.bandGsrEventListener, GsrSampleRate.MS5000);
 
                     SensorsFragment.appendToUI("Firmware Version : " + MainActivity.client.getFirmwareVersion().await()
                             + "\nHardware Version : " + MainActivity.client.getHardwareVersion().await(), SensorsFragment.band2TV);

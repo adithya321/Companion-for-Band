@@ -2,6 +2,7 @@ package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
 
+import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandBarometerEvent;
 import com.microsoft.band.sensors.BandBarometerEventListener;
 import com.opencsv.CSVWriter;
@@ -23,7 +24,9 @@ public class BarometerEventListener implements BandBarometerEventListener {
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SensorsFragment.mChartAdapter.add((float) event.getAirPressure());
+                        SensorsFragment.series1.appendData(new DataPoint(SensorsFragment.graphLastValueX,
+                                event.getAirPressure()), true, 100);
+                        SensorsFragment.graphLastValueX += 1;
                     }
                 });
             }

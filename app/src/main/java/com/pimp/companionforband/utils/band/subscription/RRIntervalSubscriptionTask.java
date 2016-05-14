@@ -8,7 +8,6 @@ import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 import com.pimp.companionforband.utils.band.BandUtils;
-import com.pimp.companionforband.utils.band.listeners.RRIntervalEventListener;
 
 public class RRIntervalSubscriptionTask extends AsyncTask<Void, Void, Void> {
     @Override
@@ -19,7 +18,7 @@ public class RRIntervalSubscriptionTask extends AsyncTask<Void, Void, Void> {
                     if (MainActivity.client.getSensorManager().getCurrentHeartRateConsent()
                             == UserConsent.GRANTED) {
                         MainActivity.client.getSensorManager()
-                                .registerRRIntervalEventListener(new RRIntervalEventListener());
+                                .registerRRIntervalEventListener(SensorsFragment.bandRRIntervalEventListener);
                     } else {
                         SensorsFragment.appendToUI(MainActivity.sContext
                                         .getString(R.string.heart_rate_consent) + "\n",

@@ -2,6 +2,7 @@ package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
 
+import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandDistanceEvent;
 import com.microsoft.band.sensors.BandDistanceEventListener;
 import com.opencsv.CSVWriter;
@@ -23,7 +24,9 @@ public class DistanceEventListener implements BandDistanceEventListener {
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SensorsFragment.mChartAdapter.add(bandDistanceEvent.getPace());
+                        SensorsFragment.series1.appendData(new DataPoint(SensorsFragment.graphLastValueX,
+                                (double) bandDistanceEvent.getPace()), true, 100);
+                        SensorsFragment.graphLastValueX += 1;
                     }
                 });
             }

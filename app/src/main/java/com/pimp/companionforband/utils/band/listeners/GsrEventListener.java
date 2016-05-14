@@ -2,6 +2,7 @@ package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
 
+import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandGsrEvent;
 import com.microsoft.band.sensors.BandGsrEventListener;
 import com.opencsv.CSVWriter;
@@ -23,7 +24,9 @@ public class GsrEventListener implements BandGsrEventListener {
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SensorsFragment.mChartAdapter.add((float) event.getResistance());
+                        SensorsFragment.series1.appendData(new DataPoint(SensorsFragment.graphLastValueX,
+                                (double) event.getResistance()), true, 100);
+                        SensorsFragment.graphLastValueX += 1;
                     }
                 });
             }

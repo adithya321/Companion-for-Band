@@ -17,19 +17,47 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 import com.microsoft.band.BandIOException;
+import com.microsoft.band.sensors.BandAccelerometerEventListener;
+import com.microsoft.band.sensors.BandAltimeterEventListener;
+import com.microsoft.band.sensors.BandAmbientLightEventListener;
+import com.microsoft.band.sensors.BandBarometerEventListener;
+import com.microsoft.band.sensors.BandCaloriesEventListener;
+import com.microsoft.band.sensors.BandContactEventListener;
+import com.microsoft.band.sensors.BandDistanceEventListener;
+import com.microsoft.band.sensors.BandGsrEventListener;
+import com.microsoft.band.sensors.BandGyroscopeEventListener;
+import com.microsoft.band.sensors.BandHeartRateEventListener;
+import com.microsoft.band.sensors.BandPedometerEventListener;
+import com.microsoft.band.sensors.BandRRIntervalEventListener;
+import com.microsoft.band.sensors.BandSkinTemperatureEventListener;
+import com.microsoft.band.sensors.BandUVEventListener;
 import com.microsoft.band.sensors.GsrSampleRate;
 import com.microsoft.band.sensors.SampleRate;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
 import com.pimp.companionforband.utils.band.listeners.AccelerometerEventListener;
+import com.pimp.companionforband.utils.band.listeners.AltimeterEventListener;
+import com.pimp.companionforband.utils.band.listeners.AmbientLightEventListener;
+import com.pimp.companionforband.utils.band.listeners.BarometerEventListener;
+import com.pimp.companionforband.utils.band.listeners.CaloriesEventListener;
+import com.pimp.companionforband.utils.band.listeners.ContactEventListener;
+import com.pimp.companionforband.utils.band.listeners.DistanceEventListener;
 import com.pimp.companionforband.utils.band.listeners.GsrEventListener;
 import com.pimp.companionforband.utils.band.listeners.GyroscopeEventListener;
+import com.pimp.companionforband.utils.band.listeners.HeartRateEventListener;
+import com.pimp.companionforband.utils.band.listeners.PedometerEventListener;
+import com.pimp.companionforband.utils.band.listeners.RRIntervalEventListener;
+import com.pimp.companionforband.utils.band.listeners.SkinTemperatureEventListener;
+import com.pimp.companionforband.utils.band.listeners.UVEventListener;
 import com.pimp.companionforband.utils.band.subscription.Band1SubscriptionTask;
 import com.pimp.companionforband.utils.band.subscription.Band2SubscriptionTask;
 import com.pimp.companionforband.utils.band.subscription.HeartRateSubscriptionTask;
 import com.pimp.companionforband.utils.band.subscription.RRIntervalSubscriptionTask;
-import com.robinhood.spark.SparkView;
 
 import java.lang.ref.WeakReference;
 
@@ -41,7 +69,24 @@ public class SensorsFragment extends Fragment {
             barometerTV, caloriesTV, contactTV, distanceTV, gsrTV, gyroscopeTV, heartRateTV,
             pedometerTV, rrTV, skinTempTV, uvTV;
     int permissionCheck;
-    public static ChartAdapter mChartAdapter;
+    public static GraphView graph;
+    public static LineGraphSeries<DataPoint> series1, series2, series3;
+    public static double graphLastValueX = 0;
+
+    public static BandAccelerometerEventListener bandAccelerometerEventListener = new AccelerometerEventListener();
+    public static BandAltimeterEventListener bandAltimeterEventListener = new AltimeterEventListener();
+    public static BandAmbientLightEventListener bandAmbientLightEventListener = new AmbientLightEventListener();
+    public static BandBarometerEventListener bandBarometerEventListener = new BarometerEventListener();
+    public static BandCaloriesEventListener bandCaloriesEventListener = new CaloriesEventListener();
+    public static BandContactEventListener bandContactEventListener = new ContactEventListener();
+    public static BandDistanceEventListener bandDistanceEventListener = new DistanceEventListener();
+    public static BandGsrEventListener bandGsrEventListener = new GsrEventListener();
+    public static BandGyroscopeEventListener bandGyroscopeEventListener = new GyroscopeEventListener();
+    public static BandHeartRateEventListener bandHeartRateEventListener = new HeartRateEventListener();
+    public static BandPedometerEventListener bandPedometerEventListener = new PedometerEventListener();
+    public static BandRRIntervalEventListener bandRRIntervalEventListener = new RRIntervalEventListener();
+    public static BandSkinTemperatureEventListener bandSkinTemperatureEventListener = new SkinTemperatureEventListener();
+    public static BandUVEventListener bandUVEventListener = new UVEventListener();
 
     View.OnClickListener sampleRateRadioButtonClickListener = new View.OnClickListener() {
         @Override
@@ -52,44 +97,44 @@ public class SensorsFragment extends Fragment {
                 switch (v.getId()) {
                     case R.id.accelerometer_ms16:
                         MainActivity.client.getSensorManager().registerAccelerometerEventListener(
-                                new AccelerometerEventListener(), SampleRate.MS16);
+                                bandAccelerometerEventListener, SampleRate.MS16);
                         editor.putInt("acc_hz", R.id.accelerometer_ms16);
                         break;
                     case R.id.accelerometer_ms32:
                         MainActivity.client.getSensorManager().registerAccelerometerEventListener(
-                                new AccelerometerEventListener(), SampleRate.MS32);
+                                bandAccelerometerEventListener, SampleRate.MS32);
                         editor.putInt("acc_hz", R.id.accelerometer_ms32);
                         break;
                     case R.id.accelerometer_ms128:
                         MainActivity.client.getSensorManager().registerAccelerometerEventListener(
-                                new AccelerometerEventListener(), SampleRate.MS128);
+                                bandAccelerometerEventListener, SampleRate.MS128);
                         editor.putInt("acc_hz", R.id.accelerometer_ms128);
                         break;
                     case R.id.gyroscope_ms16:
                         MainActivity.client.getSensorManager().registerGyroscopeEventListener(
-                                new GyroscopeEventListener(), SampleRate.MS16);
+                                bandGyroscopeEventListener, SampleRate.MS16);
                         editor.putInt("gyr_hz", R.id.gyroscope_ms16);
                         break;
                     case R.id.gyroscope_ms32:
                         MainActivity.client.getSensorManager().registerGyroscopeEventListener(
-                                new GyroscopeEventListener(), SampleRate.MS32);
+                                bandGyroscopeEventListener, SampleRate.MS32);
                         editor.putInt("gyr_hz", R.id.gyroscope_ms32);
                         break;
                     case R.id.gyroscope_ms128:
                         MainActivity.client.getSensorManager().registerGyroscopeEventListener(
-                                new GyroscopeEventListener(), SampleRate.MS128);
+                                bandGyroscopeEventListener, SampleRate.MS128);
                         editor.putInt("gyr_hz", R.id.gyroscope_ms128);
                         break;
                     case R.id.gsr_ms200:
                         if (MainActivity.band2)
                             MainActivity.client.getSensorManager().registerGsrEventListener(
-                                    new GsrEventListener(), GsrSampleRate.MS200);
+                                    bandGsrEventListener, GsrSampleRate.MS200);
                         editor.putInt("gsr_hz", R.id.gsr_ms200);
                         break;
                     case R.id.gsr_ms5000:
                         if (MainActivity.band2)
                             MainActivity.client.getSensorManager().registerGsrEventListener(
-                                    new GsrEventListener(), GsrSampleRate.MS5000);
+                                    bandGsrEventListener, GsrSampleRate.MS5000);
                         editor.putInt("gsr_hz", R.id.gsr_ms5000);
                         break;
                 }
@@ -233,22 +278,6 @@ public class SensorsFragment extends Fragment {
         new Band2SubscriptionTask().execute();
         new Band1SubscriptionTask().execute();
 
-        SparkView sparkView = (SparkView) view.findViewById(R.id.sparkview);
-
-        mChartAdapter = new ChartAdapter();
-        sparkView.setAdapter(mChartAdapter);
-        sparkView.setScrubListener(new SparkView.OnScrubListener() {
-            @Override
-            public void onScrubbed(Object value) {
-                if (value == null) {
-                    scrubInfoTextView.setText(R.string.scrub_empty);
-                } else {
-                    scrubInfoTextView.setText(getString(R.string.scrub_format, value));
-                }
-            }
-        });
-
-        scrubInfoTextView = (TextView) view.findViewById(R.id.scrub_info_textview);
         chart_spinner = (Spinner) view.findViewById(R.id.chart_spinner);
 
         view.findViewById(R.id.accelerometer_ms16).setOnClickListener(sampleRateRadioButtonClickListener);
@@ -259,6 +288,20 @@ public class SensorsFragment extends Fragment {
         view.findViewById(R.id.gyroscope_ms128).setOnClickListener(sampleRateRadioButtonClickListener);
         view.findViewById(R.id.gsr_ms200).setOnClickListener(sampleRateRadioButtonClickListener);
         view.findViewById(R.id.gsr_ms5000).setOnClickListener(sampleRateRadioButtonClickListener);
+
+        graph = (GraphView) view.findViewById(R.id.graph);
+        series1 = new LineGraphSeries<>();
+        series1.setColor(getResources().getColor(R.color.accent));
+        series2 = new LineGraphSeries<>();
+        series2.setColor(getResources().getColor(R.color.primary_dark));
+        series3 = new LineGraphSeries<>();
+        series3.setColor(getResources().getColor(R.color.primary_light));
+        graph.addSeries(series1);
+        graph.addSeries(series2);
+        graph.addSeries(series3);
+        graph.getGridLabelRenderer().setVerticalLabelsVisible(false);
+        graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+        graph.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.NONE);
     }
 
     public static void appendToUI(final String string, final TextView textView) {

@@ -2,6 +2,7 @@ package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
 
+import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandGyroscopeEvent;
 import com.microsoft.band.sensors.BandGyroscopeEventListener;
 import com.opencsv.CSVWriter;
@@ -19,11 +20,17 @@ public class GyroscopeEventListener implements BandGyroscopeEventListener {
     @Override
     public void onBandGyroscopeChanged(final BandGyroscopeEvent bandGyroscopeEvent) {
         if (bandGyroscopeEvent != null) {
-            if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Angular Velocity X")) {
+            if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Angular Velocity")) {
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SensorsFragment.mChartAdapter.add(bandGyroscopeEvent.getAngularVelocityX());
+                        SensorsFragment.series1.appendData(new DataPoint(SensorsFragment.graphLastValueX,
+                                (double) bandGyroscopeEvent.getAngularVelocityX()), true, 100);
+                        SensorsFragment.series2.appendData(new DataPoint(SensorsFragment.graphLastValueX,
+                                (double) bandGyroscopeEvent.getAngularVelocityY()), true, 100);
+                        SensorsFragment.series3.appendData(new DataPoint(SensorsFragment.graphLastValueX,
+                                (double) bandGyroscopeEvent.getAngularVelocityZ()), true, 100);
+                        SensorsFragment.graphLastValueX += 1;
                     }
                 });
             }

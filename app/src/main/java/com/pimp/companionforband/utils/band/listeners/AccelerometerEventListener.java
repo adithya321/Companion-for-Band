@@ -3,6 +3,7 @@ package com.pimp.companionforband.utils.band.listeners;
 import android.os.Environment;
 import android.util.Log;
 
+import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandAccelerometerEvent;
 import com.microsoft.band.sensors.BandAccelerometerEventListener;
 import com.opencsv.CSVWriter;
@@ -20,11 +21,17 @@ public class AccelerometerEventListener implements BandAccelerometerEventListene
     @Override
     public void onBandAccelerometerChanged(final BandAccelerometerEvent event) {
         if (event != null) {
-            if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Acceleration X")) {
+            if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Acceleration")) {
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SensorsFragment.mChartAdapter.add(event.getAccelerationX());
+                        SensorsFragment.series1.appendData(new DataPoint(SensorsFragment.graphLastValueX,
+                                (double) event.getAccelerationX()), true, 100);
+                        SensorsFragment.series2.appendData(new DataPoint(SensorsFragment.graphLastValueX,
+                                (double) event.getAccelerationY()), true, 100);
+                        SensorsFragment.series3.appendData(new DataPoint(SensorsFragment.graphLastValueX,
+                                (double) event.getAccelerationZ()), true, 100);
+                        SensorsFragment.graphLastValueX += 1;
                     }
                 });
             }

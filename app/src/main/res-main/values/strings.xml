@@ -208,13 +208,13 @@
     <string name="scrub_format">Value: %1$s</string>
 
     <string-array name="chart_sensors_array">
-        <item>Acceleration X</item>
+        <item>Acceleration</item>
         <item>Altimeter</item>
         <item>Ambient Light</item>
         <item>Barometer</item>
         <item>Pace</item>
         <item>GSR</item>
-        <item>Angular Velocity X</item>
+        <item>Angular Velocity</item>
         <item>Heart Rate</item>
         <item>RR Interval</item>
         <item>Skin Temperature</item>

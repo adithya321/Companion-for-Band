@@ -8,7 +8,6 @@ import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 import com.pimp.companionforband.utils.band.BandUtils;
-import com.pimp.companionforband.utils.band.listeners.HeartRateEventListener;
 
 public class HeartRateSubscriptionTask extends AsyncTask<Void, Void, Void> {
     @Override
@@ -16,7 +15,7 @@ public class HeartRateSubscriptionTask extends AsyncTask<Void, Void, Void> {
         try {
             if (BandUtils.getConnectedBandClient()) {
                 if (MainActivity.client.getSensorManager().getCurrentHeartRateConsent() == UserConsent.GRANTED) {
-                    MainActivity.client.getSensorManager().registerHeartRateEventListener(new HeartRateEventListener());
+                    MainActivity.client.getSensorManager().registerHeartRateEventListener(SensorsFragment.bandHeartRateEventListener);
                 } else {
                     MainActivity.sActivity.runOnUiThread(new Runnable() {
                         @SuppressWarnings("unchecked")

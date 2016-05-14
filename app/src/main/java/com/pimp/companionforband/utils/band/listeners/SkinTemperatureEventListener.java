@@ -2,6 +2,7 @@ package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
 
+import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandSkinTemperatureEvent;
 import com.microsoft.band.sensors.BandSkinTemperatureEventListener;
 import com.opencsv.CSVWriter;
@@ -24,7 +25,9 @@ public class SkinTemperatureEventListener implements BandSkinTemperatureEventLis
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SensorsFragment.mChartAdapter.add(bandSkinTemperatureEvent.getTemperature());
+                        SensorsFragment.series1.appendData(new DataPoint(SensorsFragment.graphLastValueX,
+                                (double) bandSkinTemperatureEvent.getTemperature()), true, 100);
+                        SensorsFragment.graphLastValueX += 1;
                     }
                 });
             }

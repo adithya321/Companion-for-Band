@@ -22,6 +22,7 @@ public class HeartRateConsentTask extends AsyncTask<WeakReference<Activity>, Voi
                     MainActivity.client.getSensorManager().requestHeartRateConsent(params[0].get(), new HeartRateConsentListener() {
                         @Override
                         public void userAccepted(boolean consentGiven) {
+                            new HeartRateSubscriptionTask().execute();
                         }
                     });
                 }
