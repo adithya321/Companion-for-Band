@@ -3,7 +3,8 @@
 <p align="center">
   <a target="_blank" href="https://travis-ci.org/adithya321/Companion-for-Band"><img src="https://travis-ci.org/adithya321/Companion-for-Band.svg?branch=master"></a>
   <a target="_blank" href="https://codecov.io/gh/adithya321/Companion-for-Band"><img src="https://codecov.io/gh/adithya321/Companion-for-Band/branch/master/graph/badge.svg"></a>
-  <a href="https://android-arsenal.com/api?level=17"><img src="https://img.shields.io/badge/API-17%2B-brightgreen.svg?style=flat" border="0" alt="API"></a>
+  <a href="https://android-arsenal.com/api?level=17"><img src="https://img.shields.io/badge/API-17%2B-brightgreen.svg?style=flat" alt="API"></a>
+  <a href="https://www.gnu.org/licenses/gpl.html"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg?style=flat" alt="License"></a>
 </p>
 
 <p align="center">The only app you will need for your Microsoft Band.</p>
