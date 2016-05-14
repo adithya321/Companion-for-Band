@@ -1,0 +1,150 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@color/primary"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/sensor_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
+            android:maxHeight="50dp"
+            android:maxWidth="50dp"
+            android:src="@drawable/band"
+            android:transitionName="@string/transition_sensor_icon" />
+
+        <TextView
+            android:id="@+id/sensor_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sensor_icon"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="@color/md_white_1000" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="180dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/details_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/horizontal_margin"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="sans-serif-thin"
+                    android:text="@string/sensor_details"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/horizontal_description_margin"
+                    android:layout_marginRight="@dimen/horizontal_description_margin"
+                    android:layout_marginTop="50dp"
+                    android:fontFamily="sans-serif-thin"
+                    android:textSize="14sp" />
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/options_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/details_card"
+                android:layout_margin="5dp"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/horizontal_margin"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="sans-serif-thin"
+                    android:text="@string/sensor_options"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/horizontal_description_margin"
+                    android:layout_marginRight="@dimen/horizontal_description_margin"
+                    android:layout_marginTop="50dp"
+                    android:fontFamily="sans-serif-thin"
+                    android:singleLine="true"
+                    android:textSize="14sp" />
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/graph_card"
+                android:layout_width="match_parent"
+                android:layout_height="85dp"
+                android:layout_below="@id/options_card"
+                android:layout_margin="5dp"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/horizontal_margin"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="sans-serif-thin"
+                    android:text="@string/sensor_graph"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/horizontal_description_margin"
+                    android:layout_marginRight="@dimen/horizontal_description_margin"
+                    android:layout_marginTop="50dp"
+                    android:ellipsize="end"
+                    android:fontFamily="sans-serif-thin"
+                    android:singleLine="true"
+                    android:textSize="14sp" />
+            </android.support.v7.widget.CardView>
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

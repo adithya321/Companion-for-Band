@@ -77,10 +77,6 @@ public class ExtrasFragment extends Fragment {
     private UUID barcodeTileId = UUID.fromString("23d392df-dd0c-4e93-8c0d-63dd7b02eb52");
     private UUID flashlightTileId = UUID.fromString("c2187a9c-db5c-4e73-9f9d-d742113f91e8");
 
-    public static ExtrasFragment newInstance() {
-        return new ExtrasFragment();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

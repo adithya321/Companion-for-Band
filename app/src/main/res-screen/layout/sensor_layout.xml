@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/sensor_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:foreground="?android:attr/selectableItemBackground">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/sensorIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_margin="8dp"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:maxHeight="50dp"
+                android:maxWidth="50dp"
+                android:src="@drawable/band"
+                android:transitionName="@string/transition_sensor_icon" />
+
+            <TextView
+                android:id="@+id/txtName"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="8dp"
+                android:layout_toEndOf="@id/sensorIcon"
+                android:gravity="center_vertical"
+                android:text="Sensor"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/txtDetails"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/sensorIcon"
+                android:gravity="center"
+                android:text="Details" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

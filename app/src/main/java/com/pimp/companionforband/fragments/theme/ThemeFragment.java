@@ -58,10 +58,6 @@ public class ThemeFragment extends Fragment {
     };
     private ImageView imageView;
 
-    public static ThemeFragment newInstance() {
-        return new ThemeFragment();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

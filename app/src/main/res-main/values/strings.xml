@@ -9,7 +9,7 @@
     <string name="calories">Calories</string>
     <string name="contact">Contact</string>
     <string name="distance">Distance</string>
-    <string name="gsr">GSR (Galvanic Skin Response)</string>
+    <string name="gsr">GSR</string>
     <string name="gyroscope">Gyroscope</string>
     <string name="heart_rate">Heart Rate</string>
     <string name="light">Ambient light</string>
@@ -219,4 +219,10 @@
         <item>RR Interval</item>
         <item>Skin Temperature</item>
     </string-array>
+
+    <string name="transition_sensor_icon">Sensor Icon Transition</string>
+
+    <string name="sensor_details">Details</string>
+    <string name="sensor_options">Options</string>
+    <string name="sensor_graph">Graph</string>
 </resources>
