@@ -204,25 +204,27 @@
 
     <string name="change_picture_location">CHANGE PICTURE LOCATION</string>
 
-    <string name="scrub_empty">Tap and hold the graph for value.</string>
-    <string name="scrub_format">Value: %1$s</string>
-
-    <string-array name="chart_sensors_array">
-        <item>Acceleration</item>
-        <item>Altimeter</item>
-        <item>Ambient Light</item>
-        <item>Barometer</item>
-        <item>Pace</item>
-        <item>GSR</item>
-        <item>Angular Velocity</item>
-        <item>Heart Rate</item>
-        <item>RR Interval</item>
-        <item>Skin Temperature</item>
-    </string-array>
-
     <string name="transition_sensor_name">Sensor Name Transition</string>
 
     <string name="sensor_data">Data</string>
     <string name="sensor_options">Options</string>
     <string name="sensor_graph">Graph</string>
+    <string name="sensor_details">Details</string>
+
+    <string name="accelerometer_details">Provides X, Y, and Z acceleration in g units. 1 g = 9.81 meters per second squared (m/s2).</string>
+    <string name="gyroscope_details">Provides X, Y, and Z angular velocity in degrees per second (°/sec) units.</string>
+    <string name="distance_details">Provides the total distance in centimeters, current speed in centimeters per second (cm/s), current pace in milliseconds per meter (ms/m), and the current pedometer mode (such as walking or running).</string>
+    <string name="heartRate_details">Provides the number of beats per minute; also indicates if the heart rate sensor is fully locked on to the wearer’s heart rate.
+The data returned should be used only in resting mode. The SDK doesn’t provide access to the heart rate values optimized for any other activity.</string>
+    <string name="pedometer_details">Provides the total number of steps the wearer has taken since the Band was last factory-reset. This is a lifetime counter and not a daily or a 0-based counter. To determine the absolute number of steps between two readings, you must take the difference between the returned values.</string>
+    <string name="skinTemperature_details">Provides the current skin temperature of the wearer in degrees Celsius.</string>
+    <string name="uv_details">Provides the current ultraviolet radiation exposure intensity.</string>
+    <string name="contact_details">Provides the current state of the Band as being worn/not worn.</string>
+    <string name="calories_details">Provides the total number of calories the wearer has burned since the Band was last factory-reset. This is a lifetime counter and not a daily or a 0-based counter. To determine the absolute number of calories burned between two readings, you must take the difference between the returned values.</string>
+    <string name="gsr_details">(Microsoft Band 2 only) Provides the current skin resistance of the wearer in kohms.</string>
+    <string name="rrInterval_details">(Microsoft Band 2 only) Provides the interval in seconds between the last two continuous heart beats.
+The data returned should be used only in resting mode. The SDK doesn’t provide access to the RR interval values optimized for any other activity.</string>
+    <string name="ambientLight_details">(Microsoft Band 2 only) Provides the current light intensity (illuminance) in lux (Lumes per sq. meter).</string>
+    <string name="barometer_details">(Microsoft Band 2 only) Provides the current raw air pressure in hPa (hectopascals) and raw temperature in degrees Celsius.</string>
+    <string name="altimeter_details">(Microsoft Band 2 only) Provides current elevation data like total gain/loss, steps ascended/descended, flights ascended/descended, and elevation rate.</string>
 </resources>

@@ -8,6 +8,7 @@ import com.microsoft.band.sensors.BandRRIntervalEventListener;
 import com.opencsv.CSVWriter;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.fragments.sensors.SensorActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 
 import java.io.File;
@@ -20,16 +21,14 @@ public class RRIntervalEventListener implements BandRRIntervalEventListener {
     @Override
     public void onBandRRIntervalChanged(final BandRRIntervalEvent event) {
         if (event != null) {
-            if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("RR Interval")) {
-                MainActivity.sActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        SensorsFragment.series1.appendData(new DataPoint(SensorsFragment.graphLastValueX,
-                                (double) event.getInterval()), true, 100);
-                        SensorsFragment.graphLastValueX += 1;
-                    }
-                });
-            }
+            MainActivity.sActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    SensorActivity.series1.appendData(new DataPoint(SensorActivity.graphLastValueX,
+                            event.getInterval()), true, 100);
+                    SensorActivity.graphLastValueX += 1;
+                }
+            });
             SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.rr) + String.format(" = %.3f s\n", event.getInterval()), SensorsFragment.rrTV);
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "RRInterval");

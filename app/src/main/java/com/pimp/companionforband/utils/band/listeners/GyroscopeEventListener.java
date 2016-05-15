@@ -3,11 +3,13 @@ package com.pimp.companionforband.utils.band.listeners;
 import android.os.Environment;
 import android.widget.TextView;
 
+import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandGyroscopeEvent;
 import com.microsoft.band.sensors.BandGyroscopeEventListener;
 import com.opencsv.CSVWriter;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.fragments.sensors.SensorActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 
 import java.io.File;
@@ -19,32 +21,29 @@ import java.util.Date;
 public class GyroscopeEventListener implements BandGyroscopeEventListener {
 
     TextView textView;
+    boolean graph;
 
-    public GyroscopeEventListener(TextView textView) {
+    public void setViews(TextView textView, boolean graph) {
         this.textView = textView;
-    }
-
-    public void setTextView(TextView textView) {
-        this.textView = textView;
+        this.graph = graph;
     }
 
     @Override
     public void onBandGyroscopeChanged(final BandGyroscopeEvent bandGyroscopeEvent) {
         if (bandGyroscopeEvent != null) {
-            /*if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Angular Velocity")) {
+            if (graph)
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SensorsFragment.series1.appendData(new DataPoint(SensorsFragment.graphLastValueX,
-                                (double) bandGyroscopeEvent.getAngularVelocityX()), true, 100);
-                        SensorsFragment.series2.appendData(new DataPoint(SensorsFragment.graphLastValueX,
-                                (double) bandGyroscopeEvent.getAngularVelocityY()), true, 100);
-                        SensorsFragment.series3.appendData(new DataPoint(SensorsFragment.graphLastValueX,
-                                (double) bandGyroscopeEvent.getAngularVelocityZ()), true, 100);
-                        SensorsFragment.graphLastValueX += 1;
+                        SensorActivity.series1.appendData(new DataPoint(SensorActivity.graphLastValueX,
+                                (double) bandGyroscopeEvent.getAngularVelocityX()), true, 50);
+                        SensorActivity.series2.appendData(new DataPoint(SensorActivity.graphLastValueX,
+                                (double) bandGyroscopeEvent.getAngularVelocityY()), true, 50);
+                        SensorActivity.series3.appendData(new DataPoint(SensorActivity.graphLastValueX,
+                                (double) bandGyroscopeEvent.getAngularVelocityZ()), true, 50);
+                        SensorActivity.graphLastValueX += 1;
                     }
                 });
-            }*/
             SensorsFragment.appendToUI(String.format("X = %.3f (m/s²) \nY = %.3f (m/s²)\nZ = %.3f (m/s²)\n" +
                             "X = %.3f (°/sec)\nY = %.3f (°/sec)\nZ = %.3f (°/sec)",
                     bandGyroscopeEvent.getAccelerationX(),

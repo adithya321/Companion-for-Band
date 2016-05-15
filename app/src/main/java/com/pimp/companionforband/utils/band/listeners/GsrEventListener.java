@@ -1,6 +1,7 @@
 package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
+import android.widget.TextView;
 
 import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandGsrEvent;
@@ -8,6 +9,7 @@ import com.microsoft.band.sensors.BandGsrEventListener;
 import com.opencsv.CSVWriter;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.fragments.sensors.SensorActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 
 import java.io.File;
@@ -17,19 +19,28 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class GsrEventListener implements BandGsrEventListener {
+
+    TextView textView;
+    boolean graph;
+
+    public void setViews(TextView textView, boolean graph) {
+        this.textView = textView;
+        this.graph = graph;
+    }
+
     @Override
     public void onBandGsrChanged(final BandGsrEvent event) {
         if (event != null) {
-            if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("GSR")) {
+            if (graph)
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SensorsFragment.series1.appendData(new DataPoint(SensorsFragment.graphLastValueX,
+                        SensorActivity.series1.appendData(new DataPoint(SensorActivity.graphLastValueX,
                                 (double) event.getResistance()), true, 100);
-                        SensorsFragment.graphLastValueX += 1;
+                        SensorActivity.graphLastValueX += 1;
                     }
                 });
-            }
+
             SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.resistance) + String.format(" = %d kOhms\n", event.getResistance()), SensorsFragment.gsrTV);
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "GSR");

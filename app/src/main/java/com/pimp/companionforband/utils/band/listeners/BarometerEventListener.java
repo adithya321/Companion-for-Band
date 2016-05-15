@@ -8,6 +8,7 @@ import com.microsoft.band.sensors.BandBarometerEventListener;
 import com.opencsv.CSVWriter;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.fragments.sensors.SensorActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 
 import java.io.File;
@@ -20,16 +21,14 @@ public class BarometerEventListener implements BandBarometerEventListener {
     @Override
     public void onBandBarometerChanged(final BandBarometerEvent event) {
         if (event != null) {
-            if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Barometer")) {
-                MainActivity.sActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        SensorsFragment.series1.appendData(new DataPoint(SensorsFragment.graphLastValueX,
-                                event.getAirPressure()), true, 100);
-                        SensorsFragment.graphLastValueX += 1;
-                    }
-                });
-            }
+            MainActivity.sActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    SensorActivity.series1.appendData(new DataPoint(SensorActivity.graphLastValueX,
+                            event.getAirPressure()), true, 100);
+                    SensorActivity.graphLastValueX += 1;
+                }
+            });
             SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.air_pressure) + String.format(" = %.3f hPa\n", event.getAirPressure())
                             + MainActivity.sContext.getString(R.string.air_temperature) + String.format(" = %.2f °C = %.2f F",
                     event.getTemperature(), 1.8 * event.getTemperature() + 32),

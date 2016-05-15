@@ -19,7 +19,7 @@ public class Band2SubscriptionTask extends AsyncTask<Void, Void, Void> {
                     MainActivity.client.getSensorManager().registerAmbientLightEventListener(SensorsFragment.bandAmbientLightEventListener);
                     MainActivity.client.getSensorManager().registerBarometerEventListener(SensorsFragment.bandBarometerEventListener);
 
-                    if (MainActivity.sharedPreferences.getInt("gsr_hz", R.id.gsr_ms200) == R.id.gsr_ms200)
+                    if (MainActivity.sharedPreferences.getInt("gsr_hz", 31) == 31)
                         MainActivity.client.getSensorManager().registerGsrEventListener(SensorsFragment.bandGsrEventListener, GsrSampleRate.MS200);
                     else
                         MainActivity.client.getSensorManager().registerGsrEventListener(SensorsFragment.bandGsrEventListener, GsrSampleRate.MS5000);

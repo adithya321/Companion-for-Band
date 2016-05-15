@@ -11,12 +11,9 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 import com.microsoft.band.sensors.BandAccelerometerEventListener;
 import com.microsoft.band.sensors.BandAltimeterEventListener;
 import com.microsoft.band.sensors.BandAmbientLightEventListener;
@@ -48,13 +45,10 @@ import java.lang.ref.WeakReference;
 
 public class SensorsFragment extends Fragment {
 
-    public static Spinner chart_spinner;
     public static WeakReference<Activity> reference;
     public static TextView band2TV, logTV, backlogTV, accelerometerTV, altimeterTV, ambientLightTV,
             barometerTV, caloriesTV, contactTV, distanceTV, gsrTV, gyroscopeTV, heartRateTV,
             pedometerTV, rrTV, skinTempTV, uvTV;
-    public static LineGraphSeries<DataPoint> series1, series2, series3;
-    public static double graphLastValueX = 0;
 
     public static CardView accelerometerCard, caloriesCard, contactCard, distanceCard, gyroscopeCard,
             heartRateCard, pedometerCard, skinTemperatureCard, uvCard;
@@ -99,11 +93,11 @@ public class SensorsFragment extends Fragment {
         String[] sensors = {"Accelerometer", "Calories", "Contact", "Distance", "Gyroscope",
                 "Heart Rate", "Pedometer", "SkinTemperature", "UV"};
 
-        bandAccelerometerEventListener = new AccelerometerEventListener((TextView) caloriesCard.findViewById(R.id.txtDetails));
+        bandAccelerometerEventListener = new AccelerometerEventListener();
         bandCaloriesEventListener = new CaloriesEventListener((TextView) caloriesCard.findViewById(R.id.txtDetails));
         bandContactEventListener = new ContactEventListener((TextView) contactCard.findViewById(R.id.txtDetails));
         bandDistanceEventListener = new DistanceEventListener((TextView) distanceCard.findViewById(R.id.txtDetails));
-        bandGyroscopeEventListener = new GyroscopeEventListener((TextView) gyroscopeCard.findViewById(R.id.txtDetails));
+        bandGyroscopeEventListener = new GyroscopeEventListener();
         bandHeartRateEventListener = new HeartRateEventListener((TextView) heartRateCard.findViewById(R.id.txtDetails));
         bandPedometerEventListener = new PedometerEventListener((TextView) pedometerCard.findViewById(R.id.txtDetails));
         bandSkinTemperatureEventListener = new SkinTemperatureEventListener((TextView) skinTemperatureCard.findViewById(R.id.txtDetails));
@@ -162,11 +156,12 @@ public class SensorsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        ((AccelerometerEventListener) bandAccelerometerEventListener).setTextView((TextView) accelerometerCard.findViewById(R.id.txtDetails));
+        ((AccelerometerEventListener) bandAccelerometerEventListener)
+                .setViews((TextView) accelerometerCard.findViewById(R.id.txtDetails), false);
         ((CaloriesEventListener) bandCaloriesEventListener).setTextView((TextView) caloriesCard.findViewById(R.id.txtDetails));
         ((ContactEventListener) bandContactEventListener).setTextView((TextView) contactCard.findViewById(R.id.txtDetails));
         ((DistanceEventListener) bandDistanceEventListener).setTextView((TextView) distanceCard.findViewById(R.id.txtDetails));
-        ((GyroscopeEventListener) bandGyroscopeEventListener).setTextView((TextView) gyroscopeCard.findViewById(R.id.txtDetails));
+        ((GyroscopeEventListener) bandGyroscopeEventListener).setViews((TextView) gyroscopeCard.findViewById(R.id.txtDetails), false);
         ((HeartRateEventListener) bandHeartRateEventListener).setTextView((TextView) heartRateCard.findViewById(R.id.txtDetails));
         ((PedometerEventListener) bandPedometerEventListener).setTextView((TextView) pedometerCard.findViewById(R.id.txtDetails));
         ((SkinTemperatureEventListener) bandSkinTemperatureEventListener).setTextView((TextView) skinTemperatureCard.findViewById(R.id.txtDetails));

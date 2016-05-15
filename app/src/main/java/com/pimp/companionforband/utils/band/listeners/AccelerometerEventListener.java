@@ -4,11 +4,13 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandAccelerometerEvent;
 import com.microsoft.band.sensors.BandAccelerometerEventListener;
 import com.opencsv.CSVWriter;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.fragments.sensors.SensorActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 
 import java.io.File;
@@ -20,36 +22,35 @@ import java.util.Date;
 public class AccelerometerEventListener implements BandAccelerometerEventListener {
 
     TextView textView;
+    boolean graph;
 
-    public AccelerometerEventListener(TextView textView) {
+    public void setViews(TextView textView, boolean graph) {
         this.textView = textView;
-    }
-
-    public void setTextView(TextView textView) {
-        this.textView = textView;
+        this.graph = graph;
     }
 
     @Override
     public void onBandAccelerometerChanged(final BandAccelerometerEvent event) {
         if (event != null) {
-            /*if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Acceleration")) {
+            if (graph)
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SensorsFragment.series1.appendData(new DataPoint(SensorsFragment.graphLastValueX,
-                                (double) event.getAccelerationX()), true, 100);
-                        SensorsFragment.series2.appendData(new DataPoint(SensorsFragment.graphLastValueX,
-                                (double) event.getAccelerationY()), true, 100);
-                        SensorsFragment.series3.appendData(new DataPoint(SensorsFragment.graphLastValueX,
-                                (double) event.getAccelerationZ()), true, 100);
-                        SensorsFragment.graphLastValueX += 1;
+                        SensorActivity.series1.appendData(new DataPoint(SensorActivity.graphLastValueX,
+                                (double) event.getAccelerationX()), true, 50);
+                        SensorActivity.series2.appendData(new DataPoint(SensorActivity.graphLastValueX,
+                                (double) event.getAccelerationY()), true, 50);
+                        SensorActivity.series3.appendData(new DataPoint(SensorActivity.graphLastValueX,
+                                (double) event.getAccelerationZ()), true, 50);
+                        SensorActivity.graphLastValueX += 1;
                     }
                 });
-            }*/
+
             SensorsFragment.appendToUI(String.format(" X = %.3f (m/s²) \n Y = %.3f (m/s²)\n Z = %.3f (m/s²)",
                     event.getAccelerationX(),
                     event.getAccelerationY(),
                     event.getAccelerationZ()), textView);
+
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Accelerometer");
                 if (file.exists() || file.isDirectory()) {

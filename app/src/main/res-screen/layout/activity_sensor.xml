@@ -92,21 +92,44 @@
                     android:text="@string/sensor_options"
                     android:textSize="25sp" />
 
-                <TextView
+                <RadioGroup
+                    android:id="@+id/options_radioGroup"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="@dimen/horizontal_description_margin"
                     android:layout_marginRight="@dimen/horizontal_description_margin"
                     android:layout_marginTop="50dp"
-                    android:fontFamily="sans-serif-thin"
-                    android:singleLine="true"
-                    android:textSize="14sp" />
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/option_1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="16 Hz" />
+
+                    <RadioButton
+                        android:id="@+id/option_2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="32 Hz" />
+
+                    <RadioButton
+                        android:id="@+id/option_3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="128 Hz" />
+                </RadioGroup>
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
                 android:id="@+id/graph_card"
                 android:layout_width="match_parent"
-                android:layout_height="85dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/options_card"
                 android:layout_margin="5dp"
                 android:foreground="?android:attr/selectableItemBackground">
@@ -120,16 +143,42 @@
                     android:text="@string/sensor_graph"
                     android:textSize="25sp" />
 
+                <com.jjoe64.graphview.GraphView
+                    android:id="@+id/sensor_graph"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="@dimen/horizontal_description_margin"
+                    android:layout_marginRight="@dimen/horizontal_description_margin"
+                    android:layout_marginTop="50dp" />
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/details_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/graph_card"
+                android:layout_margin="5dp"
+                android:foreground="?android:attr/selectableItemBackground">
+
                 <TextView
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/horizontal_margin"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="sans-serif-thin"
+                    android:text="@string/sensor_details"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/sensor_details"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="@dimen/horizontal_description_margin"
                     android:layout_marginRight="@dimen/horizontal_description_margin"
                     android:layout_marginTop="50dp"
-                    android:ellipsize="end"
-                    android:fontFamily="sans-serif-thin"
-                    android:singleLine="true"
-                    android:textSize="14sp" />
+                    android:gravity="center" />
             </android.support.v7.widget.CardView>
         </RelativeLayout>
     </ScrollView>

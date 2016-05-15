@@ -9,6 +9,7 @@ import com.microsoft.band.sensors.BandAltimeterEventListener;
 import com.opencsv.CSVWriter;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.fragments.sensors.SensorActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 
 import java.io.File;
@@ -21,16 +22,14 @@ public class AltimeterEventListener implements BandAltimeterEventListener {
     @Override
     public void onBandAltimeterChanged(final BandAltimeterEvent event) {
         if (event != null) {
-            if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Altimeter")) {
-                MainActivity.sActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        SensorsFragment.series1.appendData(new DataPoint(SensorsFragment.graphLastValueX,
-                                (double) event.getRate()), true, 100);
-                        SensorsFragment.graphLastValueX += 1;
-                    }
-                });
-            }
+            MainActivity.sActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    SensorActivity.series1.appendData(new DataPoint(SensorActivity.graphLastValueX,
+                            (double) event.getRate()), true, 100);
+                    SensorActivity.graphLastValueX += 1;
+                }
+            });
             try {
                 SensorsFragment.appendToUI(new StringBuilder()
                                 .append(MainActivity.sContext.getString(R.string.total_gain_today))

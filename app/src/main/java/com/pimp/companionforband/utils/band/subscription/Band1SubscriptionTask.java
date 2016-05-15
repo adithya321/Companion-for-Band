@@ -15,26 +15,32 @@ public class Band1SubscriptionTask extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... params) {
         try {
             if (BandUtils.getConnectedBandClient()) {
-                switch (MainActivity.sharedPreferences.getInt("acc_hz", R.id.accelerometer_ms128)) {
-                    case R.id.accelerometer_ms16:
-                        MainActivity.client.getSensorManager().registerAccelerometerEventListener(SensorsFragment.bandAccelerometerEventListener, SampleRate.MS16);
+                switch (MainActivity.sharedPreferences.getInt("acc_hz", 13)) {
+                    case 11:
+                        MainActivity.client.getSensorManager().registerAccelerometerEventListener(
+                                SensorsFragment.bandAccelerometerEventListener, SampleRate.MS16);
                         break;
-                    case R.id.accelerometer_ms32:
-                        MainActivity.client.getSensorManager().registerAccelerometerEventListener(SensorsFragment.bandAccelerometerEventListener, SampleRate.MS32);
+                    case 12:
+                        MainActivity.client.getSensorManager().registerAccelerometerEventListener(
+                                SensorsFragment.bandAccelerometerEventListener, SampleRate.MS32);
                         break;
                     default:
-                        MainActivity.client.getSensorManager().registerAccelerometerEventListener(SensorsFragment.bandAccelerometerEventListener, SampleRate.MS128);
+                        MainActivity.client.getSensorManager().registerAccelerometerEventListener(
+                                SensorsFragment.bandAccelerometerEventListener, SampleRate.MS128);
                 }
 
-                switch (MainActivity.sharedPreferences.getInt("gyr_hz", R.id.gyroscope_ms128)) {
-                    case R.id.gyroscope_ms16:
-                        MainActivity.client.getSensorManager().registerGyroscopeEventListener(SensorsFragment.bandGyroscopeEventListener, SampleRate.MS16);
+                switch (MainActivity.sharedPreferences.getInt("gyr_hz", 23)) {
+                    case 21:
+                        MainActivity.client.getSensorManager().registerGyroscopeEventListener(
+                                SensorsFragment.bandGyroscopeEventListener, SampleRate.MS16);
                         break;
-                    case R.id.gyroscope_ms32:
-                        MainActivity.client.getSensorManager().registerGyroscopeEventListener(SensorsFragment.bandGyroscopeEventListener, SampleRate.MS32);
+                    case 22:
+                        MainActivity.client.getSensorManager().registerGyroscopeEventListener(
+                                SensorsFragment.bandGyroscopeEventListener, SampleRate.MS32);
                         break;
                     default:
-                        MainActivity.client.getSensorManager().registerGyroscopeEventListener(SensorsFragment.bandGyroscopeEventListener, SampleRate.MS128);
+                        MainActivity.client.getSensorManager().registerGyroscopeEventListener(
+                                SensorsFragment.bandGyroscopeEventListener, SampleRate.MS128);
                 }
 
                 MainActivity.client.getSensorManager().registerCaloriesEventListener(SensorsFragment.bandCaloriesEventListener);

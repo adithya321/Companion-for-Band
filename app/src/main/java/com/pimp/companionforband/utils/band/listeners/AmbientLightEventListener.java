@@ -9,6 +9,7 @@ import com.microsoft.band.sensors.BandAmbientLightEventListener;
 import com.opencsv.CSVWriter;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.fragments.sensors.SensorActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 
 import java.io.File;
@@ -21,16 +22,14 @@ public class AmbientLightEventListener implements BandAmbientLightEventListener 
     @Override
     public void onBandAmbientLightChanged(final BandAmbientLightEvent event) {
         if (event != null) {
-            if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Ambient Light")) {
-                MainActivity.sActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        SensorsFragment.series1.appendData(new DataPoint(SensorsFragment.graphLastValueX,
-                                (double) event.getBrightness()), true, 100);
-                        SensorsFragment.graphLastValueX += 1;
-                    }
-                });
-            }
+            MainActivity.sActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    SensorActivity.series1.appendData(new DataPoint(SensorActivity.graphLastValueX,
+                            (double) event.getBrightness()), true, 100);
+                    SensorActivity.graphLastValueX += 1;
+                }
+            });
             SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.brightness) + String.format(" = %d lux\n", event.getBrightness()), SensorsFragment.ambientLightTV);
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "AmbientLight");
