@@ -15,18 +15,19 @@ public class HeartRateSubscriptionTask extends AsyncTask<TextView, Void, Void> {
     protected Void doInBackground(TextView... params) {
         try {
             if (BandUtils.getConnectedBandClient()) {
-                if (MainActivity.client.getSensorManager().getCurrentHeartRateConsent() == UserConsent.GRANTED) {
-                    MainActivity.client.getSensorManager().registerHeartRateEventListener(SensorsFragment.bandHeartRateEventListener);
-                } else {
-                    MainActivity.sActivity.runOnUiThread(new Runnable() {
-                        @SuppressWarnings("unchecked")
-                        @Override
-                        public void run() {
-                            new HeartRateConsentTask().execute(SensorsFragment.reference);
-                        }
-                    });
-                    SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.heart_rate_consent) + "\n", params[0]);
-                }
+                if (MainActivity.sharedPreferences.getBoolean("Heart Rate", true))
+                    if (MainActivity.client.getSensorManager().getCurrentHeartRateConsent() == UserConsent.GRANTED) {
+                        MainActivity.client.getSensorManager().registerHeartRateEventListener(SensorsFragment.bandHeartRateEventListener);
+                    } else {
+                        MainActivity.sActivity.runOnUiThread(new Runnable() {
+                            @SuppressWarnings("unchecked")
+                            @Override
+                            public void run() {
+                                new HeartRateConsentTask().execute(SensorsFragment.reference);
+                            }
+                        });
+                        SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.heart_rate_consent) + "\n", params[0]);
+                    }
             } else {
                 MainActivity.appendToUI(MainActivity.sContext.getString(R.string.band_not_found), "Style.ALERT");
             }

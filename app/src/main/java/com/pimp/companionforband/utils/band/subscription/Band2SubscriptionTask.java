@@ -15,21 +15,25 @@ public class Band2SubscriptionTask extends AsyncTask<Void, Void, Void> {
         try {
             if (BandUtils.getConnectedBandClient()) {
                 if (MainActivity.band2) {
-                    MainActivity.client.getSensorManager().registerAltimeterEventListener(SensorsFragment.bandAltimeterEventListener);
-                    MainActivity.client.getSensorManager().registerAmbientLightEventListener(SensorsFragment.bandAmbientLightEventListener);
-                    MainActivity.client.getSensorManager().registerBarometerEventListener(SensorsFragment.bandBarometerEventListener);
+                    if (MainActivity.sharedPreferences.getBoolean("Altimeter", true))
+                        MainActivity.client.getSensorManager().registerAltimeterEventListener(SensorsFragment.bandAltimeterEventListener);
+                    if (MainActivity.sharedPreferences.getBoolean("Ambient Light", true))
+                        MainActivity.client.getSensorManager().registerAmbientLightEventListener(SensorsFragment.bandAmbientLightEventListener);
+                    if (MainActivity.sharedPreferences.getBoolean("Barometer", true))
+                        MainActivity.client.getSensorManager().registerBarometerEventListener(SensorsFragment.bandBarometerEventListener);
 
-                    if (MainActivity.sharedPreferences.getInt("gsr_hz", 31) == 31)
-                        MainActivity.client.getSensorManager().registerGsrEventListener(SensorsFragment.bandGsrEventListener, GsrSampleRate.MS200);
-                    else
-                        MainActivity.client.getSensorManager().registerGsrEventListener(SensorsFragment.bandGsrEventListener, GsrSampleRate.MS5000);
+                    if (MainActivity.sharedPreferences.getBoolean("GSR", true))
+                        if (MainActivity.sharedPreferences.getInt("gsr_hz", 31) == 31)
+                            MainActivity.client.getSensorManager().registerGsrEventListener(SensorsFragment.bandGsrEventListener, GsrSampleRate.MS200);
+                        else
+                            MainActivity.client.getSensorManager().registerGsrEventListener(SensorsFragment.bandGsrEventListener, GsrSampleRate.MS5000);
 
                     SensorsFragment.appendToUI("Firmware Version : " + MainActivity.client.getFirmwareVersion().await()
                             + "\nHardware Version : " + MainActivity.client.getHardwareVersion().await(), SensorsFragment.band2TV);
                 } else {
                     SensorsFragment.appendToUI("Firmware Version : " + MainActivity.client.getFirmwareVersion().await()
                             + "\nHardware Version : " + MainActivity.client.getHardwareVersion().await()
-                            + "\n" + MainActivity.sContext.getString(R.string.band_2_required), SensorsFragment.band2TV);
+                            + "\n\n" + MainActivity.sContext.getString(R.string.band_2_required), SensorsFragment.band2TV);
                 }
             } else {
                 MainActivity.appendToUI(MainActivity.sContext.getString(R.string.band_not_found), "Style.ALERT");

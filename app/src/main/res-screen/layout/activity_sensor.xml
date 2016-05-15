@@ -162,7 +162,8 @@
                     android:layout_marginEnd="@dimen/horizontal_description_margin"
                     android:layout_marginStart="@dimen/horizontal_description_margin"
                     android:layout_marginTop="250dp"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:text="@string/scrub_empty" />
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView

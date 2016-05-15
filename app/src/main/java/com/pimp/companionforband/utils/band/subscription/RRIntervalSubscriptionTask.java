@@ -16,15 +16,16 @@ public class RRIntervalSubscriptionTask extends AsyncTask<TextView, Void, Void> 
         try {
             if (BandUtils.getConnectedBandClient()) {
                 if (MainActivity.band2) {
-                    if (MainActivity.client.getSensorManager().getCurrentHeartRateConsent()
-                            == UserConsent.GRANTED) {
-                        MainActivity.client.getSensorManager()
-                                .registerRRIntervalEventListener(SensorsFragment.bandRRIntervalEventListener);
-                    } else {
-                        SensorsFragment.appendToUI(MainActivity.sContext
-                                        .getString(R.string.heart_rate_consent) + "\n",
-                                params[0]);
-                    }
+                    if (MainActivity.sharedPreferences.getBoolean("RR Interval", true))
+                        if (MainActivity.client.getSensorManager().getCurrentHeartRateConsent()
+                                == UserConsent.GRANTED) {
+                            MainActivity.client.getSensorManager()
+                                    .registerRRIntervalEventListener(SensorsFragment.bandRRIntervalEventListener);
+                        } else {
+                            SensorsFragment.appendToUI(MainActivity.sContext
+                                            .getString(R.string.heart_rate_consent) + "\n",
+                                    params[0]);
+                        }
                 }
             } else {
                 MainActivity.appendToUI(MainActivity.sContext.getString(R.string.band_not_found),

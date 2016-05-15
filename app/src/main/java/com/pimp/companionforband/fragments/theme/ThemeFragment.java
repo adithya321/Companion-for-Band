@@ -27,7 +27,6 @@ import com.pimp.companionforband.activities.main.MainActivity;
 import com.pimp.companionforband.utils.band.BandUtils;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class ThemeFragment extends Fragment {
@@ -172,8 +171,8 @@ public class ThemeFragment extends Fragment {
                     imageView.setImageBitmap(Bitmap.createScaledBitmap(selectedImage, 310, 128, false));
                 else
                     imageView.setImageBitmap(Bitmap.createScaledBitmap(selectedImage, 310, 102, false));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                //
             }
         }
     }

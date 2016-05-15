@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.microsoft.band.UserConsent;
 import com.microsoft.band.sensors.GsrSampleRate;
 import com.microsoft.band.sensors.SampleRate;
 import com.pimp.companionforband.R;
@@ -29,6 +30,7 @@ import com.pimp.companionforband.utils.band.listeners.PedometerEventListener;
 import com.pimp.companionforband.utils.band.listeners.RRIntervalEventListener;
 import com.pimp.companionforband.utils.band.listeners.SkinTemperatureEventListener;
 import com.pimp.companionforband.utils.band.listeners.UVEventListener;
+import com.pimp.companionforband.utils.band.subscription.HeartRateConsentTask;
 import com.robinhood.spark.SparkView;
 
 public class SensorActivity extends AppCompatActivity {
@@ -49,55 +51,7 @@ public class SensorActivity extends AppCompatActivity {
         getInitialConfiguration();
         setInitialConfiguration();
         setScreenElements();
-
-        try {
-            switch (sensorName) {
-                case "Accelerometer":
-                    setAccelerometerConfiguration();
-                    break;
-                case "Altimeter":
-                    setAltimeterConfiguration();
-                    break;
-                case "Ambient Light":
-                    setAmbientLightConfiguration();
-                    break;
-                case "Barometer":
-                    setBarometerConfiguration();
-                    break;
-                case "Calories":
-                    setCaloriesConfiguration();
-                    break;
-                case "Contact":
-                    setContactConfiguration();
-                    break;
-                case "Distance":
-                    setDistanceConfiguration();
-                    break;
-                case "GSR":
-                    setGsrConfiguration();
-                    break;
-                case "Gyroscope":
-                    setGyroscopeConfiguration();
-                    break;
-                case "Heart Rate":
-                    setHeartRateConfiguration();
-                    break;
-                case "Pedometer":
-                    setPedometerConfiguration();
-                    break;
-                case "RR Interval":
-                    setRRIntervalConfiguration();
-                    break;
-                case "Skin Temperature":
-                    setSkinTemperatureConfiguration();
-                    break;
-                case "UV":
-                    setUVConfiguration();
-                    break;
-            }
-        } catch (Exception e) {
-            //
-        }
+        setSensorConfiguration();
     }
 
     private void getInitialConfiguration() {
@@ -261,138 +215,174 @@ public class SensorActivity extends AppCompatActivity {
         detailsTV.setText(getString(R.string.accelerometer_details));
         ((AccelerometerEventListener) SensorsFragment.bandAccelerometerEventListener)
                 .setViews(dataTV, true);
-        switch (MainActivity.sharedPreferences.getInt("acc_hz", 13)) {
-            case 11:
-                MainActivity.client.getSensorManager().registerAccelerometerEventListener(
-                        SensorsFragment.bandAccelerometerEventListener, SampleRate.MS16);
-                break;
-            case 12:
-                MainActivity.client.getSensorManager().registerAccelerometerEventListener(
-                        SensorsFragment.bandAccelerometerEventListener, SampleRate.MS32);
-                break;
-            default:
-                MainActivity.client.getSensorManager().registerAccelerometerEventListener(
-                        SensorsFragment.bandAccelerometerEventListener, SampleRate.MS128);
-        }
+        if (MainActivity.sharedPreferences.getBoolean(sensorName, true))
+            switch (MainActivity.sharedPreferences.getInt("acc_hz", 13)) {
+                case 11:
+                    MainActivity.client.getSensorManager().registerAccelerometerEventListener(
+                            SensorsFragment.bandAccelerometerEventListener, SampleRate.MS16);
+                    break;
+                case 12:
+                    MainActivity.client.getSensorManager().registerAccelerometerEventListener(
+                            SensorsFragment.bandAccelerometerEventListener, SampleRate.MS32);
+                    break;
+                default:
+                    MainActivity.client.getSensorManager().registerAccelerometerEventListener(
+                            SensorsFragment.bandAccelerometerEventListener, SampleRate.MS128);
+            }
     }
 
     void setAltimeterConfiguration() throws Exception {
         detailsTV.setText(getString(R.string.altimeter_details));
         ((AltimeterEventListener) SensorsFragment.bandAltimeterEventListener)
                 .setViews(dataTV, true);
-        MainActivity.client.getSensorManager().registerAltimeterEventListener(
-                SensorsFragment.bandAltimeterEventListener);
+        if (MainActivity.sharedPreferences.getBoolean(sensorName, true))
+            MainActivity.client.getSensorManager().registerAltimeterEventListener(
+                    SensorsFragment.bandAltimeterEventListener);
     }
 
     void setAmbientLightConfiguration() throws Exception {
         detailsTV.setText(getString(R.string.ambientLight_details));
         ((AmbientLightEventListener) SensorsFragment.bandAmbientLightEventListener)
                 .setViews(dataTV, true);
-        MainActivity.client.getSensorManager().registerAmbientLightEventListener(
-                SensorsFragment.bandAmbientLightEventListener);
+        if (MainActivity.sharedPreferences.getBoolean(sensorName, true))
+            MainActivity.client.getSensorManager().registerAmbientLightEventListener(
+                    SensorsFragment.bandAmbientLightEventListener);
     }
 
     void setBarometerConfiguration() throws Exception {
         detailsTV.setText(getString(R.string.barometer_details));
         ((BarometerEventListener) SensorsFragment.bandBarometerEventListener)
                 .setViews(dataTV, true);
-        MainActivity.client.getSensorManager().registerBarometerEventListener(
-                SensorsFragment.bandBarometerEventListener);
+        if (MainActivity.sharedPreferences.getBoolean(sensorName, true))
+            MainActivity.client.getSensorManager().registerBarometerEventListener(
+                    SensorsFragment.bandBarometerEventListener);
     }
 
     void setCaloriesConfiguration() throws Exception {
         detailsTV.setText(getString(R.string.calories_details));
         ((CaloriesEventListener) SensorsFragment.bandCaloriesEventListener)
                 .setViews(dataTV, true);
-        MainActivity.client.getSensorManager().registerCaloriesEventListener(
-                SensorsFragment.bandCaloriesEventListener);
+        if (MainActivity.sharedPreferences.getBoolean(sensorName, true))
+            MainActivity.client.getSensorManager().registerCaloriesEventListener(
+                    SensorsFragment.bandCaloriesEventListener);
     }
 
     void setContactConfiguration() throws Exception {
         detailsTV.setText(getString(R.string.contact_details));
         ((ContactEventListener) SensorsFragment.bandContactEventListener)
                 .setViews(dataTV, true);
-        MainActivity.client.getSensorManager().registerContactEventListener(
-                SensorsFragment.bandContactEventListener);
+        if (MainActivity.sharedPreferences.getBoolean(sensorName, true))
+            MainActivity.client.getSensorManager().registerContactEventListener(
+                    SensorsFragment.bandContactEventListener);
     }
 
     void setDistanceConfiguration() throws Exception {
         detailsTV.setText(getString(R.string.distance_details));
         ((DistanceEventListener) SensorsFragment.bandDistanceEventListener)
                 .setViews(dataTV, true);
-        MainActivity.client.getSensorManager().registerDistanceEventListener(
-                SensorsFragment.bandDistanceEventListener);
+        if (MainActivity.sharedPreferences.getBoolean(sensorName, true))
+            MainActivity.client.getSensorManager().registerDistanceEventListener(
+                    SensorsFragment.bandDistanceEventListener);
     }
 
     void setGsrConfiguration() throws Exception {
         detailsTV.setText(getString(R.string.gsr_details));
         ((GsrEventListener) SensorsFragment.bandGsrEventListener)
                 .setViews(dataTV, true);
-        if (MainActivity.sharedPreferences.getInt("gsr_hz", 31) == 31)
-            MainActivity.client.getSensorManager().registerGsrEventListener(
-                    SensorsFragment.bandGsrEventListener, GsrSampleRate.MS200);
-        else
-            MainActivity.client.getSensorManager().registerGsrEventListener(
-                    SensorsFragment.bandGsrEventListener, GsrSampleRate.MS5000);
+        if (MainActivity.sharedPreferences.getBoolean(sensorName, true))
+            if (MainActivity.sharedPreferences.getInt("gsr_hz", 31) == 31)
+                MainActivity.client.getSensorManager().registerGsrEventListener(
+                        SensorsFragment.bandGsrEventListener, GsrSampleRate.MS200);
+            else
+                MainActivity.client.getSensorManager().registerGsrEventListener(
+                        SensorsFragment.bandGsrEventListener, GsrSampleRate.MS5000);
     }
 
     void setGyroscopeConfiguration() throws Exception {
         detailsTV.setText(getString(R.string.gyroscope_details));
         ((GyroscopeEventListener) SensorsFragment.bandGyroscopeEventListener)
                 .setViews(dataTV, true);
-        switch (MainActivity.sharedPreferences.getInt("gyr_hz", 23)) {
-            case 21:
-                MainActivity.client.getSensorManager().registerGyroscopeEventListener(
-                        SensorsFragment.bandGyroscopeEventListener, SampleRate.MS16);
-                break;
-            case 22:
-                MainActivity.client.getSensorManager().registerGyroscopeEventListener(
-                        SensorsFragment.bandGyroscopeEventListener, SampleRate.MS32);
-                break;
-            default:
-                MainActivity.client.getSensorManager().registerGyroscopeEventListener(
-                        SensorsFragment.bandGyroscopeEventListener, SampleRate.MS128);
-        }
+        if (MainActivity.sharedPreferences.getBoolean(sensorName, true))
+            switch (MainActivity.sharedPreferences.getInt("gyr_hz", 23)) {
+                case 21:
+                    MainActivity.client.getSensorManager().registerGyroscopeEventListener(
+                            SensorsFragment.bandGyroscopeEventListener, SampleRate.MS16);
+                    break;
+                case 22:
+                    MainActivity.client.getSensorManager().registerGyroscopeEventListener(
+                            SensorsFragment.bandGyroscopeEventListener, SampleRate.MS32);
+                    break;
+                default:
+                    MainActivity.client.getSensorManager().registerGyroscopeEventListener(
+                            SensorsFragment.bandGyroscopeEventListener, SampleRate.MS128);
+            }
     }
 
     void setHeartRateConfiguration() throws Exception {
         detailsTV.setText(getString(R.string.heartRate_details));
         ((HeartRateEventListener) SensorsFragment.bandHeartRateEventListener)
                 .setViews(dataTV, true);
-        MainActivity.client.getSensorManager().registerHeartRateEventListener(
-                SensorsFragment.bandHeartRateEventListener);
+        if (MainActivity.sharedPreferences.getBoolean(sensorName, true))
+            if (MainActivity.client.getSensorManager().getCurrentHeartRateConsent() == UserConsent.GRANTED) {
+                MainActivity.client.getSensorManager().registerHeartRateEventListener(SensorsFragment.bandHeartRateEventListener);
+            } else {
+                MainActivity.sActivity.runOnUiThread(new Runnable() {
+                    @SuppressWarnings("unchecked")
+                    @Override
+                    public void run() {
+                        new HeartRateConsentTask().execute(SensorsFragment.reference);
+                    }
+                });
+                detailsTV.setText(getString(R.string.heart_rate_consent));
+            }
     }
 
     void setPedometerConfiguration() throws Exception {
         detailsTV.setText(getString(R.string.pedometer_details));
         ((PedometerEventListener) SensorsFragment.bandPedometerEventListener)
                 .setViews(dataTV, true);
-        MainActivity.client.getSensorManager().registerPedometerEventListener(
-                SensorsFragment.bandPedometerEventListener);
+        if (MainActivity.sharedPreferences.getBoolean(sensorName, true))
+            MainActivity.client.getSensorManager().registerPedometerEventListener(
+                    SensorsFragment.bandPedometerEventListener);
     }
 
     void setRRIntervalConfiguration() throws Exception {
         detailsTV.setText(getString(R.string.rrInterval_details));
         ((RRIntervalEventListener) SensorsFragment.bandRRIntervalEventListener)
                 .setViews(dataTV, true);
-        MainActivity.client.getSensorManager().registerRRIntervalEventListener(
-                SensorsFragment.bandRRIntervalEventListener);
+        if (MainActivity.sharedPreferences.getBoolean(sensorName, true))
+            if (MainActivity.client.getSensorManager().getCurrentHeartRateConsent()
+                    == UserConsent.GRANTED) {
+                MainActivity.client.getSensorManager()
+                        .registerRRIntervalEventListener(SensorsFragment.bandRRIntervalEventListener);
+            } else {
+                MainActivity.sActivity.runOnUiThread(new Runnable() {
+                    @SuppressWarnings("unchecked")
+                    @Override
+                    public void run() {
+                        new HeartRateConsentTask().execute(SensorsFragment.reference);
+                    }
+                });
+                detailsTV.setText(getString(R.string.heart_rate_consent));
+            }
     }
 
     void setSkinTemperatureConfiguration() throws Exception {
         detailsTV.setText(getString(R.string.skinTemperature_details));
         ((SkinTemperatureEventListener) SensorsFragment.bandSkinTemperatureEventListener)
                 .setViews(dataTV, true);
-        MainActivity.client.getSensorManager().registerSkinTemperatureEventListener(
-                SensorsFragment.bandSkinTemperatureEventListener);
+        if (MainActivity.sharedPreferences.getBoolean(sensorName, true))
+            MainActivity.client.getSensorManager().registerSkinTemperatureEventListener(
+                    SensorsFragment.bandSkinTemperatureEventListener);
     }
 
     void setUVConfiguration() throws Exception {
         detailsTV.setText(getString(R.string.uv_details));
         ((UVEventListener) SensorsFragment.bandUVEventListener)
                 .setViews(dataTV, true);
-        MainActivity.client.getSensorManager().registerUVEventListener(
-                SensorsFragment.bandUVEventListener);
+        if (MainActivity.sharedPreferences.getBoolean(sensorName, true))
+            MainActivity.client.getSensorManager().registerUVEventListener(
+                    SensorsFragment.bandUVEventListener);
     }
 
     @Override
@@ -419,12 +409,75 @@ public class SensorActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_hide:
-                if (item.getTitle().equals(getString(R.string.action_hide)))
+                if (item.getTitle().equals(getString(R.string.action_hide))) {
                     MainActivity.editor.putBoolean(sensorName, false);
-                else
+                    item.setIcon(getResources().getDrawable(R.drawable.ic_visibility_white_48dp));
+                    item.setTitle(getString(R.string.action_show));
+                } else {
                     MainActivity.editor.putBoolean(sensorName, true);
+                    item.setIcon(getResources().getDrawable(R.drawable.ic_visibility_off_white_48dp));
+                    item.setTitle(getString(R.string.action_hide));
+                }
+                MainActivity.editor.apply();
+                try {
+                    MainActivity.client.getSensorManager().unregisterAllListeners();
+                } catch (Exception e) {
+                    //
+                }
+                setSensorConfiguration();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    void setSensorConfiguration() {
+        try {
+            switch (sensorName) {
+                case "Accelerometer":
+                    setAccelerometerConfiguration();
+                    break;
+                case "Altimeter":
+                    setAltimeterConfiguration();
+                    break;
+                case "Ambient Light":
+                    setAmbientLightConfiguration();
+                    break;
+                case "Barometer":
+                    setBarometerConfiguration();
+                    break;
+                case "Calories":
+                    setCaloriesConfiguration();
+                    break;
+                case "Contact":
+                    setContactConfiguration();
+                    break;
+                case "Distance":
+                    setDistanceConfiguration();
+                    break;
+                case "GSR":
+                    setGsrConfiguration();
+                    break;
+                case "Gyroscope":
+                    setGyroscopeConfiguration();
+                    break;
+                case "Heart Rate":
+                    setHeartRateConfiguration();
+                    break;
+                case "Pedometer":
+                    setPedometerConfiguration();
+                    break;
+                case "RR Interval":
+                    setRRIntervalConfiguration();
+                    break;
+                case "Skin Temperature":
+                    setSkinTemperatureConfiguration();
+                    break;
+                case "UV":
+                    setUVConfiguration();
+                    break;
+            }
+        } catch (Exception e) {
+            //
+        }
     }
 }
