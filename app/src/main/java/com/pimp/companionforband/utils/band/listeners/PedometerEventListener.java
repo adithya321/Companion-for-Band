@@ -1,12 +1,14 @@
 package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
+import android.widget.TextView;
 
 import com.microsoft.band.sensors.BandPedometerEvent;
 import com.microsoft.band.sensors.BandPedometerEventListener;
 import com.opencsv.CSVWriter;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.fragments.sensors.SensorActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 
 import java.io.File;
@@ -16,19 +18,37 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class PedometerEventListener implements BandPedometerEventListener {
+
+    TextView textView;
+    boolean graph;
+
+    public void setViews(TextView textView, boolean graph) {
+        this.textView = textView;
+        this.graph = graph;
+    }
+
     @Override
-    public void onBandPedometerChanged(BandPedometerEvent bandPedometerEvent) {
+    public void onBandPedometerChanged(final BandPedometerEvent bandPedometerEvent) {
         if (bandPedometerEvent != null) {
+            if (graph)
+                MainActivity.sActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        SensorActivity.chartAdapter.add((float) bandPedometerEvent.getTotalSteps());
+                    }
+                });
+
             if (MainActivity.band2) {
                 try {
                     SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.steps_today) + " = " + bandPedometerEvent.getStepsToday() + "\n" +
-                            MainActivity.sContext.getString(R.string.total_steps) + " = " + bandPedometerEvent.getTotalSteps(), SensorsFragment.pedometerTV);
+                            MainActivity.sContext.getString(R.string.total_steps) + " = " + bandPedometerEvent.getTotalSteps(), textView);
                 } catch (Exception e) {
-                    SensorsFragment.appendToUI(e.toString(), SensorsFragment.pedometerTV);
+                    SensorsFragment.appendToUI(e.toString(), textView);
                 }
             } else {
-                SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.total_steps) + " = " + bandPedometerEvent.getTotalSteps(), SensorsFragment.pedometerTV);
+                SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.total_steps) + " = " + bandPedometerEvent.getTotalSteps(), textView);
             }
+
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Pedometer");
                 if (file.exists() || file.isDirectory()) {
@@ -43,7 +63,7 @@ public class PedometerEventListener implements BandPedometerEventListener {
                                     csvWriter.writeNext(new String[]{String.valueOf(bandPedometerEvent.getTimestamp()),
                                             str, String.valueOf(bandPedometerEvent.getStepsToday()), String.valueOf(bandPedometerEvent.getTotalSteps())});
                                 } catch (Exception e) {
-                                    SensorsFragment.appendToUI(e.toString(), SensorsFragment.pedometerTV);
+                                    SensorsFragment.appendToUI(e.toString(), textView);
                                 }
                             } else {
                                 csvWriter.writeNext(new String[]{String.valueOf(bandPedometerEvent.getTimestamp()),

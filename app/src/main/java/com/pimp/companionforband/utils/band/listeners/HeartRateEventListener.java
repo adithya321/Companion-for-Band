@@ -1,13 +1,14 @@
 package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
+import android.widget.TextView;
 
-import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandHeartRateEvent;
 import com.microsoft.band.sensors.BandHeartRateEventListener;
 import com.opencsv.CSVWriter;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.fragments.sensors.SensorActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 
 import java.io.File;
@@ -17,22 +18,30 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class HeartRateEventListener implements BandHeartRateEventListener {
+
+    TextView textView;
+    boolean graph;
+
+    public void setViews(TextView textView, boolean graph) {
+        this.textView = textView;
+        this.graph = graph;
+    }
+
     @Override
     public void onBandHeartRateChanged(final BandHeartRateEvent event) {
         if (event != null) {
-            if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Heart Rate")) {
+            if (graph)
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SensorsFragment.series1.appendData(new DataPoint(SensorsFragment.graphLastValueX,
-                                (double) event.getHeartRate()), true, 100);
-                        SensorsFragment.graphLastValueX += 1;
+                        SensorActivity.chartAdapter.add((float) event.getHeartRate());
                     }
                 });
-            }
+
             SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.heart_rate) + String.format(" = %d ", event.getHeartRate())
                     + MainActivity.sContext.getString(R.string.beats_per_minute) + "\n" + MainActivity.sContext.getString(R.string.quality)
-                    + String.format(" = %s", event.getQuality()), SensorsFragment.heartRateTV);
+                    + String.format(" = %s", event.getQuality()), textView);
+
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "HeartRate");
                 if (file.exists() || file.isDirectory()) {

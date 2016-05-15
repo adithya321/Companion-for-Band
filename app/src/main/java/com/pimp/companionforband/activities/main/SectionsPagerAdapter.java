@@ -19,11 +19,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return ThemeFragment.newInstance();
+                return new ThemeFragment();
             case 1:
-                return SensorsFragment.newInstance();
+                return new SensorsFragment();
             case 2:
-                return ExtrasFragment.newInstance();
+                return new ExtrasFragment();
             default:
                 return null;
         }

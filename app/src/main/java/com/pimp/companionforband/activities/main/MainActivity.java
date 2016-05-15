@@ -29,7 +29,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,10 +54,10 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 import com.pimp.companionforband.AnalyticsApplication;
-import com.pimp.companionforband.activities.support.ChangelogActivity;
-import com.pimp.companionforband.activities.donate.DonateActivity;
-import com.pimp.companionforband.activities.support.GittyActivity;
 import com.pimp.companionforband.R;
+import com.pimp.companionforband.activities.donate.DonateActivity;
+import com.pimp.companionforband.activities.support.ChangelogActivity;
+import com.pimp.companionforband.activities.support.GittyActivity;
 import com.pimp.companionforband.utils.band.BandUtils;
 import com.yalantis.ucrop.UCrop;
 
@@ -145,13 +144,8 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
             return false;
         }
     };
-    private Switch SaccelerometerStatus, SaltimeterStatus, SbaroStatus, ScaloriesStatus, ScontactStatus,
-            SdistanceStatus, SgsrStatus, SgyroscopeStatus, SlightStatus, SlogStatus,
-            SBacklogStatus, SpedometerStatus, SskinTempStatus, SuvStatus;
-    private TextView accelerometerStatus, altimeterStatus, baroStatus, caloriesStatus,
-            contactStatus, distanceStatus, gsrStatus, gyroscopeStatus, lightStatus,
-            logStatus, backlogStatus, pedometerStatus, skinTempStatus, uvStatus;
-    private RadioGroup accelerometerRG, gyroscopeRG, gsrRG;
+    private Switch logSwitch, backgroundLogSwitch;
+    private TextView logStatus, backgroundLogStatus;
     private Tracker mTracker;
     private AlertDialog mAlertDialog;
     private Uri mDestinationUri;
@@ -331,39 +325,10 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                 mTracker.setScreenName("Image~" + name);
                 mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
-                SaccelerometerStatus = (Switch) findViewById(R.id.accelerometer_switch);
-                SaltimeterStatus = (Switch) findViewById(R.id.altimeter_switch);
-                SbaroStatus = (Switch) findViewById(R.id.barometer_switch);
-                ScaloriesStatus = (Switch) findViewById(R.id.calories_switch);
-                ScontactStatus = (Switch) findViewById(R.id.contact_switch);
-                SdistanceStatus = (Switch) findViewById(R.id.distance_switch);
-                SgsrStatus = (Switch) findViewById(R.id.gsr_switch);
-                SgyroscopeStatus = (Switch) findViewById(R.id.gyroscope_switch);
-                SlightStatus = (Switch) findViewById(R.id.light_switch);
-                SlogStatus = (Switch) findViewById(R.id.log_switch);
-                SBacklogStatus = (Switch) findViewById(R.id.backlog_switch);
-                SpedometerStatus = (Switch) findViewById(R.id.pedometer_switch);
-                SskinTempStatus = (Switch) findViewById(R.id.temperature_switch);
-                SuvStatus = (Switch) findViewById(R.id.UV_switch);
-
-                accelerometerStatus = (TextView) findViewById(R.id.accelerometerStatus);
-                altimeterStatus = (TextView) findViewById(R.id.altimeterStatus);
-                baroStatus = (TextView) findViewById(R.id.barometerStatus);
-                caloriesStatus = (TextView) findViewById(R.id.caloriesStatus);
-                contactStatus = (TextView) findViewById(R.id.contactStatus);
-                distanceStatus = (TextView) findViewById(R.id.distanceStatus);
-                gsrStatus = (TextView) findViewById(R.id.gsrStatus);
-                gyroscopeStatus = (TextView) findViewById(R.id.gyroscopeStatus);
-                lightStatus = (TextView) findViewById(R.id.lightStatus);
+                logSwitch = (Switch) findViewById(R.id.log_switch);
+                backgroundLogSwitch = (Switch) findViewById(R.id.backlog_switch);
                 logStatus = (TextView) findViewById(R.id.logStatus);
-                backlogStatus = (TextView) findViewById(R.id.backlogStatus);
-                pedometerStatus = (TextView) findViewById(R.id.pedometerStatus);
-                skinTempStatus = (TextView) findViewById(R.id.temperatureStatus);
-                uvStatus = (TextView) findViewById(R.id.UVStatus);
-
-                accelerometerRG = (RadioGroup) findViewById(R.id.accelerometer_radioGroup);
-                gyroscopeRG = (RadioGroup) findViewById(R.id.gyroscope_radioGroup);
-                gsrRG = (RadioGroup) findViewById(R.id.gsr_radioGroup);
+                backgroundLogStatus = (TextView) findViewById(R.id.backlogStatus);
             }
 
             @Override
@@ -617,53 +582,17 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
     public void SwitchClick(View view) {
         switch (view.getId()) {
             case R.id.log_switch:
-                setSwitch(SlogStatus, logStatus, "log");
-                if (SlogStatus.isChecked())
-                    SBacklogStatus.setVisibility(View.VISIBLE);
+                setSwitch(logSwitch, logStatus, "log");
+                if (logSwitch.isChecked())
+                    backgroundLogSwitch.setVisibility(View.VISIBLE);
                 else {
-                    SBacklogStatus.setChecked(false);
-                    setSwitch(SBacklogStatus, backlogStatus, "backlog");
-                    SBacklogStatus.setVisibility(View.GONE);
+                    backgroundLogSwitch.setChecked(false);
+                    setSwitch(backgroundLogSwitch, backgroundLogStatus, "backlog");
+                    backgroundLogSwitch.setVisibility(View.GONE);
                 }
                 break;
             case R.id.backlog_switch:
-                setSwitch(SBacklogStatus, backlogStatus, "backlog");
-                break;
-            case R.id.accelerometer_switch:
-                setSwitch(SaccelerometerStatus, accelerometerRG, accelerometerStatus, "acc");
-                break;
-            case R.id.altimeter_switch:
-                setSwitch(SaltimeterStatus, altimeterStatus, "alt");
-                break;
-            case R.id.light_switch:
-                setSwitch(SlightStatus, lightStatus, "light");
-                break;
-            case R.id.barometer_switch:
-                setSwitch(SbaroStatus, baroStatus, "bar");
-                break;
-            case R.id.calories_switch:
-                setSwitch(ScaloriesStatus, caloriesStatus, "cal");
-                break;
-            case R.id.contact_switch:
-                setSwitch(ScontactStatus, contactStatus, "con");
-                break;
-            case R.id.distance_switch:
-                setSwitch(SdistanceStatus, distanceStatus, "dis");
-                break;
-            case R.id.gsr_switch:
-                setSwitch(SgsrStatus, gsrRG, gsrStatus, "gsr");
-                break;
-            case R.id.gyroscope_switch:
-                setSwitch(SgyroscopeStatus, gyroscopeRG, gyroscopeStatus, "gyr");
-                break;
-            case R.id.pedometer_switch:
-                setSwitch(SpedometerStatus, pedometerStatus, "ped");
-                break;
-            case R.id.temperature_switch:
-                setSwitch(SskinTempStatus, skinTempStatus, "tem");
-                break;
-            case R.id.UV_switch:
-                setSwitch(SuvStatus, uvStatus, "uv");
+                setSwitch(backgroundLogSwitch, backgroundLogStatus, "backlog");
                 break;
         }
     }
@@ -676,20 +605,6 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
         } else {
             editor.putBoolean(string, true);
             editor.apply();
-            textView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    void setSwitch(Switch s, RadioGroup radioGroup, TextView textView, String string) {
-        if (!s.isChecked()) {
-            editor.putBoolean(string, false);
-            editor.apply();
-            radioGroup.setVisibility(View.GONE);
-            textView.setVisibility(View.GONE);
-        } else {
-            editor.putBoolean(string, true);
-            editor.apply();
-            radioGroup.setVisibility(View.VISIBLE);
             textView.setVisibility(View.VISIBLE);
         }
     }

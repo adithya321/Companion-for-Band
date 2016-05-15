@@ -1,13 +1,14 @@
 package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
+import android.widget.TextView;
 
-import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandRRIntervalEvent;
 import com.microsoft.band.sensors.BandRRIntervalEventListener;
 import com.opencsv.CSVWriter;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.fragments.sensors.SensorActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 
 import java.io.File;
@@ -17,20 +18,29 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class RRIntervalEventListener implements BandRRIntervalEventListener {
+
+    TextView textView;
+    boolean graph;
+
+    public void setViews(TextView textView, boolean graph) {
+        this.textView = textView;
+        this.graph = graph;
+    }
+
     @Override
     public void onBandRRIntervalChanged(final BandRRIntervalEvent event) {
         if (event != null) {
-            if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("RR Interval")) {
+            if (graph)
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SensorsFragment.series1.appendData(new DataPoint(SensorsFragment.graphLastValueX,
-                                (double) event.getInterval()), true, 100);
-                        SensorsFragment.graphLastValueX += 1;
+                        SensorActivity.chartAdapter.add((float) event.getInterval());
                     }
                 });
-            }
-            SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.rr) + String.format(" = %.3f s\n", event.getInterval()), SensorsFragment.rrTV);
+
+            SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.rr)
+                    + String.format(" = %.3f s\n", event.getInterval()), textView);
+
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "RRInterval");
                 if (file.exists() || file.isDirectory()) {

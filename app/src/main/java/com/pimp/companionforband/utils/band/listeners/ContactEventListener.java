@@ -1,12 +1,14 @@
 package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
+import android.widget.TextView;
 
 import com.microsoft.band.sensors.BandContactEvent;
 import com.microsoft.band.sensors.BandContactEventListener;
 import com.opencsv.CSVWriter;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.fragments.sensors.SensorActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 
 import java.io.File;
@@ -17,10 +19,37 @@ import java.util.Date;
 
 public class ContactEventListener implements BandContactEventListener {
 
+    TextView textView;
+    boolean graph;
+
+    public void setViews(TextView textView, boolean graph) {
+        this.textView = textView;
+        this.graph = graph;
+    }
+
     @Override
-    public void onBandContactChanged(BandContactEvent bandContactEvent) {
+    public void onBandContactChanged(final BandContactEvent bandContactEvent) {
         if (bandContactEvent != null) {
-            SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.contact_status) + " = " + bandContactEvent.getContactState(), SensorsFragment.contactTV);
+            if (graph)
+                MainActivity.sActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        switch (bandContactEvent.getContactState()) {
+                            case UNKNOWN:
+                                SensorActivity.chartAdapter.add(-1f);
+                                break;
+                            case NOT_WORN:
+                                SensorActivity.chartAdapter.add(0f);
+                                break;
+                            case WORN:
+                                SensorActivity.chartAdapter.add(2f);
+                                break;
+                        }
+                    }
+                });
+
+            SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.contact_status) + " = " + bandContactEvent.getContactState(), textView);
+
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Contact");
                 if (file.exists() || file.isDirectory()) {

@@ -1,13 +1,14 @@
 package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
+import android.widget.TextView;
 
-import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandDistanceEvent;
 import com.microsoft.band.sensors.BandDistanceEventListener;
 import com.opencsv.CSVWriter;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.fragments.sensors.SensorActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 
 import java.io.File;
@@ -17,19 +18,26 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class DistanceEventListener implements BandDistanceEventListener {
+
+    TextView textView;
+    boolean graph;
+
+    public void setViews(TextView textView, boolean graph) {
+        this.textView = textView;
+        this.graph = graph;
+    }
+
     @Override
     public void onBandDistanceChanged(final BandDistanceEvent bandDistanceEvent) {
         if (bandDistanceEvent != null) {
-            if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Pace")) {
+            if (graph)
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SensorsFragment.series1.appendData(new DataPoint(SensorsFragment.graphLastValueX,
-                                (double) bandDistanceEvent.getPace()), true, 100);
-                        SensorsFragment.graphLastValueX += 1;
+                        SensorActivity.chartAdapter.add(bandDistanceEvent.getPace());
                     }
                 });
-            }
+
             if (MainActivity.band2) {
                 try {
                     SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.motion_type) + " = " + bandDistanceEvent.getMotionType() +
@@ -37,17 +45,18 @@ public class DistanceEventListener implements BandDistanceEventListener {
                             "\n" + MainActivity.sContext.getString(R.string.speed) + " (cm/s) = " + bandDistanceEvent.getSpeed() +
                             "\n" + MainActivity.sContext.getString(R.string.distance_today) + " = " + bandDistanceEvent.getDistanceToday() / 100000L +
                             " km\n" + MainActivity.sContext.getString(R.string.total_distance) + " = " + bandDistanceEvent.getTotalDistance() / 100000L +
-                            " km", SensorsFragment.distanceTV);
+                            " km", textView);
                 } catch (Exception e) {
-                    SensorsFragment.appendToUI(e.toString(), SensorsFragment.distanceTV);
+                    SensorsFragment.appendToUI(e.toString(), textView);
                 }
             } else {
                 SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.motion_type) + " = " + bandDistanceEvent.getMotionType() +
                         "\n" + MainActivity.sContext.getString(R.string.pace) + " (ms/m) = " + bandDistanceEvent.getPace() +
                         "\n" + MainActivity.sContext.getString(R.string.speed) + " (cm/s) = " + bandDistanceEvent.getSpeed() +
                         "\n" + MainActivity.sContext.getString(R.string.total_distance) + " = " + bandDistanceEvent.getTotalDistance() / 100000L +
-                        " km", SensorsFragment.distanceTV);
+                        " km", textView);
             }
+
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Distance");
                 if (file.exists() || file.isDirectory()) {
@@ -66,7 +75,7 @@ public class DistanceEventListener implements BandDistanceEventListener {
                                             String.valueOf(bandDistanceEvent.getDistanceToday()),
                                             String.valueOf(bandDistanceEvent.getTotalDistance())});
                                 } catch (Exception e) {
-                                    SensorsFragment.appendToUI(e.toString(), SensorsFragment.distanceTV);
+                                    SensorsFragment.appendToUI(e.toString(), textView);
                                 }
                             } else {
                                 csvWriter.writeNext(new String[]{String.valueOf(bandDistanceEvent.getTimestamp()),

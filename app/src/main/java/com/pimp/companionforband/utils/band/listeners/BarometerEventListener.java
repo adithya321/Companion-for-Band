@@ -1,13 +1,14 @@
 package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
+import android.widget.TextView;
 
-import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandBarometerEvent;
 import com.microsoft.band.sensors.BandBarometerEventListener;
 import com.opencsv.CSVWriter;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.fragments.sensors.SensorActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 
 import java.io.File;
@@ -17,23 +18,32 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class BarometerEventListener implements BandBarometerEventListener {
+
+    TextView textView;
+    boolean graph;
+
+    public void setViews(TextView textView, boolean graph) {
+        this.textView = textView;
+        this.graph = graph;
+    }
+
     @Override
     public void onBandBarometerChanged(final BandBarometerEvent event) {
         if (event != null) {
-            if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Barometer")) {
+            if (graph)
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SensorsFragment.series1.appendData(new DataPoint(SensorsFragment.graphLastValueX,
-                                event.getAirPressure()), true, 100);
-                        SensorsFragment.graphLastValueX += 1;
+                        SensorActivity.chartAdapter.add((float) event.getAirPressure());
                     }
                 });
-            }
-            SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.air_pressure) + String.format(" = %.3f hPa\n", event.getAirPressure())
-                            + MainActivity.sContext.getString(R.string.air_temperature) + String.format(" = %.2f °C = %.2f F",
-                    event.getTemperature(), 1.8 * event.getTemperature() + 32),
-                    SensorsFragment.barometerTV);
+
+            SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.air_pressure)
+                    + String.format(" = %.3f hPa\n", event.getAirPressure())
+                    + MainActivity.sContext.getString(R.string.air_temperature)
+                    + String.format(" = %.2f °C = %.2f F",
+                    event.getTemperature(), 1.8 * event.getTemperature() + 32), textView);
+
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Barometer");
                 if (file.exists() || file.isDirectory()) {

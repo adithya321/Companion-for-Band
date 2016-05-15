@@ -27,7 +27,6 @@ import com.pimp.companionforband.activities.main.MainActivity;
 import com.pimp.companionforband.utils.band.BandUtils;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class ThemeFragment extends Fragment {
@@ -57,10 +56,6 @@ public class ThemeFragment extends Fragment {
         }
     };
     private ImageView imageView;
-
-    public static ThemeFragment newInstance() {
-        return new ThemeFragment();
-    }
 
     @Nullable
     @Override
@@ -177,7 +172,7 @@ public class ThemeFragment extends Fragment {
                 else
                     imageView.setImageBitmap(Bitmap.createScaledBitmap(selectedImage, 310, 102, false));
             } catch (Exception e) {
-                e.printStackTrace();
+                //
             }
         }
     }

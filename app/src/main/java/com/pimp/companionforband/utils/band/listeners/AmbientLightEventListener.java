@@ -2,13 +2,14 @@ package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
 import android.util.Log;
+import android.widget.TextView;
 
-import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandAmbientLightEvent;
 import com.microsoft.band.sensors.BandAmbientLightEventListener;
 import com.opencsv.CSVWriter;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.fragments.sensors.SensorActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 
 import java.io.File;
@@ -18,20 +19,29 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class AmbientLightEventListener implements BandAmbientLightEventListener {
+
+    TextView textView;
+    boolean graph;
+
+    public void setViews(TextView textView, boolean graph) {
+        this.textView = textView;
+        this.graph = graph;
+    }
+
     @Override
     public void onBandAmbientLightChanged(final BandAmbientLightEvent event) {
         if (event != null) {
-            if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Ambient Light")) {
+            if (graph)
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SensorsFragment.series1.appendData(new DataPoint(SensorsFragment.graphLastValueX,
-                                (double) event.getBrightness()), true, 100);
-                        SensorsFragment.graphLastValueX += 1;
+                        SensorActivity.chartAdapter.add((float) event.getBrightness());
                     }
                 });
-            }
-            SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.brightness) + String.format(" = %d lux\n", event.getBrightness()), SensorsFragment.ambientLightTV);
+
+            SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.brightness)
+                    + String.format(" = %d lux\n", event.getBrightness()), textView);
+
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "AmbientLight");
                 if (file.exists() || file.isDirectory()) {
