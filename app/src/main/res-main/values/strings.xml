@@ -220,9 +220,9 @@
         <item>Skin Temperature</item>
     </string-array>
 
-    <string name="transition_sensor_icon">Sensor Icon Transition</string>
+    <string name="transition_sensor_name">Sensor Name Transition</string>
 
-    <string name="sensor_details">Details</string>
+    <string name="sensor_data">Data</string>
     <string name="sensor_options">Options</string>
     <string name="sensor_graph">Graph</string>
 </resources>

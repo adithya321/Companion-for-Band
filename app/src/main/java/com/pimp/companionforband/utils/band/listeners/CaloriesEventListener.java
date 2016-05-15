@@ -2,6 +2,7 @@ package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.microsoft.band.sensors.BandCaloriesEvent;
 import com.microsoft.band.sensors.BandCaloriesEventListener;
@@ -17,18 +18,29 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class CaloriesEventListener implements BandCaloriesEventListener {
+
+    TextView textView;
+
+    public CaloriesEventListener(TextView textView) {
+        this.textView = textView;
+    }
+
+    public void setTextView(TextView textView) {
+        this.textView = textView;
+    }
+
     @Override
     public void onBandCaloriesChanged(BandCaloriesEvent bandCaloriesEvent) {
         if (bandCaloriesEvent != null) {
             if (MainActivity.band2) {
                 try {
                     SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.calories_today) + " = " + bandCaloriesEvent.getCaloriesToday() + " kCal\n" +
-                            MainActivity.sContext.getString(R.string.calories) + " = " + bandCaloriesEvent.getCalories() + " kCal", SensorsFragment.caloriesTV);
+                            MainActivity.sContext.getString(R.string.calories) + " = " + bandCaloriesEvent.getCalories() + " kCal", textView);
                 } catch (Exception e) {
-                    SensorsFragment.appendToUI(e.toString(), SensorsFragment.caloriesTV);
+                    SensorsFragment.appendToUI(e.toString(), textView);
                 }
             } else {
-                SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.calories) + " = " + bandCaloriesEvent.getCalories() + " kCal", SensorsFragment.caloriesTV);
+                SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.calories) + " = " + bandCaloriesEvent.getCalories() + " kCal", textView);
             }
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Calories");
@@ -45,7 +57,7 @@ public class CaloriesEventListener implements BandCaloriesEventListener {
                                             str, String.valueOf(bandCaloriesEvent.getCaloriesToday()),
                                             String.valueOf(bandCaloriesEvent.getCalories())});
                                 } catch (Exception e) {
-                                    SensorsFragment.appendToUI(e.toString(), SensorsFragment.caloriesTV);
+                                    SensorsFragment.appendToUI(e.toString(), textView);
                                 }
                             } else {
                                 csvWriter.writeNext(new String[]{String.valueOf(bandCaloriesEvent.getTimestamp()),

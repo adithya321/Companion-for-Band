@@ -23,8 +23,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
@@ -61,7 +59,6 @@ import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.donate.DonateActivity;
 import com.pimp.companionforband.activities.support.ChangelogActivity;
 import com.pimp.companionforband.activities.support.GittyActivity;
-import com.pimp.companionforband.fragments.sensors.SensorAdapter;
 import com.pimp.companionforband.utils.band.BandUtils;
 import com.yalantis.ucrop.UCrop;
 
@@ -69,8 +66,6 @@ import net.rdrei.android.dirchooser.DirectoryChooserConfig;
 import net.rdrei.android.dirchooser.DirectoryChooserFragment;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import angtrim.com.fivestarslibrary.FiveStarsDialog;
 import angtrim.com.fivestarslibrary.NegativeReviewListener;
@@ -94,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
 
     public static SharedPreferences sharedPreferences;
     public static SharedPreferences.Editor editor;
-    RecyclerView recyclerView;
 
     int base = 0;
     int r, g, b;
@@ -370,18 +364,6 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                 accelerometerRG = (RadioGroup) findViewById(R.id.accelerometer_radioGroup);
                 gyroscopeRG = (RadioGroup) findViewById(R.id.gyroscope_radioGroup);
                 gsrRG = (RadioGroup) findViewById(R.id.gsr_radioGroup);
-
-                List<String> list = new ArrayList<>();
-                list.add("1");
-                list.add("2");
-                list.add("3");
-
-                recyclerView = (RecyclerView) findViewById(R.id.sensorList);
-                recyclerView.setHasFixedSize(true);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-                linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                recyclerView.setLayoutManager(linearLayoutManager);
-                recyclerView.setAdapter(new SensorAdapter(list, MainActivity.this));
             }
 
             @Override

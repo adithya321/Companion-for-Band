@@ -23,38 +23,23 @@
         <TextView
             android:id="@+id/header"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:background="@color/primary"
-            android:scaleType="centerCrop" />
-
-        <ImageView
-            android:id="@+id/sensor_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:adjustViewBounds="true"
-            android:maxHeight="50dp"
-            android:maxWidth="50dp"
-            android:src="@drawable/band"
-            android:transitionName="@string/transition_sensor_icon" />
+            android:layout_height="100dp"
+            android:background="@color/primary" />
 
         <TextView
             android:id="@+id/sensor_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/sensor_icon"
             android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
             android:textAppearance="?android:textAppearanceLarge"
-            android:textColor="@color/md_white_1000" />
+            android:textColor="@color/md_white_1000"
+            android:transitionName="@string/transition_sensor_name" />
     </RelativeLayout>
 
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="180dp">
+        android:layout_marginTop="130dp">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -63,7 +48,7 @@
             android:layout_marginRight="16dp">
 
             <android.support.v7.widget.CardView
-                android:id="@+id/details_card"
+                android:id="@+id/data_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -75,24 +60,26 @@
                     android:layout_marginStart="@dimen/horizontal_margin"
                     android:layout_marginTop="10dp"
                     android:fontFamily="sans-serif-thin"
-                    android:text="@string/sensor_details"
+                    android:text="@string/sensor_data"
                     android:textSize="25sp" />
 
                 <TextView
+                    android:id="@+id/sensor_data"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="@dimen/horizontal_description_margin"
                     android:layout_marginRight="@dimen/horizontal_description_margin"
                     android:layout_marginTop="50dp"
-                    android:fontFamily="sans-serif-thin"
-                    android:textSize="14sp" />
+                    android:gravity="center"
+                    android:textAppearance="?android:textAppearanceMedium" />
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
                 android:id="@+id/options_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/details_card"
+                android:layout_below="@id/data_card"
                 android:layout_margin="5dp"
                 android:foreground="?android:attr/selectableItemBackground">
 

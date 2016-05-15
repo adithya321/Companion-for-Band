@@ -1,6 +1,7 @@
 package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
+import android.widget.TextView;
 
 import com.microsoft.band.sensors.BandContactEvent;
 import com.microsoft.band.sensors.BandContactEventListener;
@@ -17,10 +18,20 @@ import java.util.Date;
 
 public class ContactEventListener implements BandContactEventListener {
 
+    TextView textView;
+
+    public ContactEventListener(TextView textView) {
+        this.textView = textView;
+    }
+
+    public void setTextView(TextView textView) {
+        this.textView = textView;
+    }
+
     @Override
     public void onBandContactChanged(BandContactEvent bandContactEvent) {
         if (bandContactEvent != null) {
-            SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.contact_status) + " = " + bandContactEvent.getContactState(), SensorsFragment.contactTV);
+            SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.contact_status) + " = " + bandContactEvent.getContactState(), textView);
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Contact");
                 if (file.exists() || file.isDirectory()) {

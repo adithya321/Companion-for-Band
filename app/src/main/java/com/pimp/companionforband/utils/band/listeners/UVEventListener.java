@@ -1,6 +1,7 @@
 package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
+import android.widget.TextView;
 
 import com.microsoft.band.sensors.BandUVEvent;
 import com.microsoft.band.sensors.BandUVEventListener;
@@ -16,18 +17,29 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class UVEventListener implements BandUVEventListener {
+
+    TextView textView;
+
+    public UVEventListener(TextView textView) {
+        this.textView = textView;
+    }
+
+    public void setTextView(TextView textView) {
+        this.textView = textView;
+    }
+
     @Override
     public void onBandUVChanged(final BandUVEvent bandUVEvent) {
         if (bandUVEvent != null) {
             if (MainActivity.band2) {
                 try {
                     SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.uv_today) + " = " + bandUVEvent.getUVExposureToday() + "\n" +
-                            MainActivity.sContext.getString(R.string.uv_index) + " = " + bandUVEvent.getUVIndexLevel(), SensorsFragment.uvTV);
+                            MainActivity.sContext.getString(R.string.uv_index) + " = " + bandUVEvent.getUVIndexLevel(), textView);
                 } catch (Exception e) {
-                    SensorsFragment.appendToUI(e.toString(), SensorsFragment.uvTV);
+                    SensorsFragment.appendToUI(e.toString(), textView);
                 }
             } else {
-                SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.uv_index) + " = " + bandUVEvent.getUVIndexLevel(), SensorsFragment.uvTV);
+                SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.uv_index) + " = " + bandUVEvent.getUVIndexLevel(), textView);
             }
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "UV");
@@ -43,7 +55,7 @@ public class UVEventListener implements BandUVEventListener {
                                     csvWriter.writeNext(new String[]{String.valueOf(bandUVEvent.getTimestamp()),
                                             str, String.valueOf(bandUVEvent.getUVExposureToday()), String.valueOf(bandUVEvent.getUVIndexLevel())});
                                 } catch (Exception e) {
-                                    SensorsFragment.appendToUI(e.toString(), SensorsFragment.uvTV);
+                                    SensorsFragment.appendToUI(e.toString(), textView);
                                 }
                             } else {
                                 csvWriter.writeNext(new String[]{String.valueOf(bandUVEvent.getTimestamp()),

@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.fragments.extras.ExtrasFragment;
-import com.pimp.companionforband.fragments.sensors.SensorsFragment2;
+import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 import com.pimp.companionforband.fragments.theme.ThemeFragment;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -21,7 +21,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return new ThemeFragment();
             case 1:
-                return new SensorsFragment2();
+                return new SensorsFragment();
             case 2:
                 return new ExtrasFragment();
             default:

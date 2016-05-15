@@ -1,8 +1,8 @@
 package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
+import android.widget.TextView;
 
-import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandHeartRateEvent;
 import com.microsoft.band.sensors.BandHeartRateEventListener;
 import com.opencsv.CSVWriter;
@@ -17,10 +17,21 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class HeartRateEventListener implements BandHeartRateEventListener {
+
+    TextView textView;
+
+    public HeartRateEventListener(TextView textView) {
+        this.textView = textView;
+    }
+
+    public void setTextView(TextView textView) {
+        this.textView = textView;
+    }
+
     @Override
     public void onBandHeartRateChanged(final BandHeartRateEvent event) {
         if (event != null) {
-            if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Heart Rate")) {
+            /*if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Heart Rate")) {
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -29,10 +40,10 @@ public class HeartRateEventListener implements BandHeartRateEventListener {
                         SensorsFragment.graphLastValueX += 1;
                     }
                 });
-            }
+            }*/
             SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.heart_rate) + String.format(" = %d ", event.getHeartRate())
                     + MainActivity.sContext.getString(R.string.beats_per_minute) + "\n" + MainActivity.sContext.getString(R.string.quality)
-                    + String.format(" = %s", event.getQuality()), SensorsFragment.heartRateTV);
+                    + String.format(" = %s", event.getQuality()), textView);
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "HeartRate");
                 if (file.exists() || file.isDirectory()) {

@@ -1,8 +1,8 @@
 package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
+import android.widget.TextView;
 
-import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandGyroscopeEvent;
 import com.microsoft.band.sensors.BandGyroscopeEventListener;
 import com.opencsv.CSVWriter;
@@ -17,10 +17,21 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class GyroscopeEventListener implements BandGyroscopeEventListener {
+
+    TextView textView;
+
+    public GyroscopeEventListener(TextView textView) {
+        this.textView = textView;
+    }
+
+    public void setTextView(TextView textView) {
+        this.textView = textView;
+    }
+
     @Override
     public void onBandGyroscopeChanged(final BandGyroscopeEvent bandGyroscopeEvent) {
         if (bandGyroscopeEvent != null) {
-            if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Angular Velocity")) {
+            /*if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Angular Velocity")) {
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -33,7 +44,7 @@ public class GyroscopeEventListener implements BandGyroscopeEventListener {
                         SensorsFragment.graphLastValueX += 1;
                     }
                 });
-            }
+            }*/
             SensorsFragment.appendToUI(String.format("X = %.3f (m/s²) \nY = %.3f (m/s²)\nZ = %.3f (m/s²)\n" +
                             "X = %.3f (°/sec)\nY = %.3f (°/sec)\nZ = %.3f (°/sec)",
                     bandGyroscopeEvent.getAccelerationX(),
@@ -42,7 +53,7 @@ public class GyroscopeEventListener implements BandGyroscopeEventListener {
                     bandGyroscopeEvent.getAngularVelocityX(),
                     bandGyroscopeEvent.getAngularVelocityY(),
                     bandGyroscopeEvent.getAngularVelocityZ()),
-                    SensorsFragment.gyroscopeTV);
+                    textView);
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Gyroscope");
                 if (file.exists() || file.isDirectory()) {

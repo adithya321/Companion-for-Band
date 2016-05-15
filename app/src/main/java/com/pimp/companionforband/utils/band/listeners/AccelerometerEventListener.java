@@ -2,8 +2,8 @@ package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
 import android.util.Log;
+import android.widget.TextView;
 
-import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandAccelerometerEvent;
 import com.microsoft.band.sensors.BandAccelerometerEventListener;
 import com.opencsv.CSVWriter;
@@ -18,10 +18,21 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class AccelerometerEventListener implements BandAccelerometerEventListener {
+
+    TextView textView;
+
+    public AccelerometerEventListener(TextView textView) {
+        this.textView = textView;
+    }
+
+    public void setTextView(TextView textView) {
+        this.textView = textView;
+    }
+
     @Override
     public void onBandAccelerometerChanged(final BandAccelerometerEvent event) {
         if (event != null) {
-            if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Acceleration")) {
+            /*if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Acceleration")) {
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -34,11 +45,11 @@ public class AccelerometerEventListener implements BandAccelerometerEventListene
                         SensorsFragment.graphLastValueX += 1;
                     }
                 });
-            }
+            }*/
             SensorsFragment.appendToUI(String.format(" X = %.3f (m/s²) \n Y = %.3f (m/s²)\n Z = %.3f (m/s²)",
                     event.getAccelerationX(),
                     event.getAccelerationY(),
-                    event.getAccelerationZ()), SensorsFragment.accelerometerTV);
+                    event.getAccelerationZ()), textView);
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Accelerometer");
                 if (file.exists() || file.isDirectory()) {

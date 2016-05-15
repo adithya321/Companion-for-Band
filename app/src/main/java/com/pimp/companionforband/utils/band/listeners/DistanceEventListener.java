@@ -1,8 +1,8 @@
 package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
+import android.widget.TextView;
 
-import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandDistanceEvent;
 import com.microsoft.band.sensors.BandDistanceEventListener;
 import com.opencsv.CSVWriter;
@@ -17,10 +17,21 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class DistanceEventListener implements BandDistanceEventListener {
+
+    TextView textView;
+
+    public DistanceEventListener(TextView textView) {
+        this.textView = textView;
+    }
+
+    public void setTextView(TextView textView) {
+        this.textView = textView;
+    }
+
     @Override
     public void onBandDistanceChanged(final BandDistanceEvent bandDistanceEvent) {
         if (bandDistanceEvent != null) {
-            if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Pace")) {
+            /*if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Pace")) {
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -29,7 +40,7 @@ public class DistanceEventListener implements BandDistanceEventListener {
                         SensorsFragment.graphLastValueX += 1;
                     }
                 });
-            }
+            }*/
             if (MainActivity.band2) {
                 try {
                     SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.motion_type) + " = " + bandDistanceEvent.getMotionType() +
@@ -37,16 +48,16 @@ public class DistanceEventListener implements BandDistanceEventListener {
                             "\n" + MainActivity.sContext.getString(R.string.speed) + " (cm/s) = " + bandDistanceEvent.getSpeed() +
                             "\n" + MainActivity.sContext.getString(R.string.distance_today) + " = " + bandDistanceEvent.getDistanceToday() / 100000L +
                             " km\n" + MainActivity.sContext.getString(R.string.total_distance) + " = " + bandDistanceEvent.getTotalDistance() / 100000L +
-                            " km", SensorsFragment.distanceTV);
+                            " km", textView);
                 } catch (Exception e) {
-                    SensorsFragment.appendToUI(e.toString(), SensorsFragment.distanceTV);
+                    SensorsFragment.appendToUI(e.toString(), textView);
                 }
             } else {
                 SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.motion_type) + " = " + bandDistanceEvent.getMotionType() +
                         "\n" + MainActivity.sContext.getString(R.string.pace) + " (ms/m) = " + bandDistanceEvent.getPace() +
                         "\n" + MainActivity.sContext.getString(R.string.speed) + " (cm/s) = " + bandDistanceEvent.getSpeed() +
                         "\n" + MainActivity.sContext.getString(R.string.total_distance) + " = " + bandDistanceEvent.getTotalDistance() / 100000L +
-                        " km", SensorsFragment.distanceTV);
+                        " km", textView);
             }
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Distance");
@@ -66,7 +77,7 @@ public class DistanceEventListener implements BandDistanceEventListener {
                                             String.valueOf(bandDistanceEvent.getDistanceToday()),
                                             String.valueOf(bandDistanceEvent.getTotalDistance())});
                                 } catch (Exception e) {
-                                    SensorsFragment.appendToUI(e.toString(), SensorsFragment.distanceTV);
+                                    SensorsFragment.appendToUI(e.toString(), textView);
                                 }
                             } else {
                                 csvWriter.writeNext(new String[]{String.valueOf(bandDistanceEvent.getTimestamp()),

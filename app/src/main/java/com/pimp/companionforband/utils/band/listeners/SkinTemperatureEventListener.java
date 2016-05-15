@@ -1,8 +1,8 @@
 package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
+import android.widget.TextView;
 
-import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandSkinTemperatureEvent;
 import com.microsoft.band.sensors.BandSkinTemperatureEventListener;
 import com.opencsv.CSVWriter;
@@ -18,10 +18,20 @@ import java.util.Date;
 
 public class SkinTemperatureEventListener implements BandSkinTemperatureEventListener {
 
+    TextView textView;
+
+    public SkinTemperatureEventListener(TextView textView) {
+        this.textView = textView;
+    }
+
+    public void setTextView(TextView textView) {
+        this.textView = textView;
+    }
+
     @Override
     public void onBandSkinTemperatureChanged(final BandSkinTemperatureEvent bandSkinTemperatureEvent) {
         if (bandSkinTemperatureEvent != null) {
-            if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Skin Temperature")) {
+            /*if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Skin Temperature")) {
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -30,9 +40,9 @@ public class SkinTemperatureEventListener implements BandSkinTemperatureEventLis
                         SensorsFragment.graphLastValueX += 1;
                     }
                 });
-            }
+            }*/
             SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.temperature) + String.format(" = " + bandSkinTemperatureEvent.getTemperature() + " °C" + " = %.2f F",
-                    1.8 * bandSkinTemperatureEvent.getTemperature() + 32), SensorsFragment.skinTempTV);
+                    1.8 * bandSkinTemperatureEvent.getTemperature() + 32), textView);
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "SkinTemperature");
                 if (file.exists() || file.isDirectory()) {
