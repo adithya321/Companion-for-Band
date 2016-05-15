@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".AppActivity">
+    <item
+        android:id="@+id/action_hide"
+        android:icon="@drawable/ic_visibility_off_white_48dp"
+        android:title="@string/action_hide"
+        app:showAsAction="ifRoom" />
+</menu>

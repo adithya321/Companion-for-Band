@@ -230,4 +230,7 @@ The data returned should be used only in resting mode. The SDK doesn’t provide
     <string name="ambientLight_details">(Microsoft Band 2 only) Provides the current light intensity (illuminance) in lux (Lumes per sq. meter).</string>
     <string name="barometer_details">(Microsoft Band 2 only) Provides the current raw air pressure in hPa (hectopascals) and raw temperature in degrees Celsius.</string>
     <string name="altimeter_details">(Microsoft Band 2 only) Provides current elevation data like total gain/loss, steps ascended/descended, flights ascended/descended, and elevation rate.</string>
+
+    <string name="action_hide">Unregister Sensor</string>
+    <string name="action_show">Register Sensor</string>
 </resources>

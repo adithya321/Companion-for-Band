@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -391,5 +393,38 @@ public class SensorActivity extends AppCompatActivity {
                 .setViews(dataTV, true);
         MainActivity.client.getSensorManager().registerUVEventListener(
                 SensorsFragment.bandUVEventListener);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_sensor, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (MainActivity.sharedPreferences.getBoolean(sensorName, true)) {
+            menu.findItem(R.id.action_hide)
+                    .setIcon(getResources().getDrawable(R.drawable.ic_visibility_off_white_48dp));
+            menu.findItem(R.id.action_hide).setTitle(getString(R.string.action_hide));
+        } else {
+            menu.findItem(R.id.action_hide)
+                    .setIcon(getResources().getDrawable(R.drawable.ic_visibility_white_48dp));
+            menu.findItem(R.id.action_hide).setTitle(getString(R.string.action_show));
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_hide:
+                if (item.getTitle().equals(getString(R.string.action_hide)))
+                    MainActivity.editor.putBoolean(sensorName, false);
+                else
+                    MainActivity.editor.putBoolean(sensorName, true);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

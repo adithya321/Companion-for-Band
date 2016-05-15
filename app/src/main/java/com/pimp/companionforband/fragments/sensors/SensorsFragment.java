@@ -14,6 +14,7 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.microsoft.band.sensors.BandAccelerometerEventListener;
@@ -138,6 +139,19 @@ public class SensorsFragment extends Fragment {
             logTV.setText(getResources().getString(R.string.permit_log));
         else
             logTV.setText(getResources().getString(R.string.log_text));
+
+        ((Switch) view.findViewById(R.id.log_switch)).setChecked(MainActivity.sharedPreferences.getBoolean("log", false));
+        if (!MainActivity.sharedPreferences.getBoolean("log", false))
+            view.findViewById(R.id.logStatus).setVisibility(View.GONE);
+        else {
+            view.findViewById(R.id.logStatus).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.backlog_switch).setVisibility(View.VISIBLE);
+        }
+        ((Switch) view.findViewById(R.id.backlog_switch)).setChecked(MainActivity.sharedPreferences.getBoolean("backlog", false));
+        if (!MainActivity.sharedPreferences.getBoolean("backlog", false))
+            view.findViewById(R.id.backlogStatus).setVisibility(View.GONE);
+        else
+            view.findViewById(R.id.backlogStatus).setVisibility(View.VISIBLE);
     }
 
     View.OnClickListener cardViewOnClickListener = new View.OnClickListener() {
@@ -177,7 +191,9 @@ public class SensorsFragment extends Fragment {
     public void onPause() {
         super.onPause();
         try {
-            MainActivity.client.getSensorManager().unregisterAllListeners();
+            if (MainActivity.client != null)
+                if (!MainActivity.sharedPreferences.getBoolean("backlog", false))
+                    MainActivity.client.getSensorManager().unregisterAllListeners();
         } catch (Exception e) {
             //
         }
