@@ -3,7 +3,6 @@ package com.pimp.companionforband.utils.band.listeners;
 import android.os.Environment;
 import android.widget.TextView;
 
-import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandGyroscopeEvent;
 import com.microsoft.band.sensors.BandGyroscopeEventListener;
 import com.opencsv.CSVWriter;
@@ -35,13 +34,7 @@ public class GyroscopeEventListener implements BandGyroscopeEventListener {
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SensorActivity.series1.appendData(new DataPoint(SensorActivity.graphLastValueX,
-                                (double) bandGyroscopeEvent.getAngularVelocityX()), true, 50);
-                        SensorActivity.series2.appendData(new DataPoint(SensorActivity.graphLastValueX,
-                                (double) bandGyroscopeEvent.getAngularVelocityY()), true, 50);
-                        SensorActivity.series3.appendData(new DataPoint(SensorActivity.graphLastValueX,
-                                (double) bandGyroscopeEvent.getAngularVelocityZ()), true, 50);
-                        SensorActivity.graphLastValueX += 1;
+                        SensorActivity.chartAdapter.add(bandGyroscopeEvent.getAngularVelocityX());
                     }
                 });
 

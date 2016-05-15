@@ -8,6 +8,7 @@ import com.microsoft.band.sensors.BandUVEventListener;
 import com.opencsv.CSVWriter;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.fragments.sensors.SensorActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 
 import java.io.File;
@@ -29,6 +30,30 @@ public class UVEventListener implements BandUVEventListener {
     @Override
     public void onBandUVChanged(final BandUVEvent bandUVEvent) {
         if (bandUVEvent != null) {
+            if (graph)
+                MainActivity.sActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        switch (bandUVEvent.getUVIndexLevel()) {
+                            case NONE:
+                                SensorActivity.chartAdapter.add(0f);
+                                break;
+                            case LOW:
+                                SensorActivity.chartAdapter.add(1f);
+                                break;
+                            case MEDIUM:
+                                SensorActivity.chartAdapter.add(2f);
+                                break;
+                            case HIGH:
+                                SensorActivity.chartAdapter.add(3f);
+                                break;
+                            case VERY_HIGH:
+                                SensorActivity.chartAdapter.add(4f);
+                                break;
+                        }
+                    }
+                });
+
             if (MainActivity.band2) {
                 try {
                     SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.uv_today) + " = " + bandUVEvent.getUVExposureToday() + "\n" +

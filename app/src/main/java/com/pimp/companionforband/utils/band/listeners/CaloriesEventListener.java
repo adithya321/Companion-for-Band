@@ -9,6 +9,7 @@ import com.microsoft.band.sensors.BandCaloriesEventListener;
 import com.opencsv.CSVWriter;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.fragments.sensors.SensorActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 
 import java.io.File;
@@ -30,6 +31,14 @@ public class CaloriesEventListener implements BandCaloriesEventListener {
     @Override
     public void onBandCaloriesChanged(final BandCaloriesEvent bandCaloriesEvent) {
         if (bandCaloriesEvent != null) {
+            if (graph)
+                MainActivity.sActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        SensorActivity.chartAdapter.add((float) bandCaloriesEvent.getCalories());
+                    }
+                });
+
             if (MainActivity.band2) {
                 try {
                     SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.calories_today) + " = " + bandCaloriesEvent.getCaloriesToday() + " kCal\n" +

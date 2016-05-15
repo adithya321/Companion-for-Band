@@ -1,6 +1,5 @@
 package com.pimp.companionforband.fragments.sensors;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,14 +9,6 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.GridLabelRenderer;
-import com.jjoe64.graphview.LegendRenderer;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.DataPointInterface;
-import com.jjoe64.graphview.series.LineGraphSeries;
-import com.jjoe64.graphview.series.OnDataPointTapListener;
-import com.jjoe64.graphview.series.Series;
 import com.microsoft.band.sensors.GsrSampleRate;
 import com.microsoft.band.sensors.SampleRate;
 import com.pimp.companionforband.R;
@@ -36,25 +27,22 @@ import com.pimp.companionforband.utils.band.listeners.PedometerEventListener;
 import com.pimp.companionforband.utils.band.listeners.RRIntervalEventListener;
 import com.pimp.companionforband.utils.band.listeners.SkinTemperatureEventListener;
 import com.pimp.companionforband.utils.band.listeners.UVEventListener;
+import com.robinhood.spark.SparkView;
 
 public class SensorActivity extends AppCompatActivity {
 
-    public static Activity sActivity;
     String sensorName;
-    TextView nameTV, dataTV, detailsTV;
+    TextView nameTV, dataTV, detailsTV, scrubInfoTextView;
     CardView optionsCV, graphCV;
+    SparkView sparkView;
+    public static ChartAdapter chartAdapter;
     RadioButton option1, option2, option3;
-    public static GraphView graphView;
-    public static LineGraphSeries<DataPoint> series1, series2, series3;
-    public static double graphLastValueX = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_sensor);
-
-        sActivity = this;
 
         getInitialConfiguration();
         setInitialConfiguration();
@@ -75,11 +63,9 @@ public class SensorActivity extends AppCompatActivity {
                     setBarometerConfiguration();
                     break;
                 case "Calories":
-                    graphCV.setVisibility(View.GONE);
                     setCaloriesConfiguration();
                     break;
                 case "Contact":
-                    graphCV.setVisibility(View.GONE);
                     setContactConfiguration();
                     break;
                 case "Distance":
@@ -95,7 +81,6 @@ public class SensorActivity extends AppCompatActivity {
                     setHeartRateConfiguration();
                     break;
                 case "Pedometer":
-                    graphCV.setVisibility(View.GONE);
                     setPedometerConfiguration();
                     break;
                 case "RR Interval":
@@ -105,7 +90,6 @@ public class SensorActivity extends AppCompatActivity {
                     setSkinTemperatureConfiguration();
                     break;
                 case "UV":
-                    graphCV.setVisibility(View.GONE);
                     setUVConfiguration();
                     break;
             }
@@ -143,7 +127,7 @@ public class SensorActivity extends AppCompatActivity {
         option2 = (RadioButton) findViewById(R.id.option_2);
         option3 = (RadioButton) findViewById(R.id.option_3);
         graphCV = (CardView) findViewById(R.id.graph_card);
-        graphView = (GraphView) findViewById(R.id.sensor_graph);
+        sparkView = (SparkView) findViewById(R.id.sensor_graph);
         detailsTV = (TextView) findViewById(R.id.sensor_details);
 
         nameTV.setText(sensorName);
@@ -152,47 +136,18 @@ public class SensorActivity extends AppCompatActivity {
         option2.setOnClickListener(optionsRadioButtonClickListener);
         option3.setOnClickListener(optionsRadioButtonClickListener);
 
-        series1 = new LineGraphSeries<>();
-        series1.setColor(getResources().getColor(R.color.accent));
-        series1.setOnDataPointTapListener(new OnDataPointTapListener() {
-            @Override
-            public void onTap(Series series, DataPointInterface dataPoint) {
-                detailsTV.setText(dataPoint.toString());
-            }
-        });
-        series2 = new LineGraphSeries<>();
-        series2.setColor(getResources().getColor(R.color.primary_dark));
-        series3 = new LineGraphSeries<>();
-        series3.setColor(getResources().getColor(R.color.primary_light));
-        graphView.addSeries(series1);
-        graphView.addSeries(series2);
-        graphView.addSeries(series3);
-        graphView.getGridLabelRenderer().setVerticalLabelsVisible(false);
-        graphView.getGridLabelRenderer().setHorizontalLabelsVisible(false);
-        graphView.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.NONE);
-
         switch (sensorName) {
             case "Accelerometer":
                 optionsCV.setVisibility(View.VISIBLE);
                 option1.setChecked(MainActivity.sharedPreferences.getInt("acc_hz", 13) == 11);
                 option2.setChecked(MainActivity.sharedPreferences.getInt("acc_hz", 13) == 12);
                 option3.setChecked(MainActivity.sharedPreferences.getInt("acc_hz", 13) == 13);
-                series1.setTitle("X");
-                series2.setTitle("Y");
-                series3.setTitle("Z");
-                graphView.getLegendRenderer().setVisible(true);
-                graphView.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.BOTTOM);
                 break;
             case "Gyroscope":
                 optionsCV.setVisibility(View.VISIBLE);
                 option1.setChecked(MainActivity.sharedPreferences.getInt("gyr_hz", 23) == 21);
                 option2.setChecked(MainActivity.sharedPreferences.getInt("gyr_hz", 23) == 22);
                 option3.setChecked(MainActivity.sharedPreferences.getInt("gyr_hz", 23) == 23);
-                series1.setTitle("X");
-                series2.setTitle("Y");
-                series3.setTitle("Z");
-                graphView.getLegendRenderer().setVisible(true);
-                graphView.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.BOTTOM);
                 break;
             case "GSR":
                 optionsCV.setVisibility(View.VISIBLE);
@@ -205,6 +160,20 @@ public class SensorActivity extends AppCompatActivity {
                 option3.setVisibility(View.GONE);
                 break;
         }
+
+        scrubInfoTextView = (TextView) findViewById(R.id.scrub_info_textview);
+        chartAdapter = new ChartAdapter();
+        sparkView.setAdapter(chartAdapter);
+        sparkView.setScrubListener(new SparkView.OnScrubListener() {
+            @Override
+            public void onScrubbed(Object value) {
+                if (value == null) {
+                    scrubInfoTextView.setText(R.string.scrub_empty);
+                } else {
+                    scrubInfoTextView.setText(getString(R.string.scrub_format, value));
+                }
+            }
+        });
     }
 
     @Override

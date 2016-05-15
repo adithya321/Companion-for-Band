@@ -8,6 +8,7 @@ import com.microsoft.band.sensors.BandPedometerEventListener;
 import com.opencsv.CSVWriter;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.fragments.sensors.SensorActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 
 import java.io.File;
@@ -27,8 +28,16 @@ public class PedometerEventListener implements BandPedometerEventListener {
     }
 
     @Override
-    public void onBandPedometerChanged(BandPedometerEvent bandPedometerEvent) {
+    public void onBandPedometerChanged(final BandPedometerEvent bandPedometerEvent) {
         if (bandPedometerEvent != null) {
+            if (graph)
+                MainActivity.sActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        SensorActivity.chartAdapter.add((float) bandPedometerEvent.getTotalSteps());
+                    }
+                });
+
             if (MainActivity.band2) {
                 try {
                     SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.steps_today) + " = " + bandPedometerEvent.getStepsToday() + "\n" +

@@ -3,7 +3,6 @@ package com.pimp.companionforband.utils.band.listeners;
 import android.os.Environment;
 import android.widget.TextView;
 
-import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandBarometerEvent;
 import com.microsoft.band.sensors.BandBarometerEventListener;
 import com.opencsv.CSVWriter;
@@ -35,16 +34,14 @@ public class BarometerEventListener implements BandBarometerEventListener {
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SensorActivity.series1.appendData(new DataPoint(SensorActivity.graphLastValueX,
-                                event.getAirPressure()), true, 30);
-                        SensorActivity.graphLastValueX += 1;
+                        SensorActivity.chartAdapter.add((float) event.getAirPressure());
                     }
                 });
 
             SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.air_pressure)
-                            + String.format(" = %.3f hPa\n", event.getAirPressure())
-                            + MainActivity.sContext.getString(R.string.air_temperature)
-                            + String.format(" = %.2f °C = %.2f F",
+                    + String.format(" = %.3f hPa\n", event.getAirPressure())
+                    + MainActivity.sContext.getString(R.string.air_temperature)
+                    + String.format(" = %.2f °C = %.2f F",
                     event.getTemperature(), 1.8 * event.getTemperature() + 32), textView);
 
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {

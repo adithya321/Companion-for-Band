@@ -204,6 +204,9 @@
 
     <string name="change_picture_location">CHANGE PICTURE LOCATION</string>
 
+    <string name="scrub_empty">Tap and hold the graph for value.</string>
+    <string name="scrub_format">Value: %1$s</string>
+
     <string name="transition_sensor_name">Sensor Name Transition</string>
 
     <string name="sensor_data">Data</string>

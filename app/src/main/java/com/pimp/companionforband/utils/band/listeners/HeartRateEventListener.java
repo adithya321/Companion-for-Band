@@ -3,7 +3,6 @@ package com.pimp.companionforband.utils.band.listeners;
 import android.os.Environment;
 import android.widget.TextView;
 
-import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandHeartRateEvent;
 import com.microsoft.band.sensors.BandHeartRateEventListener;
 import com.opencsv.CSVWriter;
@@ -32,12 +31,10 @@ public class HeartRateEventListener implements BandHeartRateEventListener {
     public void onBandHeartRateChanged(final BandHeartRateEvent event) {
         if (event != null) {
             if (graph)
-                SensorActivity.sActivity.runOnUiThread(new Runnable() {
+                MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SensorActivity.series1.appendData(new DataPoint(event.getTimestamp(),
-                                (double) event.getHeartRate()), true, 30);
-                        SensorActivity.graphLastValueX += 1;
+                        SensorActivity.chartAdapter.add((float) event.getHeartRate());
                     }
                 });
 

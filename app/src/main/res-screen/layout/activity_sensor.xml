@@ -144,14 +144,25 @@
                     android:text="@string/sensor_graph"
                     android:textSize="25sp" />
 
-                <com.jjoe64.graphview.GraphView
+                <com.robinhood.spark.SparkView
                     android:id="@+id/sensor_graph"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:layout_marginEnd="@dimen/horizontal_description_margin"
+                    android:layout_marginStart="@dimen/horizontal_description_margin"
+                    android:layout_marginTop="50dp"
+                    app:spark_lineColor="@color/accent"
+                    app:spark_scrubEnabled="true" />
+
+                <TextView
+                    android:id="@+id/scrub_info_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="@dimen/horizontal_description_margin"
-                    android:layout_marginRight="@dimen/horizontal_description_margin"
-                    android:layout_marginTop="50dp" />
+                    android:layout_marginEnd="@dimen/horizontal_description_margin"
+                    android:layout_marginStart="@dimen/horizontal_description_margin"
+                    android:layout_marginTop="250dp"
+                    android:gravity="center" />
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView

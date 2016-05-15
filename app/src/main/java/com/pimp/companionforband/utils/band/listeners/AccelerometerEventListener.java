@@ -4,7 +4,6 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandAccelerometerEvent;
 import com.microsoft.band.sensors.BandAccelerometerEventListener;
 import com.opencsv.CSVWriter;
@@ -36,13 +35,7 @@ public class AccelerometerEventListener implements BandAccelerometerEventListene
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SensorActivity.series1.appendData(new DataPoint(SensorActivity.graphLastValueX,
-                                (double) event.getAccelerationX()), true, 50);
-                        SensorActivity.series2.appendData(new DataPoint(SensorActivity.graphLastValueX,
-                                (double) event.getAccelerationY()), true, 50);
-                        SensorActivity.series3.appendData(new DataPoint(SensorActivity.graphLastValueX,
-                                (double) event.getAccelerationZ()), true, 50);
-                        SensorActivity.graphLastValueX += 1;
+                        SensorActivity.chartAdapter.add(event.getAccelerationX());
                     }
                 });
 
