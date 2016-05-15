@@ -176,7 +176,7 @@ public class ThemeFragment extends Fragment {
                     imageView.setImageBitmap(Bitmap.createScaledBitmap(selectedImage, 310, 128, false));
                 else
                     imageView.setImageBitmap(Bitmap.createScaledBitmap(selectedImage, 310, 102, false));
-            } catch (FileNotFoundException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
