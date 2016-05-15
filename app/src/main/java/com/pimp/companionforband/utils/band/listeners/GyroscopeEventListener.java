@@ -44,6 +44,7 @@ public class GyroscopeEventListener implements BandGyroscopeEventListener {
                         SensorActivity.graphLastValueX += 1;
                     }
                 });
+
             SensorsFragment.appendToUI(String.format("X = %.3f (m/s²) \nY = %.3f (m/s²)\nZ = %.3f (m/s²)\n" +
                             "X = %.3f (°/sec)\nY = %.3f (°/sec)\nZ = %.3f (°/sec)",
                     bandGyroscopeEvent.getAccelerationX(),
@@ -53,6 +54,7 @@ public class GyroscopeEventListener implements BandGyroscopeEventListener {
                     bandGyroscopeEvent.getAngularVelocityY(),
                     bandGyroscopeEvent.getAngularVelocityZ()),
                     textView);
+
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Gyroscope");
                 if (file.exists() || file.isDirectory()) {

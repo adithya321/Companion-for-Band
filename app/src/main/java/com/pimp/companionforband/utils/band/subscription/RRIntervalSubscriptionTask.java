@@ -1,6 +1,7 @@
 package com.pimp.companionforband.utils.band.subscription;
 
 import android.os.AsyncTask;
+import android.widget.TextView;
 
 import com.microsoft.band.BandException;
 import com.microsoft.band.UserConsent;
@@ -9,9 +10,9 @@ import com.pimp.companionforband.activities.main.MainActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 import com.pimp.companionforband.utils.band.BandUtils;
 
-public class RRIntervalSubscriptionTask extends AsyncTask<Void, Void, Void> {
+public class RRIntervalSubscriptionTask extends AsyncTask<TextView, Void, Void> {
     @Override
-    protected Void doInBackground(Void... params) {
+    protected Void doInBackground(TextView... params) {
         try {
             if (BandUtils.getConnectedBandClient()) {
                 if (MainActivity.band2) {
@@ -22,7 +23,7 @@ public class RRIntervalSubscriptionTask extends AsyncTask<Void, Void, Void> {
                     } else {
                         SensorsFragment.appendToUI(MainActivity.sContext
                                         .getString(R.string.heart_rate_consent) + "\n",
-                                SensorsFragment.rrTV);
+                                params[0]);
                     }
                 }
             } else {

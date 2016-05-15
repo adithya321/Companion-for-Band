@@ -81,7 +81,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/data_card"
                 android:layout_margin="5dp"
-                android:foreground="?android:attr/selectableItemBackground">
+                android:foreground="?android:attr/selectableItemBackground"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"

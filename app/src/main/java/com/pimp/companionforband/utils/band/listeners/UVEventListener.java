@@ -19,13 +19,11 @@ import java.util.Date;
 public class UVEventListener implements BandUVEventListener {
 
     TextView textView;
+    boolean graph;
 
-    public UVEventListener(TextView textView) {
+    public void setViews(TextView textView, boolean graph) {
         this.textView = textView;
-    }
-
-    public void setTextView(TextView textView) {
-        this.textView = textView;
+        this.graph = graph;
     }
 
     @Override
@@ -41,6 +39,7 @@ public class UVEventListener implements BandUVEventListener {
             } else {
                 SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.uv_index) + " = " + bandUVEvent.getUVIndexLevel(), textView);
             }
+
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "UV");
                 if (file.exists() || file.isDirectory()) {

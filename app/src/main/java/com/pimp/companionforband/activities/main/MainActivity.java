@@ -331,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                 mTracker.setScreenName("Image~" + name);
                 mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
-                SaccelerometerStatus = (Switch) findViewById(R.id.accelerometer_switch);
+                /*SaccelerometerStatus = (Switch) findViewById(R.id.accelerometer_switch);
                 SaltimeterStatus = (Switch) findViewById(R.id.altimeter_switch);
                 SbaroStatus = (Switch) findViewById(R.id.barometer_switch);
                 ScaloriesStatus = (Switch) findViewById(R.id.calories_switch);
@@ -339,10 +339,10 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                 SdistanceStatus = (Switch) findViewById(R.id.distance_switch);
                 SgsrStatus = (Switch) findViewById(R.id.gsr_switch);
                 SgyroscopeStatus = (Switch) findViewById(R.id.gyroscope_switch);
-                SlightStatus = (Switch) findViewById(R.id.light_switch);
+                SlightStatus = (Switch) findViewById(R.id.light_switch);*/
                 SlogStatus = (Switch) findViewById(R.id.log_switch);
                 SBacklogStatus = (Switch) findViewById(R.id.backlog_switch);
-                SpedometerStatus = (Switch) findViewById(R.id.pedometer_switch);
+                /*SpedometerStatus = (Switch) findViewById(R.id.pedometer_switch);
                 SskinTempStatus = (Switch) findViewById(R.id.temperature_switch);
                 SuvStatus = (Switch) findViewById(R.id.UV_switch);
 
@@ -354,16 +354,16 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                 distanceStatus = (TextView) findViewById(R.id.distanceStatus);
                 gsrStatus = (TextView) findViewById(R.id.gsrStatus);
                 gyroscopeStatus = (TextView) findViewById(R.id.gyroscopeStatus);
-                lightStatus = (TextView) findViewById(R.id.lightStatus);
+                lightStatus = (TextView) findViewById(R.id.lightStatus);*/
                 logStatus = (TextView) findViewById(R.id.logStatus);
                 backlogStatus = (TextView) findViewById(R.id.backlogStatus);
-                pedometerStatus = (TextView) findViewById(R.id.pedometerStatus);
+                /*pedometerStatus = (TextView) findViewById(R.id.pedometerStatus);
                 skinTempStatus = (TextView) findViewById(R.id.temperatureStatus);
                 uvStatus = (TextView) findViewById(R.id.UVStatus);
 
                 accelerometerRG = (RadioGroup) findViewById(R.id.accelerometer_radioGroup);
                 gyroscopeRG = (RadioGroup) findViewById(R.id.gyroscope_radioGroup);
-                gsrRG = (RadioGroup) findViewById(R.id.gsr_radioGroup);
+                gsrRG = (RadioGroup) findViewById(R.id.gsr_radioGroup);*/
             }
 
             @Override
@@ -629,7 +629,7 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
             case R.id.backlog_switch:
                 setSwitch(SBacklogStatus, backlogStatus, "backlog");
                 break;
-            case R.id.accelerometer_switch:
+            /*case R.id.accelerometer_switch:
                 setSwitch(SaccelerometerStatus, accelerometerRG, accelerometerStatus, "acc");
                 break;
             case R.id.altimeter_switch:
@@ -664,7 +664,7 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                 break;
             case R.id.UV_switch:
                 setSwitch(SuvStatus, uvStatus, "uv");
-                break;
+                break;*/
         }
     }
 

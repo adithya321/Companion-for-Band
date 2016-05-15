@@ -3,11 +3,13 @@ package com.pimp.companionforband.utils.band.listeners;
 import android.os.Environment;
 import android.widget.TextView;
 
+import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandDistanceEvent;
 import com.microsoft.band.sensors.BandDistanceEventListener;
 import com.opencsv.CSVWriter;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.fragments.sensors.SensorActivity;
 import com.pimp.companionforband.fragments.sensors.SensorsFragment;
 
 import java.io.File;
@@ -19,28 +21,26 @@ import java.util.Date;
 public class DistanceEventListener implements BandDistanceEventListener {
 
     TextView textView;
+    boolean graph;
 
-    public DistanceEventListener(TextView textView) {
+    public void setViews(TextView textView, boolean graph) {
         this.textView = textView;
-    }
-
-    public void setTextView(TextView textView) {
-        this.textView = textView;
+        this.graph = graph;
     }
 
     @Override
     public void onBandDistanceChanged(final BandDistanceEvent bandDistanceEvent) {
         if (bandDistanceEvent != null) {
-            /*if (SensorsFragment.chart_spinner.getSelectedItem().toString().equals("Pace")) {
+            if (graph)
                 MainActivity.sActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SensorsFragment.series1.appendData(new DataPoint(SensorsFragment.graphLastValueX,
-                                (double) bandDistanceEvent.getPace()), true, 100);
-                        SensorsFragment.graphLastValueX += 1;
+                        SensorActivity.series1.appendData(new DataPoint(SensorActivity.graphLastValueX,
+                                (double) bandDistanceEvent.getPace()), true, 30);
+                        SensorActivity.graphLastValueX += 1;
                     }
                 });
-            }*/
+
             if (MainActivity.band2) {
                 try {
                     SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.motion_type) + " = " + bandDistanceEvent.getMotionType() +
@@ -59,6 +59,7 @@ public class DistanceEventListener implements BandDistanceEventListener {
                         "\n" + MainActivity.sContext.getString(R.string.total_distance) + " = " + bandDistanceEvent.getTotalDistance() / 100000L +
                         " km", textView);
             }
+
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Distance");
                 if (file.exists() || file.isDirectory()) {

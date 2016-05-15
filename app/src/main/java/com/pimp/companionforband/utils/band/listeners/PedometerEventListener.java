@@ -19,13 +19,11 @@ import java.util.Date;
 public class PedometerEventListener implements BandPedometerEventListener {
 
     TextView textView;
+    boolean graph;
 
-    public PedometerEventListener(TextView textView) {
+    public void setViews(TextView textView, boolean graph) {
         this.textView = textView;
-    }
-
-    public void setTextView(TextView textView) {
-        this.textView = textView;
+        this.graph = graph;
     }
 
     @Override
@@ -41,6 +39,7 @@ public class PedometerEventListener implements BandPedometerEventListener {
             } else {
                 SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.total_steps) + " = " + bandPedometerEvent.getTotalSteps(), textView);
             }
+
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Pedometer");
                 if (file.exists() || file.isDirectory()) {

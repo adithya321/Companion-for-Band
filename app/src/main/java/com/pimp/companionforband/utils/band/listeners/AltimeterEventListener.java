@@ -2,6 +2,7 @@ package com.pimp.companionforband.utils.band.listeners;
 
 import android.os.Environment;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.jjoe64.graphview.series.DataPoint;
 import com.microsoft.band.sensors.BandAltimeterEvent;
@@ -19,17 +20,28 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class AltimeterEventListener implements BandAltimeterEventListener {
+
+    TextView textView;
+    boolean graph;
+
+    public void setViews(TextView textView, boolean graph) {
+        this.textView = textView;
+        this.graph = graph;
+    }
+
     @Override
     public void onBandAltimeterChanged(final BandAltimeterEvent event) {
         if (event != null) {
-            MainActivity.sActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    SensorActivity.series1.appendData(new DataPoint(SensorActivity.graphLastValueX,
-                            (double) event.getRate()), true, 100);
-                    SensorActivity.graphLastValueX += 1;
-                }
-            });
+            if (graph)
+                MainActivity.sActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        SensorActivity.series1.appendData(new DataPoint(SensorActivity.graphLastValueX,
+                                (double) event.getRate()), true, 30);
+                        SensorActivity.graphLastValueX += 1;
+                    }
+                });
+
             try {
                 SensorsFragment.appendToUI(new StringBuilder()
                                 .append(MainActivity.sContext.getString(R.string.total_gain_today))
@@ -54,7 +66,7 @@ public class AltimeterEventListener implements BandAltimeterEventListener {
                                 .append(String.format(" = %d\n", event.getFlightsAscended()))
                                 .append(MainActivity.sContext.getString(R.string.stairs_descended))
                                 .append(String.format(" = %d\n", event.getFlightsDescended())).toString()
-                        , SensorsFragment.altimeterTV);
+                        , textView);
 
                 if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                     File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Altimeter");
@@ -94,7 +106,7 @@ public class AltimeterEventListener implements BandAltimeterEventListener {
                     }
                 }
             } catch (Exception e) {
-                SensorsFragment.appendToUI(e.toString(), SensorsFragment.altimeterTV);
+                SensorsFragment.appendToUI(e.toString(), textView);
             }
         }
     }

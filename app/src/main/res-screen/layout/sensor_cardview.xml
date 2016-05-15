@@ -19,13 +19,12 @@
             android:transitionName="@string/transition_sensor_name" />
 
         <TextView
-            android:id="@+id/txtDetails"
+            android:id="@+id/txtData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/txtName"
             android:layout_margin="8dp"
             android:gravity="center"
-            android:text="Details"
             android:textAppearance="?android:textAppearanceMedium" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>

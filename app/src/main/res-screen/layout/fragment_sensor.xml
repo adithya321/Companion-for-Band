@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true">
+    android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
         android:orientation="vertical">
 
         <TextView
@@ -14,17 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp" />
-
-        <Spinner
-            android:id="@+id/chart_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/chart_sensors_array" />
-
-        <com.jjoe64.graphview.GraphView
-            android:id="@+id/graph"
-            android:layout_width="match_parent"
-            android:layout_height="200dp" />
 
         <Switch
             android:id="@+id/log_switch"
@@ -58,283 +47,60 @@
             android:padding="8dp"
             android:visibility="gone" />
 
-        <Switch
-            android:id="@+id/accelerometer_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="SwitchClick"
-            android:padding="8dp"
-            android:text="@string/accelerometer" />
+        <include
+            android:id="@+id/accelerometer_card"
+            layout="@layout/sensor_cardview" />
 
-        <RadioGroup
-            android:id="@+id/accelerometer_radioGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp">
+        <include
+            android:id="@+id/altimeter_card"
+            layout="@layout/sensor_cardview" />
 
-            <RadioButton
-                android:id="@+id/accelerometer_ms16"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="16 Hz" />
+        <include
+            android:id="@+id/ambientLight_card"
+            layout="@layout/sensor_cardview" />
 
-            <RadioButton
-                android:id="@+id/accelerometer_ms32"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="32 Hz" />
+        <include
+            android:id="@+id/barometer_card"
+            layout="@layout/sensor_cardview" />
 
-            <RadioButton
-                android:id="@+id/accelerometer_ms128"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:checked="true"
-                android:text="128 Hz" />
-        </RadioGroup>
+        <include
+            android:id="@+id/calories_card"
+            layout="@layout/sensor_cardview" />
 
-        <TextView
-            android:id="@+id/accelerometerStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
+        <include
+            android:id="@+id/contact_card"
+            layout="@layout/sensor_cardview" />
 
-        <Switch
-            android:id="@+id/altimeter_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="SwitchClick"
-            android:padding="8dp"
-            android:text="@string/altimeter" />
+        <include
+            android:id="@+id/distance_card"
+            layout="@layout/sensor_cardview" />
 
-        <TextView
-            android:id="@+id/altimeterStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
+        <include
+            android:id="@+id/gsr_card"
+            layout="@layout/sensor_cardview" />
 
-        <Switch
-            android:id="@+id/light_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="SwitchClick"
-            android:padding="8dp"
-            android:text="@string/light" />
+        <include
+            android:id="@+id/gyroscope_card"
+            layout="@layout/sensor_cardview" />
 
-        <TextView
-            android:id="@+id/lightStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
+        <include
+            android:id="@+id/heartRate_card"
+            layout="@layout/sensor_cardview" />
 
-        <Switch
-            android:id="@+id/barometer_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="SwitchClick"
-            android:padding="8dp"
-            android:text="@string/barometer" />
+        <include
+            android:id="@+id/pedometer_card"
+            layout="@layout/sensor_cardview" />
 
-        <TextView
-            android:id="@+id/barometerStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
+        <include
+            android:id="@+id/rrInterval_card"
+            layout="@layout/sensor_cardview" />
 
-        <Switch
-            android:id="@+id/calories_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="SwitchClick"
-            android:padding="8dp"
-            android:text="@string/calories" />
+        <include
+            android:id="@+id/skinTemperature_card"
+            layout="@layout/sensor_cardview" />
 
-        <TextView
-            android:id="@+id/caloriesStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
-
-        <Switch
-            android:id="@+id/contact_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="SwitchClick"
-            android:padding="8dp"
-            android:text="@string/contact" />
-
-        <TextView
-            android:id="@+id/contactStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
-
-        <Switch
-            android:id="@+id/distance_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="SwitchClick"
-            android:padding="8dp"
-            android:text="@string/distance" />
-
-        <TextView
-            android:id="@+id/distanceStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
-
-        <Switch
-            android:id="@+id/gsr_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="SwitchClick"
-            android:padding="8dp"
-            android:text="@string/gsr" />
-
-        <RadioGroup
-            android:id="@+id/gsr_radioGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp">
-
-            <RadioButton
-                android:id="@+id/gsr_ms200"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="200 Hz" />
-
-            <RadioButton
-                android:id="@+id/gsr_ms5000"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:checked="true"
-                android:text="5000 Hz" />
-        </RadioGroup>
-
-        <TextView
-            android:id="@+id/gsrStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
-
-        <Switch
-            android:id="@+id/gyroscope_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="SwitchClick"
-            android:padding="8dp"
-            android:text="@string/gyroscope" />
-
-        <RadioGroup
-            android:id="@+id/gyroscope_radioGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp">
-
-            <RadioButton
-                android:id="@+id/gyroscope_ms16"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="16 Hz" />
-
-            <RadioButton
-                android:id="@+id/gyroscope_ms32"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="32 Hz" />
-
-            <RadioButton
-                android:id="@+id/gyroscope_ms128"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:checked="true"
-                android:text="128 Hz" />
-        </RadioGroup>
-
-        <TextView
-            android:id="@+id/gyroscopeStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
-
-        <Switch
-            android:id="@+id/heart_rate_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="SwitchClick"
-            android:padding="8dp"
-            android:text="@string/heart_rate" />
-
-        <TextView
-            android:id="@+id/heartStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
-
-        <Switch
-            android:id="@+id/pedometer_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="SwitchClick"
-            android:padding="8dp"
-            android:text="@string/pedometer" />
-
-        <TextView
-            android:id="@+id/pedometerStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
-
-        <Switch
-            android:id="@+id/rr_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="SwitchClick"
-            android:padding="8dp"
-            android:text="@string/rr" />
-
-        <TextView
-            android:id="@+id/rrStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
-
-        <Switch
-            android:id="@+id/temperature_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="SwitchClick"
-            android:padding="8dp"
-            android:text="@string/temperature" />
-
-        <TextView
-            android:id="@+id/temperatureStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
-
-        <Switch
-            android:id="@+id/UV_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="SwitchClick"
-            android:padding="8dp"
-            android:text="@string/uv" />
-
-        <TextView
-            android:id="@+id/UVStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
+        <include
+            android:id="@+id/uv_card"
+            layout="@layout/sensor_cardview" />
     </LinearLayout>
 </ScrollView>

@@ -36,12 +36,15 @@ public class GsrEventListener implements BandGsrEventListener {
                     @Override
                     public void run() {
                         SensorActivity.series1.appendData(new DataPoint(SensorActivity.graphLastValueX,
-                                (double) event.getResistance()), true, 100);
+                                (double) event.getResistance()), true, 30);
                         SensorActivity.graphLastValueX += 1;
                     }
                 });
 
-            SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.resistance) + String.format(" = %d kOhms\n", event.getResistance()), SensorsFragment.gsrTV);
+            SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.resistance)
+                    + String.format(" = %d kOhms\n",
+                    event.getResistance()), textView);
+
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "GSR");
                 if (file.exists() || file.isDirectory()) {

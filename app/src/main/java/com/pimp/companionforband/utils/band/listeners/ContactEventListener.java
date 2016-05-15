@@ -19,19 +19,18 @@ import java.util.Date;
 public class ContactEventListener implements BandContactEventListener {
 
     TextView textView;
+    boolean graph;
 
-    public ContactEventListener(TextView textView) {
+    public void setViews(TextView textView, boolean graph) {
         this.textView = textView;
-    }
-
-    public void setTextView(TextView textView) {
-        this.textView = textView;
+        this.graph = graph;
     }
 
     @Override
     public void onBandContactChanged(BandContactEvent bandContactEvent) {
         if (bandContactEvent != null) {
             SensorsFragment.appendToUI(MainActivity.sContext.getString(R.string.contact_status) + " = " + bandContactEvent.getContactState(), textView);
+
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Contact");
                 if (file.exists() || file.isDirectory()) {

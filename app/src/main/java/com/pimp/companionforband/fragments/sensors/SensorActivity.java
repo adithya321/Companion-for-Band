@@ -1,5 +1,6 @@
 package com.pimp.companionforband.fragments.sensors;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,25 +9,40 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.OnDataPointTapListener;
+import com.jjoe64.graphview.series.Series;
 import com.microsoft.band.sensors.GsrSampleRate;
 import com.microsoft.band.sensors.SampleRate;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
 import com.pimp.companionforband.utils.band.listeners.AccelerometerEventListener;
+import com.pimp.companionforband.utils.band.listeners.AltimeterEventListener;
+import com.pimp.companionforband.utils.band.listeners.AmbientLightEventListener;
+import com.pimp.companionforband.utils.band.listeners.BarometerEventListener;
+import com.pimp.companionforband.utils.band.listeners.CaloriesEventListener;
+import com.pimp.companionforband.utils.band.listeners.ContactEventListener;
+import com.pimp.companionforband.utils.band.listeners.DistanceEventListener;
 import com.pimp.companionforband.utils.band.listeners.GsrEventListener;
 import com.pimp.companionforband.utils.band.listeners.GyroscopeEventListener;
+import com.pimp.companionforband.utils.band.listeners.HeartRateEventListener;
+import com.pimp.companionforband.utils.band.listeners.PedometerEventListener;
+import com.pimp.companionforband.utils.band.listeners.RRIntervalEventListener;
+import com.pimp.companionforband.utils.band.listeners.SkinTemperatureEventListener;
+import com.pimp.companionforband.utils.band.listeners.UVEventListener;
 
 public class SensorActivity extends AppCompatActivity {
 
+    public static Activity sActivity;
     String sensorName;
     TextView nameTV, dataTV, detailsTV;
-    CardView optionsCV;
+    CardView optionsCV, graphCV;
     RadioButton option1, option2, option3;
     public static GraphView graphView;
     public static LineGraphSeries<DataPoint> series1, series2, series3;
@@ -38,6 +54,8 @@ public class SensorActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_sensor);
 
+        sActivity = this;
+
         getInitialConfiguration();
         setInitialConfiguration();
         setScreenElements();
@@ -47,15 +65,52 @@ public class SensorActivity extends AppCompatActivity {
                 case "Accelerometer":
                     setAccelerometerConfiguration();
                     break;
+                case "Altimeter":
+                    setAltimeterConfiguration();
+                    break;
+                case "Ambient Light":
+                    setAmbientLightConfiguration();
+                    break;
+                case "Barometer":
+                    setBarometerConfiguration();
+                    break;
+                case "Calories":
+                    graphCV.setVisibility(View.GONE);
+                    setCaloriesConfiguration();
+                    break;
+                case "Contact":
+                    graphCV.setVisibility(View.GONE);
+                    setContactConfiguration();
+                    break;
+                case "Distance":
+                    setDistanceConfiguration();
+                    break;
+                case "GSR":
+                    setGsrConfiguration();
+                    break;
                 case "Gyroscope":
                     setGyroscopeConfiguration();
                     break;
-                case "GSR":
-                    setGSRConfiguration();
+                case "Heart Rate":
+                    setHeartRateConfiguration();
+                    break;
+                case "Pedometer":
+                    graphCV.setVisibility(View.GONE);
+                    setPedometerConfiguration();
+                    break;
+                case "RR Interval":
+                    setRRIntervalConfiguration();
+                    break;
+                case "Skin Temperature":
+                    setSkinTemperatureConfiguration();
+                    break;
+                case "UV":
+                    graphCV.setVisibility(View.GONE);
+                    setUVConfiguration();
                     break;
             }
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+            //
         }
     }
 
@@ -87,6 +142,7 @@ public class SensorActivity extends AppCompatActivity {
         option1 = (RadioButton) findViewById(R.id.option_1);
         option2 = (RadioButton) findViewById(R.id.option_2);
         option3 = (RadioButton) findViewById(R.id.option_3);
+        graphCV = (CardView) findViewById(R.id.graph_card);
         graphView = (GraphView) findViewById(R.id.sensor_graph);
         detailsTV = (TextView) findViewById(R.id.sensor_details);
 
@@ -95,18 +151,48 @@ public class SensorActivity extends AppCompatActivity {
         option1.setOnClickListener(optionsRadioButtonClickListener);
         option2.setOnClickListener(optionsRadioButtonClickListener);
         option3.setOnClickListener(optionsRadioButtonClickListener);
+
+        series1 = new LineGraphSeries<>();
+        series1.setColor(getResources().getColor(R.color.accent));
+        series1.setOnDataPointTapListener(new OnDataPointTapListener() {
+            @Override
+            public void onTap(Series series, DataPointInterface dataPoint) {
+                detailsTV.setText(dataPoint.toString());
+            }
+        });
+        series2 = new LineGraphSeries<>();
+        series2.setColor(getResources().getColor(R.color.primary_dark));
+        series3 = new LineGraphSeries<>();
+        series3.setColor(getResources().getColor(R.color.primary_light));
+        graphView.addSeries(series1);
+        graphView.addSeries(series2);
+        graphView.addSeries(series3);
+        graphView.getGridLabelRenderer().setVerticalLabelsVisible(false);
+        graphView.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+        graphView.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.NONE);
+
         switch (sensorName) {
             case "Accelerometer":
                 optionsCV.setVisibility(View.VISIBLE);
                 option1.setChecked(MainActivity.sharedPreferences.getInt("acc_hz", 13) == 11);
                 option2.setChecked(MainActivity.sharedPreferences.getInt("acc_hz", 13) == 12);
                 option3.setChecked(MainActivity.sharedPreferences.getInt("acc_hz", 13) == 13);
+                series1.setTitle("X");
+                series2.setTitle("Y");
+                series3.setTitle("Z");
+                graphView.getLegendRenderer().setVisible(true);
+                graphView.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.BOTTOM);
                 break;
             case "Gyroscope":
                 optionsCV.setVisibility(View.VISIBLE);
                 option1.setChecked(MainActivity.sharedPreferences.getInt("gyr_hz", 23) == 21);
                 option2.setChecked(MainActivity.sharedPreferences.getInt("gyr_hz", 23) == 22);
                 option3.setChecked(MainActivity.sharedPreferences.getInt("gyr_hz", 23) == 23);
+                series1.setTitle("X");
+                series2.setTitle("Y");
+                series3.setTitle("Z");
+                graphView.getLegendRenderer().setVisible(true);
+                graphView.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.BOTTOM);
                 break;
             case "GSR":
                 optionsCV.setVisibility(View.VISIBLE);
@@ -119,19 +205,6 @@ public class SensorActivity extends AppCompatActivity {
                 option3.setVisibility(View.GONE);
                 break;
         }
-
-        series1 = new LineGraphSeries<>();
-        series1.setColor(getResources().getColor(R.color.accent));
-        series2 = new LineGraphSeries<>();
-        series2.setColor(getResources().getColor(R.color.primary_dark));
-        series3 = new LineGraphSeries<>();
-        series3.setColor(getResources().getColor(R.color.primary_light));
-        graphView.addSeries(series1);
-        graphView.addSeries(series2);
-        graphView.addSeries(series3);
-        graphView.getGridLabelRenderer().setVerticalLabelsVisible(false);
-        graphView.getGridLabelRenderer().setHorizontalLabelsVisible(false);
-        graphView.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.NONE);
     }
 
     @Override
@@ -214,6 +287,7 @@ public class SensorActivity extends AppCompatActivity {
     };
 
     void setAccelerometerConfiguration() throws Exception {
+        detailsTV.setText(getString(R.string.accelerometer_details));
         ((AccelerometerEventListener) SensorsFragment.bandAccelerometerEventListener)
                 .setViews(dataTV, true);
         switch (MainActivity.sharedPreferences.getInt("acc_hz", 13)) {
@@ -229,10 +303,70 @@ public class SensorActivity extends AppCompatActivity {
                 MainActivity.client.getSensorManager().registerAccelerometerEventListener(
                         SensorsFragment.bandAccelerometerEventListener, SampleRate.MS128);
         }
-        detailsTV.setText(getString(R.string.accelerometer_details));
+    }
+
+    void setAltimeterConfiguration() throws Exception {
+        detailsTV.setText(getString(R.string.altimeter_details));
+        ((AltimeterEventListener) SensorsFragment.bandAltimeterEventListener)
+                .setViews(dataTV, true);
+        MainActivity.client.getSensorManager().registerAltimeterEventListener(
+                SensorsFragment.bandAltimeterEventListener);
+    }
+
+    void setAmbientLightConfiguration() throws Exception {
+        detailsTV.setText(getString(R.string.ambientLight_details));
+        ((AmbientLightEventListener) SensorsFragment.bandAmbientLightEventListener)
+                .setViews(dataTV, true);
+        MainActivity.client.getSensorManager().registerAmbientLightEventListener(
+                SensorsFragment.bandAmbientLightEventListener);
+    }
+
+    void setBarometerConfiguration() throws Exception {
+        detailsTV.setText(getString(R.string.barometer_details));
+        ((BarometerEventListener) SensorsFragment.bandBarometerEventListener)
+                .setViews(dataTV, true);
+        MainActivity.client.getSensorManager().registerBarometerEventListener(
+                SensorsFragment.bandBarometerEventListener);
+    }
+
+    void setCaloriesConfiguration() throws Exception {
+        detailsTV.setText(getString(R.string.calories_details));
+        ((CaloriesEventListener) SensorsFragment.bandCaloriesEventListener)
+                .setViews(dataTV, true);
+        MainActivity.client.getSensorManager().registerCaloriesEventListener(
+                SensorsFragment.bandCaloriesEventListener);
+    }
+
+    void setContactConfiguration() throws Exception {
+        detailsTV.setText(getString(R.string.contact_details));
+        ((ContactEventListener) SensorsFragment.bandContactEventListener)
+                .setViews(dataTV, true);
+        MainActivity.client.getSensorManager().registerContactEventListener(
+                SensorsFragment.bandContactEventListener);
+    }
+
+    void setDistanceConfiguration() throws Exception {
+        detailsTV.setText(getString(R.string.distance_details));
+        ((DistanceEventListener) SensorsFragment.bandDistanceEventListener)
+                .setViews(dataTV, true);
+        MainActivity.client.getSensorManager().registerDistanceEventListener(
+                SensorsFragment.bandDistanceEventListener);
+    }
+
+    void setGsrConfiguration() throws Exception {
+        detailsTV.setText(getString(R.string.gsr_details));
+        ((GsrEventListener) SensorsFragment.bandGsrEventListener)
+                .setViews(dataTV, true);
+        if (MainActivity.sharedPreferences.getInt("gsr_hz", 31) == 31)
+            MainActivity.client.getSensorManager().registerGsrEventListener(
+                    SensorsFragment.bandGsrEventListener, GsrSampleRate.MS200);
+        else
+            MainActivity.client.getSensorManager().registerGsrEventListener(
+                    SensorsFragment.bandGsrEventListener, GsrSampleRate.MS5000);
     }
 
     void setGyroscopeConfiguration() throws Exception {
+        detailsTV.setText(getString(R.string.gyroscope_details));
         ((GyroscopeEventListener) SensorsFragment.bandGyroscopeEventListener)
                 .setViews(dataTV, true);
         switch (MainActivity.sharedPreferences.getInt("gyr_hz", 23)) {
@@ -248,18 +382,45 @@ public class SensorActivity extends AppCompatActivity {
                 MainActivity.client.getSensorManager().registerGyroscopeEventListener(
                         SensorsFragment.bandGyroscopeEventListener, SampleRate.MS128);
         }
-        detailsTV.setText(getString(R.string.gyroscope_details));
     }
 
-    void setGSRConfiguration() throws Exception {
-        ((GsrEventListener) SensorsFragment.bandGsrEventListener)
+    void setHeartRateConfiguration() throws Exception {
+        detailsTV.setText(getString(R.string.heartRate_details));
+        ((HeartRateEventListener) SensorsFragment.bandHeartRateEventListener)
                 .setViews(dataTV, true);
-        if (MainActivity.sharedPreferences.getInt("gsr_hz", 31) == 31)
-            MainActivity.client.getSensorManager().registerGsrEventListener(
-                    SensorsFragment.bandGsrEventListener, GsrSampleRate.MS200);
-        else
-            MainActivity.client.getSensorManager().registerGsrEventListener(
-                    SensorsFragment.bandGsrEventListener, GsrSampleRate.MS5000);
-        detailsTV.setText(getString(R.string.gsr_details));
+        MainActivity.client.getSensorManager().registerHeartRateEventListener(
+                SensorsFragment.bandHeartRateEventListener);
+    }
+
+    void setPedometerConfiguration() throws Exception {
+        detailsTV.setText(getString(R.string.pedometer_details));
+        ((PedometerEventListener) SensorsFragment.bandPedometerEventListener)
+                .setViews(dataTV, true);
+        MainActivity.client.getSensorManager().registerPedometerEventListener(
+                SensorsFragment.bandPedometerEventListener);
+    }
+
+    void setRRIntervalConfiguration() throws Exception {
+        detailsTV.setText(getString(R.string.rrInterval_details));
+        ((RRIntervalEventListener) SensorsFragment.bandRRIntervalEventListener)
+                .setViews(dataTV, true);
+        MainActivity.client.getSensorManager().registerRRIntervalEventListener(
+                SensorsFragment.bandRRIntervalEventListener);
+    }
+
+    void setSkinTemperatureConfiguration() throws Exception {
+        detailsTV.setText(getString(R.string.skinTemperature_details));
+        ((SkinTemperatureEventListener) SensorsFragment.bandSkinTemperatureEventListener)
+                .setViews(dataTV, true);
+        MainActivity.client.getSensorManager().registerSkinTemperatureEventListener(
+                SensorsFragment.bandSkinTemperatureEventListener);
+    }
+
+    void setUVConfiguration() throws Exception {
+        detailsTV.setText(getString(R.string.uv_details));
+        ((UVEventListener) SensorsFragment.bandUVEventListener)
+                .setViews(dataTV, true);
+        MainActivity.client.getSensorManager().registerUVEventListener(
+                SensorsFragment.bandUVEventListener);
     }
 }
