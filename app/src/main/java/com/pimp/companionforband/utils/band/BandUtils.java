@@ -13,6 +13,8 @@ public class BandUtils extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... params) {
         try {
             if (getConnectedBandClient()) {
+                MainActivity.appendToUI(MainActivity.sContext.getString(R.string.band_connected),
+                        "Style.CONFIRM");
                 MainActivity.band2 = Integer.parseInt(MainActivity.client
                         .getHardwareVersion().await()) >= 20;
                 MainActivity.editor.putString("device_name", MainActivity.devices[0].getName());
@@ -41,8 +43,6 @@ public class BandUtils extends AsyncTask<Void, Void, Void> {
             MainActivity.client = BandClientManager.getInstance().create(MainActivity.sContext,
                     MainActivity.devices[0]);
         } else if (ConnectionState.CONNECTED == MainActivity.client.getConnectionState()) {
-            MainActivity.appendToUI(MainActivity.sContext.getString(R.string.band_connected),
-                    "Style.CONFIRM");
             return true;
         }
 
