@@ -16,7 +16,7 @@
 <a href="https://play.google.com/store/apps/details?id=com.pimp.companionforband"><img src="https://img.shields.io/badge/downloads-5k%2B-lightgrey.svg" alt="Total Downloads"></a>
 </p>
 
-<table>
+<table  border="0" cellpadding="0" cellspacing="0">
 <tr>
 <td><img src="https://raw.githubusercontent.com/adithya321/Companion-for-Band/master/SCREENSHOTS/Play%20Store/theme.jpg"/></td>
 <td><img src="https://raw.githubusercontent.com/adithya321/Companion-for-Band/master/SCREENSHOTS/Play%20Store/sensor2.jpg"/></td>
