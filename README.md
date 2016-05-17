@@ -16,6 +16,19 @@
 <a href="https://play.google.com/store/apps/details?id=com.pimp.companionforband"><img src="https://img.shields.io/badge/downloads-5k%2B-lightgrey.svg" alt="Total Downloads"></a>
 </p>
 
+<table>
+<tr>
+<td><img src="https://raw.githubusercontent.com/adithya321/Companion-for-Band/master/SCREENSHOTS/Play%20Store/theme.jpg"/></td>
+<td><img src="https://raw.githubusercontent.com/adithya321/Companion-for-Band/master/SCREENSHOTS/Play%20Store/sensor2.jpg"/></td>
+<td><img src="https://raw.githubusercontent.com/adithya321/Companion-for-Band/master/SCREENSHOTS/Play%20Store/sensor3.jpg"/></td>
+</tr>
+<tr>
+<td><img src="https://raw.githubusercontent.com/adithya321/Companion-for-Band/master/SCREENSHOTS/Play%20Store/sensor1.jpg"/></td>
+<td><img src="https://raw.githubusercontent.com/adithya321/Companion-for-Band/master/SCREENSHOTS/Play%20Store/extras1.jpg"/></td>
+<td><img src="https://raw.githubusercontent.com/adithya321/Companion-for-Band/master/SCREENSHOTS/Play%20Store/extras2.jpg"/></td>
+</tr>
+</table>
+
 ### Features
 * Change Me Tile image and Theme Colors
 * View live feed of all sensors and log them to CSV file even in background
