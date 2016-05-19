@@ -233,4 +233,6 @@ The data returned should be used only in resting mode. The SDK doesn’t provide
 
     <string name="action_hide">Unregister Sensor</string>
     <string name="action_show">Register Sensor</string>
+
+    <string name="drawer_cloud">Cloud</string>
 </resources>

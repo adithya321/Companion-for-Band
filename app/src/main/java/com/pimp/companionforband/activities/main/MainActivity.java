@@ -55,6 +55,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 import com.pimp.companionforband.AnalyticsApplication;
 import com.pimp.companionforband.R;
+import com.pimp.companionforband.activities.cloud.WebviewActivity;
 import com.pimp.companionforband.activities.donate.DonateActivity;
 import com.pimp.companionforband.activities.support.ChangelogActivity;
 import com.pimp.companionforband.activities.support.GittyActivity;
@@ -363,6 +364,8 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                 .withActionBarDrawerToggleAnimated(true)
                 .withAccountHeader(accountHeader)
                 .addDrawerItems(
+                        new PrimaryDrawerItem().withName(getString(R.string.drawer_cloud)).withIcon(GoogleMaterial.Icon.gmd_cloud).withIdentifier(1),
+                        new DividerDrawerItem(),
                         new PrimaryDrawerItem().withName(getString(R.string.rate)).withIcon(GoogleMaterial.Icon.gmd_rate_review).withIdentifier(2),
                         new PrimaryDrawerItem().withName(getString(R.string.feedback)).withIcon(GoogleMaterial.Icon.gmd_feedback).withIdentifier(3),
                         new DividerDrawerItem(),
@@ -382,6 +385,14 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                         if (drawerItem != null) {
                             flag = true;
                             switch ((int) drawerItem.getIdentifier()) {
+                                case 1:
+                                    mTracker.send(new HitBuilders.EventBuilder()
+                                            .setCategory("Action")
+                                            .setAction("Cloud")
+                                            .build());
+
+                                    startActivity(new Intent(getApplicationContext(), WebviewActivity.class));
+                                    break;
                                 case 2:
                                     mTracker.send(new HitBuilders.EventBuilder()
                                             .setCategory("Action")

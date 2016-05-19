@@ -75,6 +75,7 @@ dependencies {
     compile 'com.ragnarok.rxcamera:lib:0.0.3'
     compile 'com.robinhood.spark:spark:1.1.0'
     compile 'com.yalantis:ucrop:1.5.0'
+    compile 'com.android.volley:volley:1.0.0'
 
     compile 'com.android.support:palette-v7:23.4.0'
     compile 'com.android.support:appcompat-v7:23.4.0'
