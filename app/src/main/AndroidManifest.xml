@@ -74,7 +74,7 @@
             android:theme="@style/MaterialDrawerTheme" />
 
         <activity
-            android:name=".activities.cloud.WebviewActivity"
-            android:theme="@style/MaterialDrawerTheme.ActionBar" />
+            android:name=".activities.cloud.CloudActivity"
+            android:theme="@style/MaterialDrawerTheme" />
     </application>
 </manifest>

@@ -55,7 +55,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 import com.pimp.companionforband.AnalyticsApplication;
 import com.pimp.companionforband.R;
-import com.pimp.companionforband.activities.cloud.WebviewActivity;
+import com.pimp.companionforband.activities.cloud.CloudActivity;
 import com.pimp.companionforband.activities.donate.DonateActivity;
 import com.pimp.companionforband.activities.support.ChangelogActivity;
 import com.pimp.companionforband.activities.support.GittyActivity;
@@ -391,7 +391,7 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                                             .setAction("Cloud")
                                             .build());
 
-                                    startActivity(new Intent(getApplicationContext(), WebviewActivity.class));
+                                    startActivity(new Intent(getApplicationContext(), CloudActivity.class));
                                     break;
                                 case 2:
                                     mTracker.send(new HitBuilders.EventBuilder()

@@ -235,4 +235,8 @@ The data returned should be used only in resting mode. The SDK doesn’t provide
     <string name="action_show">Register Sensor</string>
 
     <string name="drawer_cloud">Cloud</string>
+
+    <string name="cloud_summaries">SUMMARIES</string>
+    <string name="cloud_activites">ACTIVITIES</string>
+    <string name="cloud_profile">PROFILE</string>
 </resources>

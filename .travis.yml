@@ -13,7 +13,7 @@ android:
   licenses:
   - .+
 before_install:
-- openssl aes-256-cbc -K $encrypted_60a0da6cb2bd_key -iv $encrypted_60a0da6cb2bd_iv
+- openssl aes-256-cbc -K $encrypted_9492eac0682c_key -iv $encrypted_9492eac0682c_iv
   -in app/ignore.xml.enc -out app/src/main/res-main/values/ignore.xml -d
 - openssl aes-256-cbc -K $encrypted_83fcb329e442_key -iv $encrypted_83fcb329e442_iv
   -in app/google-services.json.enc -out app/google-services.json -d
