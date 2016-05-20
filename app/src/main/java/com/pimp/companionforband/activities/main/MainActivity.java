@@ -2,6 +2,7 @@ package com.pimp.companionforband.activities.main;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,8 +28,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,10 +59,12 @@ import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 import com.pimp.companionforband.AnalyticsApplication;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.cloud.CloudActivity;
-import com.pimp.companionforband.activities.donate.DonateActivity;
 import com.pimp.companionforband.activities.support.ChangelogActivity;
 import com.pimp.companionforband.activities.support.GittyActivity;
 import com.pimp.companionforband.utils.band.BandUtils;
+import com.pimp.companionforband.utils.iab.IabHelper;
+import com.pimp.companionforband.utils.iab.IabResult;
+import com.pimp.companionforband.utils.iab.Purchase;
 import com.yalantis.ucrop.UCrop;
 
 import net.rdrei.android.dirchooser.DirectoryChooserConfig;
@@ -143,6 +148,45 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
         @Override
         public boolean onLibraryBottomLongClicked(View v, Library library) {
             return false;
+        }
+    };
+    IabHelper mHelper;
+    String SKU_COKE = "cfb_coke", SKU_COFFEE = "cfb_coffee", SKU_BURGER = "cfb_burger",
+            SKU_PIZZA = "cfb_pizza", SKU_MEAL = "cfb_meal";
+    IabHelper.OnConsumeFinishedListener mConsumeFinishedListener = new IabHelper.OnConsumeFinishedListener() {
+        public void onConsumeFinished(Purchase purchase, IabResult result) {
+            if (mHelper == null) return;
+
+            AlertDialog.Builder bld = new AlertDialog.Builder(getApplicationContext());
+            bld.setNeutralButton("OK", null);
+            if (result.isSuccess()) {
+                bld.setMessage("Thank You");
+                bld.create().show();
+            } else {
+                bld.setMessage(result.toString());
+                bld.create().show();
+            }
+        }
+    };
+    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+            if (mHelper == null) return;
+
+            if (result.isFailure()) {
+                AlertDialog.Builder bld = new AlertDialog.Builder(getApplicationContext());
+                bld.setMessage("Error purchasing : " + result);
+                bld.setNeutralButton("OK", null);
+                bld.create().show();
+                return;
+            }
+
+            if (purchase.getSku().equals(SKU_COKE)
+                    || purchase.getSku().equals(SKU_COFFEE)
+                    || purchase.getSku().equals(SKU_BURGER)
+                    || purchase.getSku().equals(SKU_PIZZA)
+                    || purchase.getSku().equals(SKU_MEAL)) {
+                mHelper.consumeAsync(purchase, mConsumeFinishedListener);
+            }
         }
     };
     private Switch logSwitch, backgroundLogSwitch;
@@ -462,7 +506,52 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                                             .setCategory("Action")
                                             .setAction("Donate")
                                             .build());
-                                    startActivity(new Intent(MainActivity.this, DonateActivity.class));
+
+                                    String base64EncodedPublicKey = getString(R.string.base64);
+                                    mHelper = new IabHelper(getApplicationContext(), base64EncodedPublicKey);
+                                    mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+                                        public void onIabSetupFinished(IabResult result) {
+                                            if (!result.isSuccess()) {
+                                                Toast.makeText(MainActivity.this,
+                                                        "Problem setting up In-app Billing: " + result,
+                                                        Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
+
+                                    final Dialog dialog = new Dialog(MainActivity.this);
+                                    dialog.setContentView(R.layout.dialog_donate);
+                                    dialog.setTitle("Donate");
+
+                                    String[] title = {"Coke", "Coffee", "Burger", "Pizza", "Meal"};
+                                    String[] price = {"Rs. 10.00", "Rs. 50.00", "Rs. 100.00", "Rs. 500.00", "Rs. 1,000.00"};
+
+                                    ListView listView = (ListView) dialog.findViewById(R.id.list);
+                                    listView.setAdapter(new DonateListAdapter(MainActivity.this, title, price));
+                                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                            switch (position) {
+                                                case 0:
+                                                    mHelper.launchPurchaseFlow(MainActivity.this, SKU_COKE, 1, mPurchaseFinishedListener, "payload");
+                                                    break;
+                                                case 1:
+                                                    mHelper.launchPurchaseFlow(MainActivity.this, SKU_COFFEE, 1, mPurchaseFinishedListener, "payload");
+                                                    break;
+                                                case 2:
+                                                    mHelper.launchPurchaseFlow(MainActivity.this, SKU_BURGER, 1, mPurchaseFinishedListener, "payload");
+                                                    break;
+                                                case 3:
+                                                    mHelper.launchPurchaseFlow(MainActivity.this, SKU_PIZZA, 1, mPurchaseFinishedListener, "payload");
+                                                    break;
+                                                case 4:
+                                                    mHelper.launchPurchaseFlow(MainActivity.this, SKU_MEAL, 1, mPurchaseFinishedListener, "payload");
+                                                    break;
+                                            }
+                                        }
+                                    });
+
+                                    dialog.show();
                                     break;
                                 case 8:
                                     mTracker.send(new HitBuilders.EventBuilder()

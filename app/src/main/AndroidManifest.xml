@@ -43,9 +43,6 @@
         </receiver>
 
         <activity
-            android:name=".activities.donate.DonateActivity"
-            android:theme="@style/MaterialDrawerTheme.ActionBar" />
-        <activity
             android:name=".activities.support.ChangelogActivity"
             android:theme="@style/MaterialDrawerTheme.ActionBar" />
 

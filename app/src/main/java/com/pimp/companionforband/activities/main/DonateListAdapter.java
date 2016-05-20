@@ -1,4 +1,4 @@
-package com.pimp.companionforband.activities.donate;
+package com.pimp.companionforband.activities.main;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,15 +9,15 @@ import android.widget.TextView;
 
 import com.pimp.companionforband.R;
 
-public class CustomAdapter extends BaseAdapter {
+public class DonateListAdapter extends BaseAdapter {
     String[] title, amount;
     Context context;
     private LayoutInflater inflater;
 
-    public CustomAdapter(DonateActivity donateActivity, String[] name, String[] price) {
+    public DonateListAdapter(MainActivity mainActivity, String[] name, String[] price) {
         title = name;
         amount = price;
-        context = donateActivity;
+        context = mainActivity;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
