@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
+    <changelogversion changeDate="MAY 20, 2016" versionName="2.8.0">
+        <changelogimprovement>Log MS Health activities and summaries</changelogimprovement>
+    </changelogversion>
+
     <changelogversion changeDate="MAY 16, 2016" versionName="2.7.0">
         <changelogimprovement>Improved Sensors UI</changelogimprovement>
         <changelogbug>Fix 'Pick Me Tile' bug</changelogbug>

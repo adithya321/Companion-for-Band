@@ -22,8 +22,8 @@ android {
         applicationId "com.pimp.companionforband"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 28
-        versionName "2.7.0"
+        versionCode 29
+        versionName "2.8.0"
     }
 
     buildTypes {

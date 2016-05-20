@@ -8,7 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -28,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -35,7 +39,10 @@ import java.util.Map;
 
 public class SummariesFragment extends Fragment {
 
-    TextView summariesTV, statusTV;
+    TextView statusTV;
+    ListView summariesLV;
+    ArrayAdapter<String> stringArrayAdapter;
+    ArrayList<String> stringArrayList;
 
     @Nullable
     @Override
@@ -47,8 +54,12 @@ public class SummariesFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        summariesTV = (TextView) view.findViewById(R.id.summaries_textview);
+        summariesLV = (ListView) view.findViewById(R.id.summaries_listview);
         statusTV = (TextView) view.findViewById(R.id.status_textview);
+        stringArrayList = new ArrayList<>();
+        stringArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.activities_list_item,
+                R.id.list_item_textView, stringArrayList);
+        summariesLV.setAdapter(stringArrayAdapter);
 
         RequestQueue queue = Volley.newRequestQueue(getContext());
 
@@ -84,22 +95,23 @@ public class SummariesFragment extends Fragment {
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject activity = jsonArray.getJSONObject(i);
                                     Iterator<String> iterator = activity.keys();
+                                    String str = "";
                                     while (iterator.hasNext()) {
                                         key = iterator.next();
-                                        summariesTV.append(UIUtils.splitCamelCase(key) + " : ");
-                                        summariesTV.append(activity.get(key).toString() + "\n");
+                                        str = str + UIUtils.splitCamelCase(key) + " : "
+                                                + activity.get(key).toString() + "\n";
                                     }
-                                    summariesTV.append("\n\n");
+                                    stringArrayAdapter.add(str);
                                 }
                             } catch (Exception e) {
-                                summariesTV.append(e.toString());
+                                Log.e("Summaries", e.toString());
                             }
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                summariesTV.setText(error.getMessage());
+                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_LONG).show();
             }
         }) {
             @Override
