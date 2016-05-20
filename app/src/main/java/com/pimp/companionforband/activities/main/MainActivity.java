@@ -61,6 +61,7 @@ import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.cloud.CloudActivity;
 import com.pimp.companionforband.activities.support.ChangelogActivity;
 import com.pimp.companionforband.activities.support.GittyActivity;
+import com.pimp.companionforband.activities.cloud.WebviewActivity;
 import com.pimp.companionforband.utils.band.BandUtils;
 import com.pimp.companionforband.utils.iab.IabHelper;
 import com.pimp.companionforband.utils.iab.IabResult;
@@ -344,6 +345,7 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -435,7 +437,10 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                                             .setAction("Cloud")
                                             .build());
 
-                                    startActivity(new Intent(getApplicationContext(), CloudActivity.class));
+                                    if (!sharedPreferences.getString("access_token", "hi").equals("hi"))
+                                        startActivity(new Intent(getApplicationContext(), CloudActivity.class));
+                                    else
+                                        startActivity(new Intent(getApplicationContext(), WebviewActivity.class));
                                     break;
                                 case 2:
                                     mTracker.send(new HitBuilders.EventBuilder()

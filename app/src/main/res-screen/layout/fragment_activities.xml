@@ -17,7 +17,7 @@
             android:textAppearance="?android:textAppearanceLarge" />
 
         <TextView
-            android:id="@+id/summaries_textview"
+            android:id="@+id/activities_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceMedium" />

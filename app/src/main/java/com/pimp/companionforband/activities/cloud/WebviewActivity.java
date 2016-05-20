@@ -1,20 +1,18 @@
-package com.pimp.companionforband.fragments.cloud;
+package com.pimp.companionforband.activities.cloud;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pimp.companionforband.R;
-import com.pimp.companionforband.activities.cloud.JsonAccessTokenExtractor;
 import com.pimp.companionforband.activities.main.MainActivity;
 
 import java.io.IOException;
@@ -24,9 +22,8 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class WebviewFragment extends Fragment {
+public class WebviewActivity extends AppCompatActivity {
 
-    public static TextView mTextView;
     String codeRequestUrl = "https://login.live.com/oauth20_authorize.srf?" +
             "client_id=$1" +
             "&scope=mshealth.ReadProfile mshealth.ReadActivityHistory mshealth.ReadDevices " +
@@ -41,17 +38,15 @@ public class WebviewFragment extends Fragment {
             "&grant_type=authorization_code";
 
     String code;
-    String accessToken;
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_webview, container, false);
-    }
+    String accessToken, refreshToken;
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_webview);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         codeRequestUrl = codeRequestUrl
                 .replace("$1", getString(R.string.client_id));
@@ -59,13 +54,19 @@ public class WebviewFragment extends Fragment {
                 .replace("$1", getString(R.string.client_id))
                 .replace("$2", getString(R.string.client_secret));
 
-        WebView myWebView = (WebView) view.findViewById(R.id.webview);
+        WebView myWebView = (WebView) findViewById(R.id.webview);
         myWebView.setWebViewClient(new MyWebViewClient());
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         myWebView.loadUrl(codeRequestUrl);
+    }
 
-        mTextView = (TextView) view.findViewById(R.id.textView);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private class MyWebViewClient extends WebViewClient {
@@ -94,11 +95,20 @@ public class WebviewFragment extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             JsonAccessTokenExtractor jate = new JsonAccessTokenExtractor();
-            accessToken = jate.extract(result);
-            mTextView.setText(accessToken);
+            accessToken = jate.extractAccessToken(result);
+            refreshToken = jate.extractRefreshToken(result);
+            if (accessToken != null) {
+                Toast.makeText(getApplicationContext(), "Authentication Successful",
+                        Toast.LENGTH_LONG).show();
 
-            MainActivity.editor.putString("token", accessToken);
-            MainActivity.editor.apply();
+                MainActivity.editor.putString("access_token", accessToken);
+                MainActivity.editor.putString("refresh_token", refreshToken);
+                MainActivity.editor.apply();
+
+                startActivity(new Intent(getApplicationContext(), CloudActivity.class));
+            } else
+                Toast.makeText(getApplicationContext(), "Authentication Failure",
+                        Toast.LENGTH_LONG).show();
         }
     }
 

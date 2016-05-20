@@ -1,8 +1,10 @@
 package com.pimp.companionforband.fragments.cloud;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,17 +20,22 @@ import com.android.volley.toolbox.Volley;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.cloud.CloudConstants;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.utils.UIUtils;
+import com.pimp.companionforband.utils.jsontocsv.parser.JsonFlattener;
+import com.pimp.companionforband.utils.jsontocsv.writer.CSVWriter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class ProfileFragment extends Fragment {
 
-    TextView profileTV;
+    TextView profileTV, devicesTV;
 
     @Nullable
     @Override
@@ -41,6 +48,7 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         profileTV = (TextView) view.findViewById(R.id.profile_textview);
+        devicesTV = (TextView) view.findViewById(R.id.devices_textview);
 
         RequestQueue queue = Volley.newRequestQueue(getContext());
 
@@ -49,11 +57,22 @@ public class ProfileFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        JsonFlattener parser = new JsonFlattener();
+                        CSVWriter writer = new CSVWriter();
+                        String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+                        try {
+                            List<Map<String, String>> flatJson = parser.parseJson(response.toString());
+                            writer.writeAsCSV(flatJson, path + File.separator + "CompanionForBand"
+                                    + File.separator + "profile.csv");
+                        } catch (Exception e) {
+                            Log.e("profileFragParseJson", e.toString());
+                        }
+
                         Iterator<String> stringIterator = response.keys();
                         while (stringIterator.hasNext()) {
                             try {
                                 String key = stringIterator.next();
-                                profileTV.append(splitCamelCase(key) + " : ");
+                                profileTV.append(UIUtils.splitCamelCase(key) + " : ");
                                 profileTV.append(response.get(key).toString() + "\n\n");
                             } catch (Exception e) {
                                 profileTV.append(e.toString());
@@ -70,7 +89,7 @@ public class ProfileFragment extends Fragment {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Authorization", "Bearer " + MainActivity.sharedPreferences
-                        .getString("token", "hi"));
+                        .getString("access_token", "hi"));
 
                 return headers;
             }
@@ -87,36 +106,48 @@ public class ProfileFragment extends Fragment {
                                 String key = stringIterator.next();
                                 if (key.equals("deviceProfiles")) {
                                     JSONArray jsonArray = response.getJSONArray("deviceProfiles");
+
+                                    JsonFlattener parser = new JsonFlattener();
+                                    CSVWriter writer = new CSVWriter();
+                                    String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+                                    try {
+                                        List<Map<String, String>> flatJson = parser.parseJson(jsonArray.toString());
+                                        writer.writeAsCSV(flatJson, path + File.separator + "CompanionForBand"
+                                                + File.separator + "devices.csv");
+                                    } catch (Exception e) {
+                                        Log.e("profileDevicesParseJson", e.toString());
+                                    }
+
                                     for (int i = 0; i < jsonArray.length(); i++) {
                                         JSONObject device = jsonArray.getJSONObject(i);
                                         Iterator<String> iterator = device.keys();
                                         while (iterator.hasNext()) {
                                             key = iterator.next();
-                                            profileTV.append(splitCamelCase(key) + " : ");
-                                            profileTV.append(device.get(key).toString() + "\n");
+                                            devicesTV.append(UIUtils.splitCamelCase(key) + " : ");
+                                            devicesTV.append(device.get(key).toString() + "\n");
                                         }
-                                        profileTV.append("\n\n");
+                                        devicesTV.append("\n\n");
                                     }
                                 } else {
-                                    profileTV.append(splitCamelCase(key) + " : ");
-                                    profileTV.append(response.get(key).toString() + "\n\n");
+                                    devicesTV.append(UIUtils.splitCamelCase(key) + " : ");
+                                    devicesTV.append(response.get(key).toString() + "\n\n");
                                 }
                             } catch (Exception e) {
-                                profileTV.append(e.toString());
+                                devicesTV.append(e.toString());
                             }
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                profileTV.setText(error.getMessage());
+                devicesTV.setText(error.getMessage());
             }
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Authorization", "Bearer " + MainActivity.sharedPreferences
-                        .getString("token", "hi"));
+                        .getString("access_token", "hi"));
 
                 return headers;
             }
@@ -124,15 +155,5 @@ public class ProfileFragment extends Fragment {
 
         queue.add(profileRequest);
         queue.add(devicesRequest);
-    }
-
-    String splitCamelCase(String s) {
-        String str = s.replaceAll(
-                String.format("%s|%s|%s",
-                        "(?<=[A-Z])(?=[A-Z][a-z])",
-                        "(?<=[^A-Z])(?=[A-Z])",
-                        "(?<=[A-Za-z])(?=[^A-Za-z])"
-                ), " ");
-        return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 }

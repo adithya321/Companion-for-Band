@@ -33,32 +33,31 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class SummariesFragment extends Fragment {
+public class ActivitiesFragment extends Fragment {
 
-    TextView summariesTV, statusTV;
+    TextView activitiesTV, statusTV;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_summaries, container, false);
+        return inflater.inflate(R.layout.fragment_activities, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        summariesTV = (TextView) view.findViewById(R.id.summaries_textview);
+        activitiesTV = (TextView) view.findViewById(R.id.activities_textview);
         statusTV = (TextView) view.findViewById(R.id.status_textview);
 
         RequestQueue queue = Volley.newRequestQueue(getContext());
 
-        JsonObjectRequest profileRequest = new JsonObjectRequest(Request.Method.GET,
-                CloudConstants.BASE_URL + CloudConstants.Summaries_URL
-                        + "Daily?startTime=2015-01-01T16%3A04%3A49.8578590-07%3A00", null,
+        JsonObjectRequest activitiesRequest = new JsonObjectRequest(Request.Method.GET,
+                CloudConstants.BASE_URL + CloudConstants.Activities_URL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        statusTV.setText("CSV file can be found in CompanionForBand/Summaries\n");
+                        statusTV.setText("CSV file can be found in CompanionForBand/Activities\n");
 
                         Iterator<String> stringIterator = response.keys();
                         while (stringIterator.hasNext()) {
@@ -68,7 +67,7 @@ public class SummariesFragment extends Fragment {
 
                                 String path = Environment.getExternalStorageDirectory().getAbsolutePath()
                                         + File.separator + "CompanionForBand"
-                                        + File.separator + "Summaries";
+                                        + File.separator + "Activities";
                                 File file = new File(path);
                                 file.mkdirs();
 
@@ -78,7 +77,7 @@ public class SummariesFragment extends Fragment {
                                     List<Map<String, String>> flatJson = parser.parseJson(jsonArray.toString());
                                     writer.writeAsCSV(flatJson, path + File.separator + key + ".csv");
                                 } catch (Exception e) {
-                                    Log.e("SummariesParseJson", e.toString());
+                                    Log.e("ActivitiesParseJson", e.toString());
                                 }
 
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -86,20 +85,20 @@ public class SummariesFragment extends Fragment {
                                     Iterator<String> iterator = activity.keys();
                                     while (iterator.hasNext()) {
                                         key = iterator.next();
-                                        summariesTV.append(UIUtils.splitCamelCase(key) + " : ");
-                                        summariesTV.append(activity.get(key).toString() + "\n");
+                                        activitiesTV.append(UIUtils.splitCamelCase(key) + " : ");
+                                        activitiesTV.append(activity.get(key).toString() + "\n");
                                     }
-                                    summariesTV.append("\n\n");
+                                    activitiesTV.append("\n\n");
                                 }
                             } catch (Exception e) {
-                                summariesTV.append(e.toString());
+                                activitiesTV.append(e.toString());
                             }
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                summariesTV.setText(error.getMessage());
+                activitiesTV.setText(error.getMessage());
             }
         }) {
             @Override
@@ -112,6 +111,6 @@ public class SummariesFragment extends Fragment {
             }
         };
 
-        queue.add(profileRequest);
+        queue.add(activitiesRequest);
     }
 }
