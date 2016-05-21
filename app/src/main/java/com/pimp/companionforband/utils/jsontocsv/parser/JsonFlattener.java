@@ -1,6 +1,5 @@
 package com.pimp.companionforband.utils.jsontocsv.parser;
 
-
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -8,25 +7,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class JsonFlattener {
-    public Map<String, String> parse(JSONObject jsonObject) {
-        Map<String, String> flatJson = new HashMap<String, String>();
+    public LinkedHashMap<String, String> parse(JSONObject jsonObject) {
+        LinkedHashMap<String, String> flatJson = new LinkedHashMap<>();
         flatten(jsonObject, flatJson, "");
         return flatJson;
     }
 
-    public List<Map<String, String>> parse(JSONArray jsonArray) {
-        List<Map<String, String>> flatJson = new ArrayList<Map<String, String>>();
+    public List<LinkedHashMap<String, String>> parse(JSONArray jsonArray) {
+        List<LinkedHashMap<String, String>> flatJson = new ArrayList<>();
         int length = jsonArray.length();
         for (int i = 0; i < length; i++) {
             try {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                Map<String, String> stringMap = parse(jsonObject);
+                LinkedHashMap<String, String> stringMap = parse(jsonObject);
                 flatJson.add(stringMap);
             } catch (Exception e) {
                 Log.e("parseJson", e.toString());
@@ -35,11 +34,11 @@ public class JsonFlattener {
         return flatJson;
     }
 
-    public List<Map<String, String>> parseJson(String json) throws Exception {
-        List<Map<String, String>> flatJson = null;
+    public List<LinkedHashMap<String, String>> parseJson(String json) throws Exception {
+        List<LinkedHashMap<String, String>> flatJson;
         try {
             JSONObject jsonObject = new JSONObject(json);
-            flatJson = new ArrayList<Map<String, String>>();
+            flatJson = new ArrayList<>();
             flatJson.add(parse(jsonObject));
         } catch (JSONException je) {
             flatJson = handleAsArray(json);
@@ -47,8 +46,8 @@ public class JsonFlattener {
         return flatJson;
     }
 
-    private List<Map<String, String>> handleAsArray(String json) throws Exception {
-        List<Map<String, String>> flatJson = null;
+    private List<LinkedHashMap<String, String>> handleAsArray(String json) throws Exception {
+        List<LinkedHashMap<String, String>> flatJson;
         try {
             JSONArray jsonArray = new JSONArray(json);
             flatJson = parse(jsonArray);

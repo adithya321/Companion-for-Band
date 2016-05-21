@@ -69,7 +69,7 @@ dependencies {
         transitive = true
     }
     compile 'com.github.paolorotolo:gitty_reporter:1.2.1'
-    compile('com.mikepenz:materialdrawer:5.2.5@aar') {
+    compile('com.mikepenz:materialdrawer:5.2.6@aar') {
         transitive = true
     }
     compile 'com.ragnarok.rxcamera:lib:0.0.3'
@@ -81,8 +81,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'
-    compile 'com.google.android.gms:play-services-analytics:8.4.0'
-    compile 'com.google.android.gms:play-services-appinvite:8.4.0'
+    compile 'com.google.android.gms:play-services-analytics:9.0.0'
+    compile 'com.google.android.gms:play-services-appinvite:9.0.0'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.10.19'

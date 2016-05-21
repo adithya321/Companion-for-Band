@@ -30,6 +30,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +62,7 @@ public class ProfileFragment extends Fragment {
                         CSVWriter writer = new CSVWriter();
                         String path = Environment.getExternalStorageDirectory().getAbsolutePath();
                         try {
-                            List<Map<String, String>> flatJson = parser.parseJson(response.toString());
+                            List<LinkedHashMap<String, String>> flatJson = parser.parseJson(response.toString());
                             writer.writeAsCSV(flatJson, path + File.separator + "CompanionForBand"
                                     + File.separator + "profile.csv");
                         } catch (Exception e) {
@@ -111,7 +112,7 @@ public class ProfileFragment extends Fragment {
                                     CSVWriter writer = new CSVWriter();
                                     String path = Environment.getExternalStorageDirectory().getAbsolutePath();
                                     try {
-                                        List<Map<String, String>> flatJson = parser.parseJson(jsonArray.toString());
+                                        List<LinkedHashMap<String, String>> flatJson = parser.parseJson(jsonArray.toString());
                                         writer.writeAsCSV(flatJson, path + File.separator + "CompanionForBand"
                                                 + File.separator + "devices.csv");
                                     } catch (Exception e) {

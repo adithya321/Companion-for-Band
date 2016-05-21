@@ -5,19 +5,18 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 import autovalue.shaded.org.apache.commons.lang.StringUtils;
 
 public class CSVWriter {
 
-    public void writeAsCSV(List<Map<String, String>> flatJson, String fileName) throws FileNotFoundException {
-        Set<String> headers = collectHeaders(flatJson);
+    public void writeAsCSV(List<LinkedHashMap<String, String>> flatJson, String fileName) throws FileNotFoundException {
+        LinkedHashSet<String> headers = collectHeaders(flatJson);
         String output = StringUtils.join(headers.toArray(), ",") + "\n";
-        for (Map<String, String> map : flatJson) {
+        for (LinkedHashMap<String, String> map : flatJson) {
             output = output + getCommaSeperatedRow(headers, map) + "\n";
         }
         writeToFile(output, fileName);
@@ -45,8 +44,8 @@ public class CSVWriter {
         }
     }
 
-    private String getCommaSeperatedRow(Set<String> headers, Map<String, String> map) {
-        List<String> items = new ArrayList<String>();
+    private String getCommaSeperatedRow(LinkedHashSet<String> headers, LinkedHashMap<String, String> map) {
+        List<String> items = new ArrayList<>();
         for (String header : headers) {
             String value = map.get(header) == null ? "" : map.get(header).replace(",", "");
             items.add(value);
@@ -54,9 +53,9 @@ public class CSVWriter {
         return StringUtils.join(items.toArray(), ",");
     }
 
-    private Set<String> collectHeaders(List<Map<String, String>> flatJson) {
-        Set<String> headers = new TreeSet<String>();
-        for (Map<String, String> map : flatJson) {
+    private LinkedHashSet<String> collectHeaders(List<LinkedHashMap<String, String>> flatJson) {
+        LinkedHashSet<String> headers = new LinkedHashSet<>();
+        for (LinkedHashMap<String, String> map : flatJson) {
             headers.addAll(map.keySet());
         }
         return headers;
