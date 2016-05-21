@@ -62,6 +62,7 @@ import com.pimp.companionforband.activities.cloud.CloudActivity;
 import com.pimp.companionforband.activities.cloud.WebviewActivity;
 import com.pimp.companionforband.activities.support.ChangelogActivity;
 import com.pimp.companionforband.activities.support.GittyActivity;
+import com.pimp.companionforband.utils.band.BandSensorData;
 import com.pimp.companionforband.utils.band.BandUtils;
 import com.pimp.companionforband.utils.iab.IabHelper;
 import com.pimp.companionforband.utils.iab.IabResult;
@@ -95,6 +96,8 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
 
     public static SharedPreferences sharedPreferences;
     public static SharedPreferences.Editor editor;
+
+    public static BandSensorData bandSensorData;
 
     int base = 0;
     int r, g, b;
@@ -316,6 +319,8 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
 
         sharedPreferences = getApplicationContext().getSharedPreferences("MyPrefs", 0);
         editor = sharedPreferences.edit();
+
+        bandSensorData = new BandSensorData();
 
         mDestinationUri = Uri.fromFile(new File(getCacheDir(), SAMPLE_CROPPED_IMAGE_NAME));
 

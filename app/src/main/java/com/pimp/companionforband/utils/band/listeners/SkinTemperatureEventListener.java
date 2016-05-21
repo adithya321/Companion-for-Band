@@ -19,8 +19,8 @@ import java.util.Date;
 
 public class SkinTemperatureEventListener implements BandSkinTemperatureEventListener {
 
-    TextView textView;
-    boolean graph;
+    private TextView textView;
+    private boolean graph;
 
     public void setViews(TextView textView, boolean graph) {
         this.textView = textView;
@@ -43,6 +43,8 @@ public class SkinTemperatureEventListener implements BandSkinTemperatureEventLis
                     + " = %.2f F", 1.8 * bandSkinTemperatureEvent.getTemperature() + 32), textView);
 
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
+                MainActivity.bandSensorData.setSkinTemperatureData(bandSkinTemperatureEvent);
+
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "SkinTemperature");
                 if (file.exists() || file.isDirectory()) {
                     try {

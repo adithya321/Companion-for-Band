@@ -20,8 +20,8 @@ import java.util.Date;
 
 public class CaloriesEventListener implements BandCaloriesEventListener {
 
-    TextView textView;
-    boolean graph;
+    private TextView textView;
+    private boolean graph;
 
     public void setViews(TextView textView, boolean graph) {
         this.textView = textView;
@@ -51,6 +51,8 @@ public class CaloriesEventListener implements BandCaloriesEventListener {
             }
 
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
+                MainActivity.bandSensorData.setCalorieData(bandCaloriesEvent);
+
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Calories");
                 if (file.exists() || file.isDirectory()) {
                     try {

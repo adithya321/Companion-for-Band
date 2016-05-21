@@ -20,8 +20,8 @@ import java.util.Date;
 
 public class AltimeterEventListener implements BandAltimeterEventListener {
 
-    TextView textView;
-    boolean graph;
+    private TextView textView;
+    private boolean graph;
 
     public void setViews(TextView textView, boolean graph) {
         this.textView = textView;
@@ -66,6 +66,8 @@ public class AltimeterEventListener implements BandAltimeterEventListener {
                         , textView);
 
                 if (MainActivity.sharedPreferences.getBoolean("log", false)) {
+                    MainActivity.bandSensorData.setAltimeterData(event);
+
                     File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Altimeter");
                     if (file.exists() || file.isDirectory()) {
                         try {

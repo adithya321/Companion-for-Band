@@ -33,6 +33,7 @@ import com.microsoft.band.sensors.BandSkinTemperatureEventListener;
 import com.microsoft.band.sensors.BandUVEventListener;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
+import com.pimp.companionforband.utils.band.listeners.AllSensorsAccelerometerEventListener;
 import com.pimp.companionforband.utils.band.listeners.AccelerometerEventListener;
 import com.pimp.companionforband.utils.band.listeners.AltimeterEventListener;
 import com.pimp.companionforband.utils.band.listeners.AmbientLightEventListener;
@@ -62,6 +63,7 @@ public class SensorsFragment extends Fragment {
             caloriesCard, contactCard, distanceCard, gsrCard, gyroscopeCard, heartRateCard,
             pedometerCard, rrIntervalCard, skinTemperatureCard, uvCard;
 
+    public static BandAccelerometerEventListener bandAllSensorsAccelerometerEventListener;
     public static BandAccelerometerEventListener bandAccelerometerEventListener;
     public static BandAltimeterEventListener bandAltimeterEventListener;
     public static BandAmbientLightEventListener bandAmbientLightEventListener;
@@ -111,6 +113,7 @@ public class SensorsFragment extends Fragment {
                 "Contact", "Distance", "GSR", "Gyroscope", "Heart Rate", "Pedometer", "RR Interval",
                 "Skin Temperature", "UV"};
 
+        bandAllSensorsAccelerometerEventListener = new AllSensorsAccelerometerEventListener();
         bandAccelerometerEventListener = new AccelerometerEventListener();
         bandAltimeterEventListener = new AltimeterEventListener();
         bandAmbientLightEventListener = new AmbientLightEventListener();

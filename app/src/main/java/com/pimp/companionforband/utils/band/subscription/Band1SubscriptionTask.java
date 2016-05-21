@@ -15,6 +15,10 @@ public class Band1SubscriptionTask extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... params) {
         try {
             if (BandUtils.getConnectedBandClient()) {
+                if (MainActivity.sharedPreferences.getBoolean("log", false))
+                    MainActivity.client.getSensorManager().registerAccelerometerEventListener
+                            (SensorsFragment.bandAllSensorsAccelerometerEventListener, SampleRate.MS128);
+
                 if (MainActivity.sharedPreferences.getBoolean("Accelerometer", true)) {
                     switch (MainActivity.sharedPreferences.getInt("acc_hz", 13)) {
                         case 11:

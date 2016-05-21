@@ -19,8 +19,8 @@ import java.util.Date;
 
 public class DistanceEventListener implements BandDistanceEventListener {
 
-    TextView textView;
-    boolean graph;
+    private TextView textView;
+    private boolean graph;
 
     public void setViews(TextView textView, boolean graph) {
         this.textView = textView;
@@ -58,6 +58,8 @@ public class DistanceEventListener implements BandDistanceEventListener {
             }
 
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
+                MainActivity.bandSensorData.setDistanceData(bandDistanceEvent);
+
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Distance");
                 if (file.exists() || file.isDirectory()) {
                     try {

@@ -19,8 +19,8 @@ import java.util.Date;
 
 public class UVEventListener implements BandUVEventListener {
 
-    TextView textView;
-    boolean graph;
+    private TextView textView;
+    private boolean graph;
 
     public void setViews(TextView textView, boolean graph) {
         this.textView = textView;
@@ -66,6 +66,8 @@ public class UVEventListener implements BandUVEventListener {
             }
 
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
+                MainActivity.bandSensorData.setUvIndexData(bandUVEvent);
+
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "UV");
                 if (file.exists() || file.isDirectory()) {
                     try {

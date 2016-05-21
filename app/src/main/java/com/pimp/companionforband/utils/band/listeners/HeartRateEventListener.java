@@ -19,8 +19,8 @@ import java.util.Date;
 
 public class HeartRateEventListener implements BandHeartRateEventListener {
 
-    TextView textView;
-    boolean graph;
+    private TextView textView;
+    private boolean graph;
 
     public void setViews(TextView textView, boolean graph) {
         this.textView = textView;
@@ -43,6 +43,8 @@ public class HeartRateEventListener implements BandHeartRateEventListener {
                     + String.format(" = %s", event.getQuality()), textView);
 
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
+                MainActivity.bandSensorData.setHeartRateData(event);
+
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "HeartRate");
                 if (file.exists() || file.isDirectory()) {
                     try {

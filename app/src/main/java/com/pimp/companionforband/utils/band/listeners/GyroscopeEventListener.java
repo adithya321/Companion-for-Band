@@ -19,8 +19,8 @@ import java.util.Date;
 
 public class GyroscopeEventListener implements BandGyroscopeEventListener {
 
-    TextView textView;
-    boolean graph;
+    private TextView textView;
+    private boolean graph;
 
     public void setViews(TextView textView, boolean graph) {
         this.textView = textView;
@@ -49,6 +49,8 @@ public class GyroscopeEventListener implements BandGyroscopeEventListener {
                     textView);
 
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
+                MainActivity.bandSensorData.setGyroscopeData(bandGyroscopeEvent);
+
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Gyroscope");
                 if (file.exists() || file.isDirectory()) {
                     try {

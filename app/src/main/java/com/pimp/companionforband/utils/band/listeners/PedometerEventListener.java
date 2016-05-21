@@ -19,8 +19,8 @@ import java.util.Date;
 
 public class PedometerEventListener implements BandPedometerEventListener {
 
-    TextView textView;
-    boolean graph;
+    private TextView textView;
+    private boolean graph;
 
     public void setViews(TextView textView, boolean graph) {
         this.textView = textView;
@@ -50,6 +50,8 @@ public class PedometerEventListener implements BandPedometerEventListener {
             }
 
             if (MainActivity.sharedPreferences.getBoolean("log", false)) {
+                MainActivity.bandSensorData.setPedometerData(bandPedometerEvent);
+
                 File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CompanionForBand" + File.separator + "Pedometer");
                 if (file.exists() || file.isDirectory()) {
                     try {

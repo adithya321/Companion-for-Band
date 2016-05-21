@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
+    <changelogversion changeDate="MAY 21, 2016" versionName="2.9.0">
+        <changelogimprovement>Log All-in-One CSV</changelogimprovement>
+        <changelogbug>Fix Actvities and Summaries CSVs' column order</changelogbug>
+    </changelogversion>
+
     <changelogversion changeDate="MAY 20, 2016" versionName="2.8.0">
         <changelogimprovement>Log MS Health activities and summaries</changelogimprovement>
     </changelogversion>
