@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -70,6 +71,11 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
 
                     outStream.write(data);
                     outStream.close();
+
+                    Intent scan = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    Uri uri = Uri.fromFile(file);
+                    scan.setData(uri);
+                    sendBroadcast(scan);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {

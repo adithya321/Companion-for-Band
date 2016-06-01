@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
+    <changelogversion changeDate="JUN 1, 2016" versionName="2.9.1">
+        <changelogtext>Add image taken with camera tile to gallery app</changelogtext>
+    </changelogversion>
+
     <changelogversion changeDate="MAY 21, 2016" versionName="2.9.0">
         <changelogimprovement>Log All-in-One CSV</changelogimprovement>
         <changelogbug>Fix Actvities and Summaries CSVs' column order</changelogbug>
