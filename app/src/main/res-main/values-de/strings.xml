@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="backlog">"Anmeldehintergrund"</string>
+    <string name="permit_log">"Erteilen Sie die Berechtigung für die Speicherung wenn sie zu Einstellungen gehen"</string>
+    <string name="pedometer">"Schrittzähler"</string>
+    <string name="rr">"RR Abstände"</string>
+    <string name="temperature">"Hauttemperatur"</string>
+    <string name="uv">"UV"</string>
+    <string name="base">"Basis"</string>
+    <string name="base_desc">"Startstreifen Schaltfläche"</string>
+    <string name="highlight">"Hervorgehoben"</string>
+    <string name="highlight_desc">"Überschrift"</string>
+    <string name="lowlight">"Dunkelheit"</string>
+    <string name="notification_one">"Benachrichtigungston 1"</string>
+    <string name="notification_two">"Benachrichtigungston 2"</string>
+    <string name="notification_alarm">"Benachrichtigungs Alarm"</string>
+    <string name="notification_timer">"Benachrichtigungs Timer"</string>
+    <string name="one_high">"Ein Ton hoch"</string>
+    <string name="two_high">"Zwei Ton hoch"</string>
+    <string name="three_high">"Drei Ton hoch"</string>
+    <string name="ramp_up">"Aufstocken"</string>
+    <string name="ramp_down">"Vertieft"</string>
+    <string name="barcode_type">"Art"</string>
+    <string name="barcode_page">"Seite"</string>
+    <!-- Log -->
+    <!-- Altimeter -->
+</resources>

@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
+<?xml version="1.0"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">"Compañero for Band"</string>
     <string name="about">"Desarrollado por Adithya J"</string>
-
     <string name="accelerometer">"Acelerómetro"</string>
     <string name="altimeter">"Altímetro"</string>
     <string name="barometer">"Barómetro"</string>
@@ -21,7 +20,6 @@
     <string name="rr">"RR Intervalo"</string>
     <string name="temperature">"Temperatura de la piel"</string>
     <string name="uv">"UV"</string>
-
     <string name="base">"Base"</string>
     <string name="base_desc">"Baldosas de inicio de Gaza"</string>
     <string name="highlight">"Realce"</string>
@@ -34,38 +32,30 @@
     <string name="highContrast_desc">"Baldosas Badged inicio de Gaza"</string>
     <string name="muted">"Apagado"</string>
     <string name="muted_desc">"Logro fitness marcadores fondos"</string>
-
     <string name="music_tile">"Teja Music"</string>
     <string name="music_tile_adding">"Teja Music está añadiendo"</string>
     <string name="music_tile_added">"Se añade Teja Music"</string>
     <string name="music_tile_not_added">"No se puede agregar baldosas música para la banda"</string>
-
     <string name="camera_tile">"Cámara del azulejo"</string>
     <string name="camera_tile_adding">"Cámara Tile está añadiendo"</string>
     <string name="camera_tile_added">"Se añade la cámara del azulejo"</string>
     <string name="camera_tile_not_added">"No se puede agregar baldosas cámara a la banda"</string>
-
     <string name="message_tile">"Mensaje del azulejo"</string>
     <string name="message_tile_adding">"Mensaje del azulejo está añadiendo"</string>
     <string name="message_tile_added">"Se añade Mensaje del azulejo"</string>
     <string name="message_tile_not_added">"No se puede agregar baldosas mensaje a la banda"</string>
-
     <string name="barcode_tile">"Código de barras del azulejo"</string>
     <string name="barcode_tile_adding">"Código de barras del azulejo está añadiendo"</string>
     <string name="barcode_tile_added">"Se añade código de barras del azulejo"</string>
     <string name="barcode_tile_not_added">"No se puede agregar baldosas de código de barras a la banda"</string>
-
     <string name="title">"Título"</string>
     <string name="hint">"Cuerpo"</string>
     <string name="message_send_error">"Introduzca el título o el cuerpo para enviar el mensaje a la banda"</string>
-
     <string name="name">"Nombre"</string>
     <string name="number">"Número"</string>
     <string name="barcode_send_error_1">"Introduzca el nombre y el número de código de barras para enviar a la banda"</string>
     <string name="barcode_send_error_2">"Seleccione un tipo de código de barras y el número de página para el código de barras"</string>
-
     <string name="send">"ENVIAR"</string>
-
     <string name="home">"Casa"</string>
     <string name="aboutLib">"Acerca de"</string>
     <string name="other">"Otras aplicaciones"</string>
@@ -75,39 +65,30 @@
     <string name="support">"Apoyo al Desarrollo"</string>
     <string name="report">"Errores de informe o solicitar Características"</string>
     <string name="translate">"Traducir"</string>
-
     <string name="pick_me_tile">"Pick Me AZULEJO"</string>
     <string name="crop_me_tile">"CULTIVOS ME AZULEJO"</string>
     <string name="get_me_tile">"CONSÍGAME AZULEJO"</string>
     <string name="update_me_tile">"SET ME AZULEJO"</string>
     <string name="get_theme">"OBTENER TEMA"</string>
     <string name="update_theme">"SET TEMA"</string>
-
     <string name="invitation_title">"Enviar App Invitar"</string>
     <string name="invitation_message">"Esta aplicación es excelente, darle una oportunidad"</string>
     <string name="invitation_cta">"¡Instalar!"</string>
     <string name="invitation_subject">"Prueba esta gran aplicación!"</string>
     <string name="send_failed">"Invitaciones Enviando fracasaron"</string>
-
     <string name="support_dev">"Porque incluso los desarrolladores tienen que llenar sus estómagos veces"</string>
-
     <string name="camera_permission">"Cámara permiso necesario para el azulejo cámara. Por favor, espere en la configuración de la aplicación para la funcionalidad adicional."</string>
     <string name="camera_granted">"Permiso otorgado. Ahora usted puede utilizar baldosas cámara."</string>
     <string name="camera_denied">"Permiso denegado. No se puede utilizar baldosas cámara."</string>
-
     <string name="storage_permission">"El permiso de almacenamiento necesaria para registrar los datos del sensor. Por favor, espere en la configuración de la aplicación para la funcionalidad adicional."</string>
     <string name="storage_granted">"Permiso otorgado. Ahora usted puede registrar datos."</string>
     <string name="storage_denied">"Permiso denegado. Usted no puede registrar datos."</string>
-
     <string name="rate_dialog_title">"¿Gusta? ¡Puntúalo!"</string>
     <string name="rate_dialog_text">"Si te gusta el uso de esta aplicación, por favor tome un momento para evaluar la misma. Gracias por su soporte!"</string>
-
     <string name="theme">"TEMA"</string>
     <string name="sensors">"SENSORES"</string>
     <string name="extras">"EXTRAS"</string>
-
     <string name="picture_saved">"Imagen guardada"</string>
-
     <string name="band_done">"Hecho"</string>
     <string name="band_connecting">"Band está conectando"</string>
     <string name="band_connected">"Band está conectado"</string>
@@ -119,8 +100,7 @@
     <string name="band_unknown_error">"Error desconocido"</string>
     <string name="band_grabbing_info">"Agarrando información de su banda"</string>
     <string name="band_tile_added">"Teja añadió"</string>
-
-    <string name="notification_one">"Notificación un tono"</string>
+    <string name="notification_one">"Lugar de sostenimiento"</string>
     <string name="notification_two">"Notificación de dos tonos"</string>
     <string name="notification_alarm">"Notificación de alarma"</string>
     <string name="notification_timer">"Temporizador Notificación"</string>
@@ -129,19 +109,15 @@
     <string name="three_high">"Tres tono alto"</string>
     <string name="ramp_up">"Rampa arriba"</string>
     <string name="ramp_down">"Rampa hacia abajo"</string>
-
     <string name="barcode_type">"Escribe"</string>
     <string name="barcode_page">"Página"</string>
-
     <string name="me_tile_updating">"MeTile está actualizando"</string>
     <string name="me_tile_updated">"MeTile se actualiza!"</string>
     <string name="theme_updating">"Temática está actualizando"</string>
     <string name="theme_updated">"Temática se actualiza!"</string>
-
     <!-- Log -->
     <string name="timestamp">"Marca de tiempo"</string>
     <string name="date_time">"Fecha y hora"</string>
-
     <!-- Altimeter -->
     <string name="total_gain">"Ganancia total"</string>
     <string name="total_loss">"Pérdida total"</string>
@@ -152,32 +128,19 @@
     <string name="alt_rate">"La tasa"</string>
     <string name="stairs_ascended">"Tramos de escaleras Ascendido"</string>
     <string name="stairs_descended">"Tramos de escaleras Descendiente"</string>
-
     <string name="brightness">"Brillo"</string>
-
     <string name="air_pressure">"Presion de aire"</string>
     <string name="air_temperature">"Temperatura del aire"</string>
-
     <string name="contact_status">"Estado"</string>
-
     <string name="motion_type">"Tipo de movimiento"</string>
     <string name="pace">"Paso"</string>
     <string name="speed">"Velocidad"</string>
     <string name="total_distance">"Distancia total"</string>
-
     <string name="resistance">"Resistencia"</string>
-
     <string name="beats_per_minute">"Pulsaciones por minuto"</string>
     <string name="quality">"Calidad"</string>
-
     <string name="total_steps">"Pasos totales"</string>
-
     <string name="uv_index">"Índice UV"</string>
-
     <string name="heart_rate_consent">"No ha dado este consentimiento aplicación para acceder a los datos de frecuencia cardíaca todavía. Por favor, pulse el botón de ritmo cardíaco de Consentimiento."</string>
     <string name="band_2_required">"El altímetro, luz ambiental, Barómetro, GSR, sensores RR Intervalo no son compatibles con la versión de la banda. Microsoft Band 2 se requiere."</string>
-    <string name="flashlight_tile">linterna Azulejos</string>
-    <string name="flashlight_tile_added">Mosaico de la linterna está añadiendo</string>
-    <string name="flashlight_tile_adding">se añade la teja linterna</string>
-    <string name="flashlight_tile_not_added">No se puede añadir baldosas linterna para la banda</string>
 </resources>
