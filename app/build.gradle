@@ -22,8 +22,8 @@ android {
         applicationId "com.pimp.companionforband"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 31
-        versionName "2.9.1"
+        versionCode 32
+        versionName "2.9.2"
 
         multiDexEnabled true
     }

@@ -584,7 +584,7 @@ public class MainActivity extends AppCompatActivity implements NegativeReviewLis
                                             .setAction("Translate")
                                             .build());
                                     Intent translate = new Intent(Intent.ACTION_VIEW,
-                                            Uri.parse("https://pimplay.oneskyapp.com/collaboration/project?id=56434"));
+                                            Uri.parse("https://poeditor.com/join/project/AZQxDV2440"));
                                     startActivity(translate);
                                     break;
                                 default:
