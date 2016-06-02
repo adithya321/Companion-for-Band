@@ -13,7 +13,7 @@
 <a href="https://github.com/adithya321/Companion-for-Band/releases"><img src="https://img.shields.io/github/release/adithya321/Companion-for-Band.svg" alt="Release Version"></a>
 <a href="https://android-arsenal.com/api?level=17"><img src="https://img.shields.io/badge/API-17%2B-brightgreen.svg?style=flat" alt="API"></a>
 <a href="https://play.google.com/store/apps/details?id=com.pimp.companionforband"><img src="https://img.shields.io/badge/rating-4.6-green.svg" alt="Average Rating"></a>
-<a href="https://play.google.com/store/apps/details?id=com.pimp.companionforband"><img src="https://img.shields.io/badge/downloads-5k%2B-lightgrey.svg" alt="Total Downloads"></a>
+<a href="https://play.google.com/store/apps/details?id=com.pimp.companionforband"><img src="https://img.shields.io/badge/downloads-9k%2B-lightgrey.svg" alt="Total Downloads"></a>
 </p>
 
 <table  border="0" cellpadding="0" cellspacing="0">
@@ -37,8 +37,13 @@
 ###[View or create issues](https://github.com/adithya321/Companion-for-Band/issues)
 
 ## Translations
-###[Help translating this app](https://pimplay.oneskyapp.com/collaboration/project?id=56434)
-* French - Thanks to [Myrmex](onesky@myrmex.org) -
+###[Help translating this app](https://poeditor.com/join/project/AZQxDV2440)
+* English
+* Spanish
+* Tamil
+* French - Thanks to Myrmex
+* Italian - Thanks to iscrizioni
+* Czech - Thanks to Vlad Imír
 
 ## Third Party Libraries
 * [AboutLibraries](https://github.com/mikepenz/AboutLibraries)
