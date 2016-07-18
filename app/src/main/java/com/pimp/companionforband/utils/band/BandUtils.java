@@ -9,29 +9,6 @@ import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
 
 public class BandUtils extends AsyncTask<Void, Void, Void> {
-    @Override
-    protected Void doInBackground(Void... params) {
-        try {
-            if (getConnectedBandClient()) {
-                MainActivity.appendToUI(MainActivity.sContext.getString(R.string.band_connected),
-                        "Style.CONFIRM");
-                MainActivity.band2 = Integer.parseInt(MainActivity.client
-                        .getHardwareVersion().await()) >= 20;
-                MainActivity.editor.putString("device_name", MainActivity.devices[0].getName());
-                MainActivity.editor.putString("device_mac", MainActivity.devices[0].getMacAddress());
-                MainActivity.editor.apply();
-            } else {
-                MainActivity.appendToUI(MainActivity.sContext.getString(R.string.band_not_found),
-                        "Style.ALERT");
-            }
-        } catch (BandException e) {
-            handleBandException(e);
-        } catch (Exception e) {
-            MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
-        }
-        return null;
-    }
-
     public static boolean getConnectedBandClient() throws InterruptedException, BandException {
         if (MainActivity.client == null) {
             MainActivity.devices = BandClientManager.getInstance().getPairedBands();
@@ -72,5 +49,28 @@ public class BandUtils extends AsyncTask<Void, Void, Void> {
                 break;
         }
         MainActivity.appendToUI(exceptionMessage, "Style.ALERT");
+    }
+
+    @Override
+    protected Void doInBackground(Void... params) {
+        try {
+            if (getConnectedBandClient()) {
+                MainActivity.appendToUI(MainActivity.sContext.getString(R.string.band_connected),
+                        "Style.CONFIRM");
+                MainActivity.band2 = Integer.parseInt(MainActivity.client
+                        .getHardwareVersion().await()) >= 20;
+                MainActivity.editor.putString("device_name", MainActivity.devices[0].getName());
+                MainActivity.editor.putString("device_mac", MainActivity.devices[0].getMacAddress());
+                MainActivity.editor.apply();
+            } else {
+                MainActivity.appendToUI(MainActivity.sContext.getString(R.string.band_not_found),
+                        "Style.ALERT");
+            }
+        } catch (BandException e) {
+            handleBandException(e);
+        } catch (Exception e) {
+            MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
+        }
+        return null;
     }
 }

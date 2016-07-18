@@ -35,12 +35,84 @@ import com.robinhood.spark.SparkView;
 
 public class SensorActivity extends AppCompatActivity {
 
+    public static ChartAdapter chartAdapter;
     String sensorName;
     TextView nameTV, dataTV, detailsTV, scrubInfoTextView;
     CardView optionsCV, graphCV;
     SparkView sparkView;
-    public static ChartAdapter chartAdapter;
     RadioButton option1, option2, option3;
+    View.OnClickListener optionsRadioButtonClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            try {
+                SharedPreferences sharedPreferences = MainActivity.sharedPreferences;
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                switch (v.getId()) {
+                    case R.id.option_1:
+                        switch (sensorName) {
+                            case "Accelerometer":
+                                MainActivity.client.getSensorManager().registerAccelerometerEventListener(
+                                        SensorsFragment.bandAccelerometerEventListener, SampleRate.MS16);
+                                editor.putInt("acc_hz", 11);
+                                break;
+                            case "Gyroscope":
+                                MainActivity.client.getSensorManager().registerGyroscopeEventListener(
+                                        SensorsFragment.bandGyroscopeEventListener, SampleRate.MS16);
+                                editor.putInt("gyr_hz", 21);
+                                break;
+                            case "GSR":
+                                if (MainActivity.band2)
+                                    MainActivity.client.getSensorManager().registerGsrEventListener(
+                                            SensorsFragment.bandGsrEventListener, GsrSampleRate.MS200);
+                                editor.putInt("gsr_hz", 31);
+                                break;
+                        }
+                        editor.apply();
+                        break;
+
+                    case R.id.option_2:
+                        switch (sensorName) {
+                            case "Accelerometer":
+                                MainActivity.client.getSensorManager().registerAccelerometerEventListener(
+                                        SensorsFragment.bandAccelerometerEventListener, SampleRate.MS32);
+                                editor.putInt("acc_hz", 12);
+                                break;
+                            case "Gyroscope":
+                                MainActivity.client.getSensorManager().registerGyroscopeEventListener(
+                                        SensorsFragment.bandGyroscopeEventListener, SampleRate.MS32);
+                                editor.putInt("gyr_hz", 22);
+                                break;
+                            case "GSR":
+                                if (MainActivity.band2)
+                                    MainActivity.client.getSensorManager().registerGsrEventListener(
+                                            SensorsFragment.bandGsrEventListener, GsrSampleRate.MS5000);
+                                editor.putInt("gsr_hz", 32);
+                                break;
+                        }
+                        editor.apply();
+                        break;
+
+                    case R.id.option_3:
+                        switch (sensorName) {
+                            case "Accelerometer":
+                                MainActivity.client.getSensorManager().registerAccelerometerEventListener(
+                                        SensorsFragment.bandAccelerometerEventListener, SampleRate.MS128);
+                                editor.putInt("acc_hz", 13);
+                                break;
+                            case "Gyroscope":
+                                MainActivity.client.getSensorManager().registerGyroscopeEventListener(
+                                        SensorsFragment.bandGyroscopeEventListener, SampleRate.MS128);
+                                editor.putInt("gyr_hz", 23);
+                                break;
+                        }
+                        editor.apply();
+                        break;
+                }
+            } catch (Exception e) {
+                //
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,79 +209,6 @@ public class SensorActivity extends AppCompatActivity {
         super.onBackPressed();
         overridePendingTransition(R.anim.fade_forward, R.anim.slide_out_right);
     }
-
-    View.OnClickListener optionsRadioButtonClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            try {
-                SharedPreferences sharedPreferences = MainActivity.sharedPreferences;
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                switch (v.getId()) {
-                    case R.id.option_1:
-                        switch (sensorName) {
-                            case "Accelerometer":
-                                MainActivity.client.getSensorManager().registerAccelerometerEventListener(
-                                        SensorsFragment.bandAccelerometerEventListener, SampleRate.MS16);
-                                editor.putInt("acc_hz", 11);
-                                break;
-                            case "Gyroscope":
-                                MainActivity.client.getSensorManager().registerGyroscopeEventListener(
-                                        SensorsFragment.bandGyroscopeEventListener, SampleRate.MS16);
-                                editor.putInt("gyr_hz", 21);
-                                break;
-                            case "GSR":
-                                if (MainActivity.band2)
-                                    MainActivity.client.getSensorManager().registerGsrEventListener(
-                                            SensorsFragment.bandGsrEventListener, GsrSampleRate.MS200);
-                                editor.putInt("gsr_hz", 31);
-                                break;
-                        }
-                        editor.apply();
-                        break;
-
-                    case R.id.option_2:
-                        switch (sensorName) {
-                            case "Accelerometer":
-                                MainActivity.client.getSensorManager().registerAccelerometerEventListener(
-                                        SensorsFragment.bandAccelerometerEventListener, SampleRate.MS32);
-                                editor.putInt("acc_hz", 12);
-                                break;
-                            case "Gyroscope":
-                                MainActivity.client.getSensorManager().registerGyroscopeEventListener(
-                                        SensorsFragment.bandGyroscopeEventListener, SampleRate.MS32);
-                                editor.putInt("gyr_hz", 22);
-                                break;
-                            case "GSR":
-                                if (MainActivity.band2)
-                                    MainActivity.client.getSensorManager().registerGsrEventListener(
-                                            SensorsFragment.bandGsrEventListener, GsrSampleRate.MS5000);
-                                editor.putInt("gsr_hz", 32);
-                                break;
-                        }
-                        editor.apply();
-                        break;
-
-                    case R.id.option_3:
-                        switch (sensorName) {
-                            case "Accelerometer":
-                                MainActivity.client.getSensorManager().registerAccelerometerEventListener(
-                                        SensorsFragment.bandAccelerometerEventListener, SampleRate.MS128);
-                                editor.putInt("acc_hz", 13);
-                                break;
-                            case "Gyroscope":
-                                MainActivity.client.getSensorManager().registerGyroscopeEventListener(
-                                        SensorsFragment.bandGyroscopeEventListener, SampleRate.MS128);
-                                editor.putInt("gyr_hz", 23);
-                                break;
-                        }
-                        editor.apply();
-                        break;
-                }
-            } catch (Exception e) {
-                //
-            }
-        }
-    };
 
     void setAccelerometerConfiguration() throws Exception {
         detailsTV.setText(getString(R.string.accelerometer_details));

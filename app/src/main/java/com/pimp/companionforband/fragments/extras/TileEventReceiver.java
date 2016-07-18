@@ -9,7 +9,6 @@ import android.view.KeyEvent;
 
 import com.microsoft.band.tiles.TileButtonEvent;
 import com.microsoft.band.tiles.TileEvent;
-import com.pimp.companionforband.fragments.extras.CameraActivity;
 
 public class TileEventReceiver extends BroadcastReceiver {
 

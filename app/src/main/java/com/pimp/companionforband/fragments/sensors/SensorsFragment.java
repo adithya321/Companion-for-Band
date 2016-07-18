@@ -33,8 +33,8 @@ import com.microsoft.band.sensors.BandSkinTemperatureEventListener;
 import com.microsoft.band.sensors.BandUVEventListener;
 import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
-import com.pimp.companionforband.utils.band.listeners.AllSensorsAccelerometerEventListener;
 import com.pimp.companionforband.utils.band.listeners.AccelerometerEventListener;
+import com.pimp.companionforband.utils.band.listeners.AllSensorsAccelerometerEventListener;
 import com.pimp.companionforband.utils.band.listeners.AltimeterEventListener;
 import com.pimp.companionforband.utils.band.listeners.AmbientLightEventListener;
 import com.pimp.companionforband.utils.band.listeners.BarometerEventListener;
@@ -78,6 +78,38 @@ public class SensorsFragment extends Fragment {
     public static BandRRIntervalEventListener bandRRIntervalEventListener;
     public static BandSkinTemperatureEventListener bandSkinTemperatureEventListener;
     public static BandUVEventListener bandUVEventListener;
+    View.OnClickListener cardViewOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            TextView sensorName = (TextView) v.findViewById(R.id.txtName);
+            Intent intent = new Intent(getContext(), SensorActivity.class);
+            intent.putExtra("sensor_name", sensorName.getText().toString());
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                String transitionName = getResources().getString(R.string.transition_sensor_name);
+
+                ActivityOptions transitionActivityOptions = ActivityOptions
+                        .makeSceneTransitionAnimation(getActivity(), sensorName, transitionName);
+                startActivity(intent, transitionActivityOptions.toBundle());
+            } else {
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.fade_back);
+            }
+        }
+    };
+
+    public static void appendToUI(final String string, final TextView textView) {
+        try {
+            MainActivity.sActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    textView.setText(string);
+                }
+            });
+        } catch (Exception e) {
+            //
+        }
+    }
 
     @Nullable
     @Override
@@ -155,39 +187,6 @@ public class SensorsFragment extends Fragment {
             view.findViewById(R.id.backlogStatus).setVisibility(View.GONE);
         else
             view.findViewById(R.id.backlogStatus).setVisibility(View.VISIBLE);
-    }
-
-    View.OnClickListener cardViewOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            TextView sensorName = (TextView) v.findViewById(R.id.txtName);
-            Intent intent = new Intent(getContext(), SensorActivity.class);
-            intent.putExtra("sensor_name", sensorName.getText().toString());
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                String transitionName = getResources().getString(R.string.transition_sensor_name);
-
-                ActivityOptions transitionActivityOptions = ActivityOptions
-                        .makeSceneTransitionAnimation(getActivity(), sensorName, transitionName);
-                startActivity(intent, transitionActivityOptions.toBundle());
-            } else {
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.fade_back);
-            }
-        }
-    };
-
-    public static void appendToUI(final String string, final TextView textView) {
-        try {
-            MainActivity.sActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    textView.setText(string);
-                }
-            });
-        } catch (Exception e) {
-            //
-        }
     }
 
     @Override

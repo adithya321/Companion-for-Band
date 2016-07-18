@@ -69,6 +69,33 @@ public class WebviewActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private String downloadUrl(String url) throws IOException {
+        InputStream is = null;
+        try {
+            URL u = new URL(url);
+            HttpURLConnection conn = (HttpURLConnection) u.openConnection();
+            conn.setReadTimeout(10000);
+            conn.setConnectTimeout(15000);
+            conn.setRequestMethod("GET");
+            conn.setDoInput(true);
+            conn.connect();
+            is = conn.getInputStream();
+
+            return readIt(is, 9999);
+        } finally {
+            if (is != null) {
+                is.close();
+            }
+        }
+    }
+
+    public String readIt(InputStream stream, int len) throws IOException {
+        Reader reader = new InputStreamReader(stream, "UTF-8");
+        char[] buffer = new char[len];
+        reader.read(buffer);
+        return new String(buffer);
+    }
+
     private class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -110,32 +137,5 @@ public class WebviewActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Authentication Failure",
                         Toast.LENGTH_LONG).show();
         }
-    }
-
-    private String downloadUrl(String url) throws IOException {
-        InputStream is = null;
-        try {
-            URL u = new URL(url);
-            HttpURLConnection conn = (HttpURLConnection) u.openConnection();
-            conn.setReadTimeout(10000);
-            conn.setConnectTimeout(15000);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.connect();
-            is = conn.getInputStream();
-
-            return readIt(is, 9999);
-        } finally {
-            if (is != null) {
-                is.close();
-            }
-        }
-    }
-
-    public String readIt(InputStream stream, int len) throws IOException {
-        Reader reader = new InputStreamReader(stream, "UTF-8");
-        char[] buffer = new char[len];
-        reader.read(buffer);
-        return new String(buffer);
     }
 }
