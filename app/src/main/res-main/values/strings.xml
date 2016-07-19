@@ -35,6 +35,12 @@
     <string name="muted">Muted</string>
     <string name="muted_desc">Fitness achievement marker backgrounds</string>
 
+    <string name="calculator_tile">Calculator Tile</string>
+    <string name="calculator_tile_adding">Calculator Tile is adding</string>
+    <string name="calculator_tile_added">Calculator Tile is added</string>
+    <string name="calculator_tile_not_added">Unable to add calculator tile to the band</string>
+    <string name="calculator_tile_needs_message_tile">Calculator Tile needs Message Tile to show results</string>
+
     <string name="music_tile">Music Tile</string>
     <string name="music_tile_adding">Music Tile is adding</string>
     <string name="music_tile_added">Music Tile is added</string>

@@ -20,6 +20,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
+                android:src="@raw/calculator_tile_small" />
+
+            <Switch
+                android:id="@+id/calculator"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/calculator_tile" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
                 android:src="@raw/music_tile_small" />
 
             <Switch

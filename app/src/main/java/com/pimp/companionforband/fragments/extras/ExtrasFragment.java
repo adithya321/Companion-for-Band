@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,8 @@ public class ExtrasFragment extends Fragment {
     private static final UUID pageId1 = UUID.fromString("29411705-106f-48bc-a671-c6d7cb3e759a");
     private static final UUID pageId2 = UUID.fromString("3f34d8b4-e697-4b4b-89df-823cef78b744");
     private static final UUID pageId3 = UUID.fromString("134055f9-e786-47e9-a0ff-c12cce0b4f96");
+    private static final UUID calculatorPageId1 = UUID.fromString("1cf3d563-9a09-4128-b839-5d12d56a002b");
+    private static final UUID calculatorPageId2 = UUID.fromString("29acaf23-7d4b-4fc3-9265-680e411594d7");
     private static final UUID cameraPageId1 = UUID.fromString("7efc3ce8-0785-4860-88cd-54a11115298f");
     private static final UUID cameraPageId2 = UUID.fromString("7efc3ce8-0785-4860-88cd-54a11115298e");
     private static final UUID cameraPageId3 = UUID.fromString("7efc3ce8-0785-4860-88cd-54a11115298d");
@@ -67,11 +70,12 @@ public class ExtrasFragment extends Fragment {
     Button btnSend, btnHaptic, btnBarcode;
 
     Spinner hapticSpinner, typeSpinner, pageSpinner;
-    Switch musicSwitch, cameraSwitch, messageSwitch, barcodeSwitch, flashlightSwitch;
-    boolean message = false, music = false, camera = false, barcode = false, flashlight = false;
+    Switch calculatorSwitch, musicSwitch, cameraSwitch, messageSwitch, barcodeSwitch, flashlightSwitch;
+    boolean message = false, calculator = false, music = false, camera = false, barcode = false, flashlight = false;
     String barcode39 = "MK12345509";
     String barcode417 = "901234567890123456";
-    private UUID tileId = UUID.fromString("3263f46a-38be-4229-afa1-85d4399b7798");
+    public static UUID tileId = UUID.fromString("3263f46a-38be-4229-afa1-85d4399b7798");
+    private UUID calculatorTileId = UUID.fromString("d5f788d2-08fd-4751-b766-fff1d773d5a7");
     private UUID musicTileId = UUID.fromString("48376b8f-1066-4b67-96c7-cecc9951bf3b");
     private UUID cameraTileId = UUID.fromString("006f9aa4-4092-44e2-b911-2f7262d198bc");
     private UUID barcodeTileId = UUID.fromString("23d392df-dd0c-4e93-8c0d-63dd7b02eb52");
@@ -89,6 +93,20 @@ public class ExtrasFragment extends Fragment {
 
         final SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyPrefs", 0);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        calculatorSwitch = (Switch) view.findViewById(R.id.calculator);
+        calculatorSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new calculatorTask().execute();
+                try {
+                    if (!doesTileExist(tileId))
+                        addTile();
+                } catch (Exception e) {
+                    Log.e("CALC ADD", e.toString());
+                }
+            }
+        });
 
         musicSwitch = (Switch) view.findViewById(R.id.music);
         musicSwitch.setOnClickListener(new View.OnClickListener() {
@@ -296,6 +314,7 @@ public class ExtrasFragment extends Fragment {
 
     private void setSwitches() {
         messageSwitch.setChecked(message);
+        calculatorSwitch.setChecked(calculator);
         musicSwitch.setChecked(music);
         cameraSwitch.setChecked(camera);
         barcodeSwitch.setChecked(barcode);
@@ -319,6 +338,27 @@ public class ExtrasFragment extends Fragment {
             return true;
         } else {
             MainActivity.appendToUI(getString(R.string.message_tile_not_added), "Style.ALERT");
+            return false;
+        }
+    }
+
+    private boolean addCalculatorTile() throws Exception {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        Bitmap tileIcon = BitmapFactory.decodeResource(getActivity().getResources(), R.raw.calculator_tile_large, options);
+        Bitmap badgeIcon = BitmapFactory.decodeResource(getActivity().getResources(), R.raw.calculator_tile_small,
+                options);
+
+        BandTile tile = new BandTile.Builder(calculatorTileId, getString(R.string.calculator_tile), tileIcon)
+                .setTileSmallIcon(badgeIcon).addPageLayout(createCalculator1Layout())
+                .addPageLayout(createCalculator2Layout()).addPageLayout(createCalculator3Layout()).build();
+        MainActivity.appendToUI(getString(R.string.calculator_tile_adding), "Style.INFO");
+        if (MainActivity.client.getTileManager().addTile(getActivity(), tile).await()) {
+            MainActivity.appendToUI(getString(R.string.calculator_tile_added), "Style.CONFIRM");
+            return true;
+        } else {
+            MainActivity.appendToUI(getString(R.string.calculator_tile_not_added), "Style.ALERT");
             return false;
         }
     }
@@ -363,6 +403,92 @@ public class ExtrasFragment extends Fragment {
         return new PageLayout(new FlowPanel(15, 0, 260, 105, FlowPanelOrientation.VERTICAL,
                 new PageElement[0]).addElements(new TextBlock(0, 0, 0, 0, TextBlockFont.SMALL)
                 .setAutoWidthEnabled(true).setMargins(0, 0, 0, 0).setId(12)));
+    }
+
+    private PageLayout createCalculator1Layout() {
+        return new PageLayout(new FlowPanel(0, 0, 320, 105, FlowPanelOrientation.VERTICAL)
+                .addElements(new FlowPanel(0, 0, 320, 50, FlowPanelOrientation.HORIZONTAL)
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(100).setPressedColor(-1))
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(101).setPressedColor(-1))
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(102).setPressedColor(-1))
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(103).setPressedColor(-1))
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(104).setPressedColor(-1)))
+
+                .addElements(new FlowPanel(5, 110, 320, 105, FlowPanelOrientation.HORIZONTAL)
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(105).setPressedColor(-1))
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(106).setPressedColor(-1))
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(107).setPressedColor(-1))
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(108).setPressedColor(-1))
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(109).setPressedColor(-1))));
+    }
+
+    private PageLayout createCalculator2Layout() {
+        return new PageLayout(new FlowPanel(0, 0, 320, 105, FlowPanelOrientation.VERTICAL)
+                .addElements(new FlowPanel(0, 0, 320, 50, FlowPanelOrientation.HORIZONTAL)
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(120).setPressedColor(-1))
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(121).setPressedColor(-1))
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(122).setPressedColor(-1))
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(123).setPressedColor(-1))
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(124).setPressedColor(-1)))
+
+                .addElements(new FlowPanel(5, 110, 320, 105, FlowPanelOrientation.HORIZONTAL)
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(125).setPressedColor(-1))
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(126).setPressedColor(-1))
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(127).setPressedColor(-1))
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(128).setPressedColor(-1))
+                        .addElements(new TextButton(0, 0, 50, 50).setMargins(0, 5, 0, 0)
+                                .setId(129).setPressedColor(-1))));
+    }
+
+    private PageLayout createCalculator3Layout() {
+        return new PageLayout(new FlowPanel(15, 0, 260, 105, FlowPanelOrientation.VERTICAL,
+                new PageElement[0]).addElements(new TextBlock(0, 0, 0, 0, TextBlockFont.SMALL)
+                .setAutoWidthEnabled(true).setMargins(0, 0, 0, 0).setId(150)));
+    }
+
+    private void updateCalculatorPages() throws BandIOException {
+        MainActivity.client.getTileManager().setPages(this.calculatorTileId,
+                new PageData(calculatorPageId1, 0)
+                        .update(new TextButtonData(100, "0"))
+                        .update(new TextButtonData(101, "1"))
+                        .update(new TextButtonData(102, "2"))
+                        .update(new TextButtonData(103, "3"))
+                        .update(new TextButtonData(104, "4"))
+                        .update(new TextButtonData(105, "5"))
+                        .update(new TextButtonData(106, "6"))
+                        .update(new TextButtonData(107, "7"))
+                        .update(new TextButtonData(108, "8"))
+                        .update(new TextButtonData(109, "9")),
+                new PageData(calculatorPageId2, 1)
+                        .update(new TextButtonData(120, "+"))
+                        .update(new TextButtonData(121, "-"))
+                        .update(new TextButtonData(122, "*"))
+                        .update(new TextButtonData(123, "/"))
+                        .update(new TextButtonData(124, "="))
+                        .update(new TextButtonData(125, "("))
+                        .update(new TextButtonData(126, ")"))
+                        .update(new TextButtonData(127, "^"))
+                        .update(new TextButtonData(128, "."))
+                        .update(new TextButtonData(129, "=")));
     }
 
     private PageLayout createMusic1Layout() {
@@ -586,16 +712,12 @@ public class ExtrasFragment extends Fragment {
                     try {
                         MainActivity.appendToUI(getString(R.string.band_grabbing_info), "Style.INFO");
 
-                        if (doesTileExist(tileId))
-                            message = true;
-                        if (doesTileExist(musicTileId))
-                            music = true;
-                        if (doesTileExist(cameraTileId))
-                            camera = true;
-                        if (doesTileExist(barcodeTileId))
-                            barcode = true;
-                        if (doesTileExist(flashlightTileId))
-                            flashlight = true;
+                        message = doesTileExist(tileId);
+                        calculator = doesTileExist(calculatorTileId);
+                        music = doesTileExist(musicTileId);
+                        camera = doesTileExist(cameraTileId);
+                        barcode = doesTileExist(barcodeTileId);
+                        flashlight = doesTileExist(flashlightTileId);
 
                         MainActivity.appendToUI(getString(R.string.band_done), "Style.CONFIRM");
                     } catch (Exception e) {
@@ -644,6 +766,27 @@ public class ExtrasFragment extends Fragment {
             }
 
             return true;
+        }
+    }
+
+    private class calculatorTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                if (BandUtils.getConnectedBandClient()) {
+                    if (doesTileExist(calculatorTileId)) {
+                        removeTile(calculatorTileId);
+                    } else {
+                        addCalculatorTile();
+                        updateCalculatorPages();
+                    }
+                }
+            } catch (BandException e) {
+                BandUtils.handleBandException(e);
+            } catch (Exception e) {
+                MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
+            }
+            return null;
         }
     }
 
