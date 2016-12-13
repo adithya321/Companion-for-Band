@@ -83,16 +83,14 @@ public class ExtrasFragment extends Fragment {
     private static final UUID barcodeId3 = UUID.fromString("8303c1c4-70c7-4ffc-b41b-0809991da568");
     private static final UUID barcodeId4 = UUID.fromString("009d0e6a-9f52-4343-a75c-7799033306df");
     private static final UUID barcodeId5 = UUID.fromString("1cedb320-2572-44b1-b914-68d53e1ec191");
-
+    public static UUID tileId = UUID.fromString("3263f46a-38be-4229-afa1-85d4399b7798");
     EditText title, body, name, number;
     Button btnSend, btnHaptic, btnBarcode;
-
     Spinner hapticSpinner, typeSpinner, pageSpinner;
     Switch calculatorSwitch, musicSwitch, cameraSwitch, messageSwitch, barcodeSwitch, flashlightSwitch;
     boolean message = false, calculator = false, music = false, camera = false, barcode = false, flashlight = false;
     String barcode39 = "MK12345509";
     String barcode417 = "901234567890123456";
-    public static UUID tileId = UUID.fromString("3263f46a-38be-4229-afa1-85d4399b7798");
     private UUID calculatorTileId = UUID.fromString("d5f788d2-08fd-4751-b766-fff1d773d5a7");
     private UUID musicTileId = UUID.fromString("48376b8f-1066-4b67-96c7-cecc9951bf3b");
     private UUID cameraTileId = UUID.fromString("006f9aa4-4092-44e2-b911-2f7262d198bc");
