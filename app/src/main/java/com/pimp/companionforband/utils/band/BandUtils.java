@@ -1,3 +1,21 @@
+/*
+ * Companion for Band
+ * Copyright (C) 2016  Adithya J
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 package com.pimp.companionforband.utils.band;
 
 import android.os.AsyncTask;
@@ -9,29 +27,6 @@ import com.pimp.companionforband.R;
 import com.pimp.companionforband.activities.main.MainActivity;
 
 public class BandUtils extends AsyncTask<Void, Void, Void> {
-    @Override
-    protected Void doInBackground(Void... params) {
-        try {
-            if (getConnectedBandClient()) {
-                MainActivity.appendToUI(MainActivity.sContext.getString(R.string.band_connected),
-                        "Style.CONFIRM");
-                MainActivity.band2 = Integer.parseInt(MainActivity.client
-                        .getHardwareVersion().await()) >= 20;
-                MainActivity.editor.putString("device_name", MainActivity.devices[0].getName());
-                MainActivity.editor.putString("device_mac", MainActivity.devices[0].getMacAddress());
-                MainActivity.editor.apply();
-            } else {
-                MainActivity.appendToUI(MainActivity.sContext.getString(R.string.band_not_found),
-                        "Style.ALERT");
-            }
-        } catch (BandException e) {
-            handleBandException(e);
-        } catch (Exception e) {
-            MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
-        }
-        return null;
-    }
-
     public static boolean getConnectedBandClient() throws InterruptedException, BandException {
         if (MainActivity.client == null) {
             MainActivity.devices = BandClientManager.getInstance().getPairedBands();
@@ -72,5 +67,28 @@ public class BandUtils extends AsyncTask<Void, Void, Void> {
                 break;
         }
         MainActivity.appendToUI(exceptionMessage, "Style.ALERT");
+    }
+
+    @Override
+    protected Void doInBackground(Void... params) {
+        try {
+            if (getConnectedBandClient()) {
+                MainActivity.appendToUI(MainActivity.sContext.getString(R.string.band_connected),
+                        "Style.CONFIRM");
+                MainActivity.band2 = Integer.parseInt(MainActivity.client
+                        .getHardwareVersion().await()) >= 20;
+                MainActivity.editor.putString("device_name", MainActivity.devices[0].getName());
+                MainActivity.editor.putString("device_mac", MainActivity.devices[0].getMacAddress());
+                MainActivity.editor.apply();
+            } else {
+                MainActivity.appendToUI(MainActivity.sContext.getString(R.string.band_not_found),
+                        "Style.ALERT");
+            }
+        } catch (BandException e) {
+            handleBandException(e);
+        } catch (Exception e) {
+            MainActivity.appendToUI(e.getMessage(), "Style.ALERT");
+        }
+        return null;
     }
 }

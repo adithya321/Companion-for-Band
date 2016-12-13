@@ -1,3 +1,21 @@
+/*
+ * Companion for Band
+ * Copyright (C) 2016  Adithya J
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 package com.pimp.companionforband.utils.band;
 
 import com.microsoft.band.InvalidBandVersionException;
@@ -327,108 +345,108 @@ public class BandSensorData {
         return accelerometerData;
     }
 
-    public BandAltimeterEvent getAltimeterData() {
-        return altimeterData;
-    }
-
-    public BandAmbientLightEvent getAmbientLightData() {
-        return ambientLightData;
-    }
-
-    public BandBarometerEvent getBarometerData() {
-        return barometerData;
-    }
-
-    public BandCaloriesEvent getCalorieData() {
-        return calorieData;
-    }
-
-    public BandContactEvent getContactData() {
-        return contactData;
-    }
-
-    public BandDistanceEvent getDistanceData() {
-        return distanceData;
-    }
-
-    public BandGsrEvent getGsrData() {
-        return gsrData;
-    }
-
-    public BandGyroscopeEvent getGyroscopeData() {
-        return gyroscopeData;
-    }
-
-    public BandHeartRateEvent getHeartRateData() {
-        return heartRateData;
-    }
-
-    public BandPedometerEvent getPedometerData() {
-        return pedometerData;
-    }
-
-    public BandRRIntervalEvent getRrIntervalData() {
-        return rrIntervalData;
-    }
-
-    public BandSkinTemperatureEvent getSkinTemperatureData() {
-        return skinTemperatureData;
-    }
-
-    public BandUVEvent getUvIndexData() {
-        return uvIndexData;
-    }
-
     public void setAccelerometerData(BandAccelerometerEvent accelerometerData) {
         this.accelerometerData = accelerometerData;
+    }
+
+    public BandAltimeterEvent getAltimeterData() {
+        return altimeterData;
     }
 
     public void setAltimeterData(BandAltimeterEvent altimeterData) {
         this.altimeterData = altimeterData;
     }
 
+    public BandAmbientLightEvent getAmbientLightData() {
+        return ambientLightData;
+    }
+
     public void setAmbientLightData(BandAmbientLightEvent ambientLightData) {
         this.ambientLightData = ambientLightData;
+    }
+
+    public BandBarometerEvent getBarometerData() {
+        return barometerData;
     }
 
     public void setBarometerData(BandBarometerEvent barometerData) {
         this.barometerData = barometerData;
     }
 
+    public BandCaloriesEvent getCalorieData() {
+        return calorieData;
+    }
+
     public void setCalorieData(BandCaloriesEvent calorieData) {
         this.calorieData = calorieData;
+    }
+
+    public BandContactEvent getContactData() {
+        return contactData;
     }
 
     public void setContactData(BandContactEvent contactData) {
         this.contactData = contactData;
     }
 
+    public BandDistanceEvent getDistanceData() {
+        return distanceData;
+    }
+
     public void setDistanceData(BandDistanceEvent distanceData) {
         this.distanceData = distanceData;
+    }
+
+    public BandGsrEvent getGsrData() {
+        return gsrData;
     }
 
     public void setGsrData(BandGsrEvent gsrData) {
         this.gsrData = gsrData;
     }
 
+    public BandGyroscopeEvent getGyroscopeData() {
+        return gyroscopeData;
+    }
+
     public void setGyroscopeData(BandGyroscopeEvent gyroscopeData) {
         this.gyroscopeData = gyroscopeData;
+    }
+
+    public BandHeartRateEvent getHeartRateData() {
+        return heartRateData;
     }
 
     public void setHeartRateData(BandHeartRateEvent heartRateData) {
         this.heartRateData = heartRateData;
     }
 
+    public BandPedometerEvent getPedometerData() {
+        return pedometerData;
+    }
+
     public void setPedometerData(BandPedometerEvent pedometerData) {
         this.pedometerData = pedometerData;
+    }
+
+    public BandRRIntervalEvent getRrIntervalData() {
+        return rrIntervalData;
     }
 
     public void setRrIntervalData(BandRRIntervalEvent rrIntervalData) {
         this.rrIntervalData = rrIntervalData;
     }
 
+    public BandSkinTemperatureEvent getSkinTemperatureData() {
+        return skinTemperatureData;
+    }
+
     public void setSkinTemperatureData(BandSkinTemperatureEvent skinTemperatureData) {
         this.skinTemperatureData = skinTemperatureData;
+    }
+
+    public BandUVEvent getUvIndexData() {
+        return uvIndexData;
     }
 
     public void setUvIndexData(BandUVEvent uvIndexData) {
