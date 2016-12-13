@@ -25,4 +25,6 @@
     <color name="style_alert">#F44336</color>
     <color name="style_info">#2196F3</color>
     <color name="style_confirm">#4CAF50</color>
+
+    <color name="hint_foreground_material_light">@android:color/black</color>
 </resources>
