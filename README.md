@@ -34,10 +34,10 @@
 * View live feed of all sensors and log them to CSV file even in background
 * Send notes, control music, take picture, add barcodes, Calculator and flashlight tile
 
-###[View or create issues](https://github.com/adithya321/Companion-for-Band/issues)
+### [View or create issues](https://github.com/adithya321/Companion-for-Band/issues)
 
 ## Translations
-###[Help translating this app](https://poeditor.com/join/project/AZQxDV2440)
+### [Help translating this app](https://poeditor.com/join/project/AZQxDV2440)
 * English
 * Spanish
 * Tamil
