@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="client_id">0000000000000000</string>
+    <string name="client_secret">0000000000000000</string>
+    <string name="oauth_token">0000000000000000</string>
+    <string name="base64">placeholder</string>
+</resources>
